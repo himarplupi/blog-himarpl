@@ -51,7 +51,7 @@ model Post {
   authorId    String
   title       String
   metaTitle   String
-  slug        String
+  slug        String         @unique
   content     String
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @default(now()) @updatedAt
