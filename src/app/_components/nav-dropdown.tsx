@@ -8,10 +8,12 @@ import {
   LogOut,
   ExternalLink,
   Menu,
-  LucideHome,
-  UsersRound,
-  Waypoints,
+  Plus,
+  FilePenLine,
+  FileUp,
+  ChevronDown,
 } from "lucide-react";
+import type { Session } from "next-auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -21,11 +23,10 @@ import {
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { NavSheet } from "./nav-sheet";
-import type { Session } from "next-auth";
 import { abbreviation } from "@/lib/utils";
 import logo from "@/images/logo.png";
+import { NavSheet } from "./nav-sheet";
+import { GoogleLoginButton } from "./auth-login-button";
 
 const hideNavbarOnRoutes = ["/login"];
 
@@ -57,35 +58,77 @@ export function NavDropdown({ session }: { session: Session | null }) {
             </NavSheet>
           </div>
 
-          <div className="flex gap-x-4">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Avatar className="cursor-pointer">
-                  <AvatarImage src={session?.user.image ?? ""} />
-                  <AvatarFallback>
-                    {abbreviation(session?.user.name)}
-                  </AvatarFallback>
-                </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>{session?.user.name}</DropdownMenuLabel>
-                <DropdownMenuItem className="cursor-pointer">
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  My Profile
-                </DropdownMenuItem>
-
-                <DropdownMenuItem
-                  className="cursor-pointer"
-                  onClick={() => signOut()}
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+          <div className="flex items-center gap-x-4">
+            {session ? (
+              <>
+                <NewPostButton />
+                <AccountButton session={session} />
+              </>
+            ) : (
+              <GoogleLoginButton size="sm" />
+            )}
           </div>
         </div>
       </nav>
     )
+  );
+}
+
+function NewPostButton() {
+  const router = useRouter();
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="sm" className="gap-x-1">
+          <Plus className="h-5 w-5" />
+          <ChevronDown className="h-5 w-5" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => router.push("/new")}
+        >
+          <FilePenLine className="mr-2 h-4 w-4" />
+          New Post
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => router.push("/new/import")}
+        >
+          <FileUp className="mr-2 h-4 w-4" />
+          Import Post
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+function AccountButton({ session }: { session: Session }) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Avatar className="cursor-pointer">
+          <AvatarImage src={session?.user.image ?? ""} />
+          <AvatarFallback>{abbreviation(session?.user.name)}</AvatarFallback>
+        </Avatar>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>{session?.user.name}</DropdownMenuLabel>
+        <DropdownMenuItem className="cursor-pointer">
+          <ExternalLink className="mr-2 h-4 w-4" />
+          My Profile
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => signOut({ callbackUrl: "/?toast=Logout berhasil!" })}
+        >
+          <LogOut className="mr-2 h-4 w-4" />
+          Logout
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
