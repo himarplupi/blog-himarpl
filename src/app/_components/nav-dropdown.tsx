@@ -25,6 +25,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { abbreviation } from "@/lib/utils";
 import logo from "@/images/logo.png";
+import {
+  ComingSoonContent,
+  ComingSoonWrapper,
+  ComingSoonTrigger,
+} from "./coming-soon";
 import { NavSheet } from "./nav-sheet";
 import { GoogleLoginButton } from "./auth-login-button";
 
@@ -35,7 +40,7 @@ export function NavDropdown({ session }: { session: Session | null }) {
 
   return (
     !hideNavbarOnRoutes.includes(pathname) && (
-      <nav className="fixed top-0 z-10 w-full">
+      <nav className="fixed top-0 z-10 w-full drop-shadow-md">
         <div className="container flex items-center justify-between bg-primary-foreground py-2 backdrop-blur-md">
           <div className="flex items-center gap-x-2">
             <Image
@@ -78,30 +83,34 @@ function NewPostButton() {
   const router = useRouter();
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-x-1">
-          <Plus className="h-5 w-5" />
-          <ChevronDown className="h-5 w-5" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => router.push("/new")}
-        >
-          <FilePenLine className="mr-2 h-4 w-4" />
-          New Post
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => router.push("/new/import")}
-        >
-          <FileUp className="mr-2 h-4 w-4" />
-          Import Post
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <ComingSoonWrapper>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" size="sm" className="gap-x-1">
+            <Plus className="h-5 w-5" />
+            <ChevronDown className="h-5 w-5" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => router.push("/new")}
+          >
+            <FilePenLine className="mr-2 h-4 w-4" />
+            New Post
+          </DropdownMenuItem>
+          <ComingSoonTrigger>
+            <DropdownMenuItem className="cursor-pointer">
+              <FileUp className="mr-2 h-4 w-4" />
+              Import Post
+            </DropdownMenuItem>
+          </ComingSoonTrigger>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <ComingSoonContent>
+        {`Fitur import postingan masih dalam pengembangan. Mohon tunggu kehadirannya! 🔥`}
+      </ComingSoonContent>
+    </ComingSoonWrapper>
   );
 }
 

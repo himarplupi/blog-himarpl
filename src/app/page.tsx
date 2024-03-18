@@ -11,10 +11,11 @@ export default async function HomePage({
   noStore();
 
   return (
-    <main className="container">
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-        HELLO WORLD!
+    <main className="container mt-16">
+      <h1 className="scroll-m-20 font-serif text-4xl font-extrabold tracking-wide lg:text-5xl">
+        Hello World!
       </h1>
+
       <NotificationToast msg={searchParams.toast} />
     </main>
   );
