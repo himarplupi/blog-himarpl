@@ -52,10 +52,6 @@ export const authOptions: NextAuthOptions = {
         return `/login?errorMsg=Account with email ${email} is not registered`;
       }
 
-      if (user.role !== "admin") {
-        return "/login?errorMsg=You are not an admin";
-      }
-
       const account = await api.account.getByUserId.query(user.id);
 
       if (!account) {
@@ -82,9 +78,7 @@ export const authOptions: NextAuthOptions = {
 
       return true;
     },
-    session: async ({ session, user }) => {
-      await api.user.putLastLogin.mutate(user.id);
-
+    session: ({ session, user }) => {
       return {
         ...session,
         user: {

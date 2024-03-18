@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -19,55 +21,40 @@ import {
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { NavSheet } from "./nav-sheet";
 import type { Session } from "next-auth";
 import { abbreviation } from "@/lib/utils";
+import logo from "@/images/logo.png";
 
 const hideNavbarOnRoutes = ["/login"];
 
 export function NavDropdown({ session }: { session: Session | null }) {
-  const router = useRouter();
   const pathname = usePathname();
 
   return (
     !hideNavbarOnRoutes.includes(pathname) && (
       <nav className="fixed top-0 z-10 w-full">
-        <div className="container flex items-center justify-between bg-primary/5 py-2 backdrop-blur-md">
+        <div className="container flex items-center justify-between bg-primary-foreground py-2 backdrop-blur-md">
           <div className="flex items-center gap-x-2">
-            <h1 className="mr-4 hidden text-2xl font-bold md:block">
-              HIMARPL Admin
-            </h1>
+            <Image
+              src={logo}
+              alt="HIMARPL Logo"
+              width={40}
+              className="hidden md:block"
+            />
+            <Link
+              href="/"
+              className="hidden font-serif text-2xl font-bold tracking-wider transition-all hover:text-foreground/75 md:block "
+            >
+              {"Blog"}
+            </Link>
 
             <NavSheet>
               <Button size="icon" variant="ghost">
                 <Menu className="h-6 w-6" />
               </Button>
             </NavSheet>
-
-            <Button
-              variant="ghost"
-              onClick={() => router.push("/")}
-              className="hidden justify-start gap-x-2 md:inline-flex"
-            >
-              <LucideHome className="ml-2 h-4 w-4" />
-              Overview
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() => router.push("/users")}
-              className="hidden justify-start gap-x-2 md:inline-flex"
-            >
-              <UsersRound className="ml-2 h-4 w-4" />
-              Users
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() => router.push("/departments")}
-              className="hidden justify-start gap-x-2 md:inline-flex"
-            >
-              <Waypoints className="ml-2 h-4 w-4" />
-              Departments
-            </Button>
           </div>
 
           <div className="flex gap-x-4">

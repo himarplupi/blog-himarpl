@@ -28,7 +28,7 @@ export function NavSheet({ children }: { children: React.ReactNode }) {
       </SheetTrigger>
       <SheetContent side="left" className="sm:w-[512px]">
         <SheetHeader className="mt-6">
-          <SheetTitle className="text-left">HIMARPL Admin</SheetTitle>
+          <SheetTitle className="text-left">HIMARPL Blog</SheetTitle>
         </SheetHeader>
         <div className="mt-3 grid grid-cols-1 gap-y-2">
           <Button

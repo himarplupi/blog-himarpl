@@ -60,9 +60,15 @@ const fontSerif = localFont({
 });
 
 export const metadata = {
-  title: "Admin | HIMARPL",
-  description: "Admin Panel for HIMARPL",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  title: "Blog | HIMARPL",
+  description:
+    "Informasi terkini seputar teknologi, programming, dan lainnya, oleh Himpunan Rekayasa Perangkat Lunak Universitas Pendidikan Indonesia",
+  icons: [
+    {
+      rel: "icon",
+      url: "/favicon.ico",
+    },
+  ],
 };
 
 export default async function RootLayout({
@@ -74,7 +80,7 @@ export default async function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "bg-background min-h-screen font-sans antialiased",
+          "min-h-screen bg-background font-sans antialiased",
           fontSans.variable,
           fontSerif.variable,
         )}
