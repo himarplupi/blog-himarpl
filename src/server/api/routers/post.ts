@@ -67,13 +67,6 @@ export const postRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const id = createId();
       const metaTitle = shortenTitle(input.title, 14);
-      let slug = formatSlug(metaTitle);
-
-      const slugExists = await ctx.db.post.count({ where: { slug } });
-
-      if (slugExists > 0) {
-        slug += `-${id}`;
-      }
 
       return await ctx.db.post.create({
         data: {
@@ -82,7 +75,7 @@ export const postRouter = createTRPCRouter({
           content: input.content,
           authorId: input.authorId,
           metaTitle: metaTitle,
-          slug: slug,
+          slug: id,
           categories: input.categoryId
             ? {
                 connect: [{ id: input.categoryId }],
@@ -106,10 +99,40 @@ export const postRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      return await ctx.db.post.update({
+        where: { id: input.id },
+        data: {
+          title: input.title,
+          content: input.content,
+          metaTitle: input.metaTitle,
+          categories: input.categoryId
+            ? {
+                connect: [{ id: input.categoryId }],
+              }
+            : undefined,
+          tags: input.tags
+            ? { connect: input.tags.map((id) => ({ id })) }
+            : undefined,
+        },
+      });
+    }),
+  publish: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
       const id = input.id;
-      const metaTitle = input.metaTitle
-        ? input.metaTitle
-        : shortenTitle(input.title, 14);
+      const res = await ctx.db.post.findFirst({ where: { id } });
+
+      if (!res) {
+        throw new Error("Post not found");
+      }
+
+      const metaTitle = res.metaTitle
+        ? res.metaTitle
+        : shortenTitle(res.title, 14);
       let slug = formatSlug(metaTitle);
 
       const slugExists = await ctx.db.post.count({ where: { slug } });
@@ -121,18 +144,9 @@ export const postRouter = createTRPCRouter({
       return await ctx.db.post.update({
         where: { id },
         data: {
-          title: input.title,
-          content: input.content,
-          metaTitle: metaTitle,
           slug: slug,
-          categories: input.categoryId
-            ? {
-                connect: [{ id: input.categoryId }],
-              }
-            : undefined,
-          tags: input.tags
-            ? { connect: input.tags.map((id) => ({ id })) }
-            : undefined,
+          metaTitle: metaTitle,
+          publishedAt: new Date(),
         },
       });
     }),
