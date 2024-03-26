@@ -91,6 +91,7 @@ model User {
   image         String?
   username      String?       @unique
   bio           String?
+  position      String?
   role          Role          @default(member)
   lastLoginAt   DateTime      @default(now())
   createdAt     DateTime      @default(now())
