@@ -51,7 +51,7 @@ model Post {
   authorId    String
   title       String
   metaTitle   String
-  slug        String
+  slug        String         @unique
   content     String
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @default(now()) @updatedAt
@@ -91,6 +91,7 @@ model User {
   image         String?
   username      String?       @unique
   bio           String?
+  position      String?
   role          Role          @default(member)
   lastLoginAt   DateTime      @default(now())
   createdAt     DateTime      @default(now())
