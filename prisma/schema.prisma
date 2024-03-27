@@ -51,7 +51,7 @@ model Post {
   authorId    String
   title       String
   metaTitle   String
-  slug        String         @unique
+  slug        String
   content     String
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @default(now()) @updatedAt
@@ -59,6 +59,8 @@ model Post {
   author      User           @relation(fields: [authorId], references: [id])
   categories  PostCategory[]
   tags        PostTag[]
+
+  @@unique([authorId, slug])
 }
 
 // Define the department model
@@ -93,7 +95,7 @@ model User {
   bio           String?
   position      String?
   role          Role          @default(member)
-  lastLoginAt   DateTime      @default(now())
+  lastLoginAt   DateTime?
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @default(now()) @updatedAt
   departmentId  String?
