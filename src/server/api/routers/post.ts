@@ -1,47 +1,76 @@
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { faker } from "@faker-js/faker";
+import GithubSlugger from "github-slugger";
 
-export type Post7Day = {
-  publishedAt: Date | null;
-};
-
-export type PostStatistic = {
-  totalPostsIn7Days: number;
-  percentageIn7Days: number;
-  posts7Days: Post7Day[];
-};
+const contentGuide = `
+  # Ini adalah heading 1
+  Ini adalah paragraf dengan **bold** dan *italic*.
+  ## Ini adalah heading 2
+  Ini adalah paragraf dengan [link](https://example.com).
+  ### Ini adalah heading 3
+  Ini adalah paragraf dengan \`code\`.
+  #### Ini adalah heading 4
+  Ini adalah paragraf dengan:
+  \`\`\`
+  code block
+  \`\`\`
+  ##### Ini adalah heading 5
+  Ini adalah paragraf dengan:
+  - list 1
+  - list 2
+  ###### Ini adalah heading 6
+  Ini adalah paragraf dengan gambar:
+  ![gambar](https://example.com/image.jpg)
+`;
 
 export const postRouter = createTRPCRouter({
-  getStatistic: protectedProcedure.query(async ({ ctx }) => {
-    const posts7Days = await ctx.db.post.findMany({
-      orderBy: { publishedAt: "asc" },
-      select: { publishedAt: true },
-      where: {
-        publishedAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
-      },
-    });
+  new: protectedProcedure.mutation(async ({ ctx }) => {
+    if (!ctx.session.user.username) {
+      throw new Error("User must have a username to create a post");
+    }
 
-    const posts7DaysBefore = await ctx.db.post.count({
-      where: {
-        publishedAt: {
-          gte: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
-          lt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+    const slugger = new GithubSlugger();
+    const title = faker.company.catchPhrase();
+    const metaTitle = parseMetaTitle(title);
+
+    (
+      await ctx.db.post.findMany({
+        where: {
+          authorId: ctx.session.user.id,
         },
+        select: {
+          slug: true,
+        },
+      })
+    ).forEach((post) => {
+      slugger.slug(post.slug);
+    });
+
+    // Insert new post
+    const post = await ctx.db.post.create({
+      data: {
+        title,
+        metaTitle,
+        content: contentGuide,
+        slug: slugger.slug(metaTitle),
+        authorId: ctx.session.user.id,
       },
     });
 
-    const totalPostsIn7Days = posts7Days.length - posts7DaysBefore;
+    slugger.reset();
 
-    const percentageIn7Days =
-      Math.round(
-        (totalPostsIn7Days / (posts7DaysBefore === 0 ? 1 : posts7DaysBefore)) *
-          100 *
-          100,
-      ) / 100;
-
-    return {
-      totalPostsIn7Days,
-      percentageIn7Days,
-      posts7Days,
-    };
+    return post;
   }),
 });
+
+function parseMetaTitle(title: string) {
+  // Remove special characters and convert to lowercase
+  const safeTitle = title.replace(/[^\w\s]/gi, "").toLowerCase();
+
+  // Set safe meta title length by word length
+  const maxWords = 10;
+  const words = safeTitle.split(" ");
+  const truncatedTitle = words.slice(0, maxWords).join(" ");
+
+  return truncatedTitle;
+}

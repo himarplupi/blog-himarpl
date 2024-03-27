@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
-export async function LoginPage({
+export default async function LoginPage({
   searchParams,
 }: {
   searchParams: { errorMsg?: string };
@@ -25,9 +25,9 @@ export async function LoginPage({
     <main className="flex min-h-screen items-center justify-center">
       <Card className="w-96">
         <CardHeader>
-          <CardTitle>Login Admin</CardTitle>
+          <CardTitle>Login</CardTitle>
           <CardDescription>
-            Masuk ke laman admin dengan menggunakan akun Google UPI Anda.
+            Mulai posting dengan menggunakan akun Google UPI Anda.
           </CardDescription>
         </CardHeader>
         <CardContent>
