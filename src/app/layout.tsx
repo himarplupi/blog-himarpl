@@ -85,10 +85,7 @@ export default async function RootLayout({
           fontSerif.variable,
         )}
       >
-        <TRPCReactProvider>
-          {children}
-          <GlobalFooter />
-        </TRPCReactProvider>
+        <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
 
       <GoogleAnalytics gaId="G-BNJKV201XL" />

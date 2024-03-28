@@ -1,26 +1,29 @@
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { faker } from "@faker-js/faker";
+import { z } from "zod";
 import GithubSlugger from "github-slugger";
 
 const contentGuide = `
-  # Ini adalah heading 1
-  Ini adalah paragraf dengan **bold** dan *italic*.
-  ## Ini adalah heading 2
-  Ini adalah paragraf dengan [link](https://example.com).
-  ### Ini adalah heading 3
-  Ini adalah paragraf dengan \`code\`.
-  #### Ini adalah heading 4
-  Ini adalah paragraf dengan:
-  \`\`\`
+  <h1>Ini adalah heading 1</h1>
+  <p>Ini adalah paragraf dengan <strong>bold</strong> dan <em>italic</em>.</p>
+  <h2>Ini adalah heading 2</h2>
+  <p>Ini adalah paragraf dengan <a href="https://example.com">link</a>.</p>
+  <h3>Ini adalah heading 3</h3>
+  <p>Ini adalah paragraf dengan <code>code</code>.</p>
+  <h4>Ini adalah heading 4</h4>
+  <p>Ini adalah paragraf dengan:</p>
+  <pre><code>
   code block
-  \`\`\`
-  ##### Ini adalah heading 5
-  Ini adalah paragraf dengan:
-  - list 1
-  - list 2
-  ###### Ini adalah heading 6
-  Ini adalah paragraf dengan gambar:
-  ![gambar](https://example.com/image.jpg)
+  </code></pre>
+  <h5>Ini adalah heading 5</h5>
+  <p>Ini adalah paragraf dengan:</p>
+  <ul>
+    <li>list 1</li>
+    <li>list 2</li>
+  </ul>
+  <h6>Ini adalah heading 6</h6>
+  <p>Ini adalah paragraf dengan gambar:</p>
+  <img src="https://example.com/image.jpg" alt="gambar">
 `;
 
 export const postRouter = createTRPCRouter({
@@ -61,6 +64,76 @@ export const postRouter = createTRPCRouter({
 
     return post;
   }),
+  byParams: protectedProcedure
+    .input(
+      z.object({
+        username: z.string(),
+        slug: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const author = await ctx.db.user.findUnique({
+        where: {
+          username: input.username,
+        },
+        include: {
+          posts: {
+            where: {
+              slug: input.slug,
+            },
+            include: {
+              category: {
+                select: {
+                  title: true,
+                  slug: true,
+                },
+              },
+              tags: {
+                select: {
+                  title: true,
+                  slug: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return {
+        author,
+        post: author?.posts[0],
+      };
+    }),
+  save: protectedProcedure
+    .input(
+      z.object({
+        authorId: z.string(),
+        slug: z.string(),
+        title: z.string(),
+        content: z.string(),
+        categoryId: z.string().optional(),
+        tagIds: z.array(z.string()).optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.post.update({
+        data: {
+          title: input.title,
+          metaTitle: parseMetaTitle(input.title),
+          content: input.content,
+          categoryId: input.categoryId,
+          tags: {
+            connect: input.tagIds?.map((id) => ({ id })),
+          },
+        },
+        where: {
+          authorId_slug: {
+            authorId: input.authorId,
+            slug: input.slug,
+          },
+        },
+      });
+    }),
 });
 
 function parseMetaTitle(title: string) {

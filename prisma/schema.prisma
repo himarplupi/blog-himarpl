@@ -47,17 +47,18 @@ model PostCategory {
 }
 
 model Post {
-  id          String         @id @default(cuid())
+  id          String        @id @default(cuid())
   authorId    String
   title       String
   metaTitle   String
   slug        String
   content     String
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @default(now()) @updatedAt
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt
   publishedAt DateTime?
-  author      User           @relation(fields: [authorId], references: [id])
-  categories  PostCategory[]
+  categoryId  String?
+  author      User          @relation(fields: [authorId], references: [id])
+  category    PostCategory? @relation(fields: [categoryId], references: [id])
   tags        PostTag[]
 
   @@unique([authorId, slug])

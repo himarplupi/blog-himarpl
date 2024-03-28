@@ -1,6 +1,9 @@
 import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
 import { redirect, notFound } from "next/navigation";
+import { EditorProvider } from "@/components/post/editor-context";
+import { Editor } from "@/components/post/editor";
+import { EditorNavbar } from "@/components/post/editor-navbar";
 
 type PostEditPageProps = {
   params: { username: string; slug: string };
@@ -14,9 +17,16 @@ export default async function PostEditPage({ params }: PostEditPageProps) {
     return redirect("/login");
   }
 
-  const author = await api.user.byUsername.query(username);
+  const { author, post } = await api.post.byParams.query({
+    slug: params.slug,
+    username,
+  });
 
   if (!author || session.user.id !== author.id) {
+    return notFound();
+  }
+
+  if (!post) {
     return notFound();
   }
 
@@ -25,12 +35,11 @@ export default async function PostEditPage({ params }: PostEditPageProps) {
   }
 
   return (
-    <main className="container mt-16 min-h-screen py-8">
-      <h2 className="scroll-m-20 border-b pb-2 font-serif text-3xl font-semibold uppercase tracking-wide first:mt-0">
-        Post Edit Page
-      </h2>
-      {params.slug}
-      {params.username}
-    </main>
+    <EditorProvider author={author} post={post}>
+      <EditorNavbar session={session} />
+      <main className="container mt-16 min-h-screen space-y-8 py-8">
+        <Editor />
+      </main>
+    </EditorProvider>
   );
 }
