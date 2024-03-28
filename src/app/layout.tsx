@@ -5,7 +5,6 @@ import localFont from "next/font/local";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import { cn } from "@/lib/utils";
 import { TRPCReactProvider } from "@/trpc/react";
-import { GlobalFooter } from "@/components/common/global-footer";
 
 const fontSans = FontSans({
   subsets: ["latin"],

@@ -7,6 +7,10 @@ export async function GET() {
 
   if (!session) redirect("/login");
 
+  if (!session.user.username) {
+    return redirect("/register/username");
+  }
+
   const newPost = await api.post.new.mutate();
 
   return redirect(`/@${session?.user?.username}/${newPost.slug}/edit`);

@@ -19,6 +19,10 @@ export default async function LoginPage({
 }) {
   const session = await getServerAuthSession();
 
+  if (session && !session.user.username) {
+    return redirect("/register/username");
+  }
+
   if (session) return redirect("/");
 
   return (
