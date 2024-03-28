@@ -35,7 +35,7 @@ const DocumentWithTitle = Document.extend({
 
 const CustomHeading = Heading.extend({
   parseHTML() {
-    return this.options.levels.map((level, index) => {
+    return this.options.levels.map((level) => {
       return {
         tag: `h${level}`,
         attrs: { level: level == 1 ? 2 : level },
