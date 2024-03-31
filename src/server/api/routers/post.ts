@@ -1,6 +1,7 @@
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { faker } from "@faker-js/faker";
 import { z } from "zod";
+import { createId } from "@paralleldrive/cuid2";
 import GithubSlugger from "github-slugger";
 
 const contentGuide = `
@@ -28,42 +29,79 @@ const contentGuide = `
 
 export const postRouter = createTRPCRouter({
   new: protectedProcedure.mutation(async ({ ctx }) => {
-    if (!ctx.session.user.username) {
+    const currentUser = ctx.session.user;
+
+    if (!currentUser.username) {
       throw new Error("User must have a username to create a post");
     }
 
-    const slugger = new GithubSlugger();
+    const id = createId();
     const title = faker.company.catchPhrase();
-    const metaTitle = parseMetaTitle(title);
-
-    (
-      await ctx.db.post.findMany({
-        where: {
-          authorId: ctx.session.user.id,
-        },
-        select: {
-          slug: true,
-        },
-      })
-    ).forEach((post) => {
-      slugger.slug(post.slug);
-    });
 
     // Insert new post
-    const post = await ctx.db.post.create({
+    return await ctx.db.post.create({
       data: {
+        id,
         title,
-        metaTitle,
         content: contentGuide,
-        slug: slugger.slug(metaTitle),
+        slug: id,
+        metaTitle: parseMetaTitle(title),
         authorId: ctx.session.user.id,
       },
     });
-
-    slugger.reset();
-
-    return post;
   }),
+  publish: protectedProcedure
+    .input(
+      z.object({
+        title: z.string(),
+        content: z.string(),
+        slug: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const currentUser = ctx.session.user;
+
+      if (!currentUser.username) {
+        throw new Error("User must have a username to create a post");
+      }
+
+      const title = input.title;
+      const slugger = new GithubSlugger();
+      const metaTitle = parseMetaTitle(title);
+
+      (
+        await ctx.db.post.findMany({
+          where: {
+            authorId: ctx.session.user.id,
+          },
+          select: {
+            slug: true,
+          },
+        })
+      ).forEach((post) => {
+        slugger.slug(post.slug);
+      });
+
+      // Insert new post
+      const post = await ctx.db.post.update({
+        where: {
+          authorId_slug: {
+            authorId: currentUser.id,
+            slug: input.slug,
+          },
+        },
+        data: {
+          title,
+          metaTitle,
+          content: input.content,
+          slug: slugger.slug(metaTitle),
+        },
+      });
+
+      slugger.reset();
+
+      return post;
+    }),
   byParams: protectedProcedure
     .input(
       z.object({
@@ -134,6 +172,34 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
+  selectSelfDrafts: protectedProcedure.query(async ({ ctx }) => {
+    const currentUser = ctx.session.user;
+    if (!currentUser) {
+      throw new Error("User must be logged in to view drafts");
+    }
+
+    return ctx.db.post.findMany({
+      where: {
+        authorId: currentUser.id,
+        publishedAt: null,
+      },
+    });
+  }),
+  selectSelfPublished: protectedProcedure.query(async ({ ctx }) => {
+    const currentUser = ctx.session.user;
+    if (!currentUser) {
+      throw new Error("User must be logged in to view drafts");
+    }
+
+    return ctx.db.post.findMany({
+      where: {
+        authorId: currentUser.id,
+        publishedAt: {
+          not: null,
+        },
+      },
+    });
+  }),
 });
 
 function parseMetaTitle(title: string) {

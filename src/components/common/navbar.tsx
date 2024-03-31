@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import { LogOut, ExternalLink, Menu, Plus } from "lucide-react";
+import { LogOut, Book, User, Menu, Pen } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -58,8 +58,11 @@ export function Navbar({ session }: { session: Session | null }) {
           </div>
 
           <div className="ml-auto flex items-center gap-x-4">
-            <Link href="/new" className={cn(buttonVariants({ size: "sm" }))}>
-              <Plus className="mr-2 h-4 w-4" /> New Post
+            <Link
+              href="/new"
+              className={cn(buttonVariants({ size: "sm", variant: "outline" }))}
+            >
+              <Pen className="mr-2 h-4 w-4" /> New Post
             </Link>
 
             <DropdownMenu>
@@ -73,10 +76,18 @@ export function Navbar({ session }: { session: Session | null }) {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuLabel>{session?.user.name}</DropdownMenuLabel>
-                <DropdownMenuItem className="cursor-pointer">
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  My Profile
-                </DropdownMenuItem>
+                <Link href="/me">
+                  <DropdownMenuItem className="cursor-pointer">
+                    <User className="mr-2 h-4 w-4" />
+                    Profilku
+                  </DropdownMenuItem>
+                </Link>
+                <Link href="/me/posts/drafts">
+                  <DropdownMenuItem className="cursor-pointer">
+                    <Book className="mr-2 h-4 w-4" />
+                    Postinganku
+                  </DropdownMenuItem>
+                </Link>
 
                 <DropdownMenuItem
                   className="cursor-pointer"

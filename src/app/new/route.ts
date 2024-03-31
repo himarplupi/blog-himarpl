@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
 
-export async function GET() {
+export async function RedirectMeToNewPost() {
   const session = await getServerAuthSession();
 
   if (!session) redirect("/login");
@@ -15,3 +15,5 @@ export async function GET() {
 
   return redirect(`/@${session?.user?.username}/${newPost.slug}/edit`);
 }
+
+export { RedirectMeToNewPost as GET };
