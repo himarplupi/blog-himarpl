@@ -49,7 +49,7 @@ export default function DraftsPage() {
             <div className="flex-grow justify-between gap-x-4 sm:flex">
               <div className="w-fit">
                 <h3 className="line-clamp-2 text-pretty font-serif text-xl font-bold capitalize leading-7 sm:text-2xl">
-                  {post.title}
+                  {post.title.length > 0 ? post.title : "Tidak ada judul"}
                 </h3>
                 <p className="line-clamp-3 text-pretty text-sm leading-5 tracking-wide">
                   {getContent(post.content)}
