@@ -3,7 +3,7 @@ import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
 import { unstable_noStore as noStore } from "next/cache";
 
-export async function RedirectMeToNewPost() {
+async function RedirectMeToNewPost() {
   noStore();
   const session = await getServerAuthSession();
 
