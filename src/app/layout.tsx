@@ -5,6 +5,7 @@ import localFont from "next/font/local";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import { cn } from "@/lib/utils";
 import { TRPCReactProvider } from "@/trpc/react";
+import { Toaster } from "@/components/ui/sonner";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -85,6 +86,7 @@ export default async function RootLayout({
         )}
       >
         <TRPCReactProvider>{children}</TRPCReactProvider>
+        <Toaster />
       </body>
 
       <GoogleAnalytics gaId="G-BNJKV201XL" />

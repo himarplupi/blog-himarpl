@@ -183,6 +183,20 @@ export const postRouter = createTRPCRouter({
         authorId: currentUser.id,
         publishedAt: null,
       },
+      include: {
+        category: {
+          select: {
+            title: true,
+            slug: true,
+          },
+        },
+        tags: {
+          select: {
+            title: true,
+            slug: true,
+          },
+        },
+      },
     });
   }),
   selectSelfPublished: protectedProcedure.query(async ({ ctx }) => {
@@ -198,8 +212,39 @@ export const postRouter = createTRPCRouter({
           not: null,
         },
       },
+      include: {
+        category: {
+          select: {
+            title: true,
+            slug: true,
+          },
+        },
+        tags: {
+          select: {
+            title: true,
+            slug: true,
+          },
+        },
+      },
     });
   }),
+  delete: protectedProcedure
+    .input(
+      z.object({
+        authorId: z.string(),
+        slug: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.post.delete({
+        where: {
+          authorId_slug: {
+            authorId: input.authorId,
+            slug: input.slug,
+          },
+        },
+      });
+    }),
 });
 
 function parseMetaTitle(title: string) {

@@ -28,7 +28,7 @@ export function EditorNavbar({ session }: { session: Session | null }) {
           <div className="flex items-center gap-x-2">
             <Image src={logo} alt="HIMARPL Logo" width={40} />
             <Link
-              href="/me/drafts"
+              href="/me/posts/drafts"
               className="hidden font-serif text-lg text-foreground/80 sm:inline"
             >
               <strong>Draft</strong> in @{session?.user.username}

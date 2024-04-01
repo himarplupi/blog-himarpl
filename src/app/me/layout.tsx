@@ -4,12 +4,14 @@ import { MePostProvider } from "@/components/post/me-post-context";
 import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
 import { redirect } from "next/navigation";
+import { unstable_noStore as noStore } from "next/cache";
 
 export default async function MeLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  noStore();
   const session = await getServerAuthSession();
 
   if (!session) redirect("/login");
@@ -30,7 +32,11 @@ export default async function MeLayout({
     <>
       <Navbar session={session} />
       <MeHeader />
-      <MePostProvider draftPosts={draftPosts} publishedPosts={publishedPosts}>
+      <MePostProvider
+        session={session}
+        draftPosts={draftPosts}
+        publishedPosts={publishedPosts}
+      >
         <LayoutAnimationProvider>{children}</LayoutAnimationProvider>
       </MePostProvider>
     </>
