@@ -60,6 +60,7 @@ export function DeleteAlertContent({
     });
 
     if (onDelete) {
+      await deletePromise;
       onDelete({ slug, authorId });
     }
   };
