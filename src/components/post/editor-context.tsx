@@ -6,6 +6,14 @@ import StarterKit from "@tiptap/starter-kit";
 import Document from "@tiptap/extension-document";
 import Heading from "@tiptap/extension-heading";
 import Placeholder from "@tiptap/extension-placeholder";
+import Image from "@tiptap/extension-image";
+import Link from "@tiptap/extension-link";
+import Superscript from "@tiptap/extension-superscript";
+import Subscript from "@tiptap/extension-subscript";
+import Underline from "@tiptap/extension-underline";
+import Highlight from "@tiptap/extension-highlight";
+import CharacterCount from "@tiptap/extension-character-count";
+import TextAlign from "@tiptap/extension-text-align";
 import { useEditor, textblockTypeInputRule, type Editor } from "@tiptap/react";
 import { api } from "@/trpc/react";
 import { cn } from "@/lib/utils";
@@ -94,6 +102,18 @@ export function EditorProvider({
       }),
       DocumentWithTitle,
       CustomHeading,
+      Link,
+      TextAlign,
+      Highlight,
+      CharacterCount,
+      Superscript,
+      Subscript,
+      Underline,
+      Image.configure({
+        HTMLAttributes: {
+          class: "w-full h-auto",
+        },
+      }),
       Placeholder.configure({
         placeholder: ({ node }) => {
           if (node.type.name === "heading") {
