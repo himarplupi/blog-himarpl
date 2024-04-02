@@ -1,6 +1,7 @@
 import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
 import { redirect, notFound } from "next/navigation";
+import { unstable_noStore as noStore } from "next/cache";
 import { EditorProvider } from "@/components/post/editor-context";
 import { Editor } from "@/components/post/editor";
 import { EditorNavbar } from "@/components/post/editor-navbar";
@@ -10,6 +11,7 @@ type PostEditPageProps = {
 };
 
 export default async function PostEditPage({ params }: PostEditPageProps) {
+  noStore();
   const session = await getServerAuthSession();
   const username = params.username.substring(3);
 
