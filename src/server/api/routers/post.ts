@@ -5,26 +5,25 @@ import { createId } from "@paralleldrive/cuid2";
 import GithubSlugger from "github-slugger";
 
 const contentGuide = `
-  <h1>Ini adalah heading 1</h1>
-  <p>Ini adalah paragraf dengan <strong>bold</strong> dan <em>italic</em>.</p>
   <h2>Ini adalah heading 2</h2>
+  <p>Ini adalah paragraf dengan <strong>bold</strong> dan <em>italic</em>.</p>
   <p>Ini adalah paragraf dengan <a href="https://example.com">link</a>.</p>
   <h3>Ini adalah heading 3</h3>
-  <p>Ini adalah paragraf dengan <code>code</code>.</p>
+  <p>Ini adalah paragraf dengan <code>code</code> dan <u>garis bawah</u>.</p>
   <h4>Ini adalah heading 4</h4>
-  <p>Ini adalah paragraf dengan:</p>
+  <p>Ini adalah <mark>paragraf</mark> dengan:</p>
   <pre><code>
   code block
   </code></pre>
-  <h5>Ini adalah heading 5</h5>
+  <h5>Ini adalah heading 5 bukan <s>paragraf</s></h5>
   <p>Ini adalah paragraf dengan:</p>
   <ul>
     <li>list 1</li>
     <li>list 2</li>
   </ul>
-  <h6>Ini adalah heading 6</h6>
-  <p>Ini adalah paragraf dengan gambar:</p>
-  <img src="https://example.com/image.jpg" alt="gambar">
+  <h6>Ini adalah <sub>Head</sub>ing<sup>6</sup></h6>
+  <p>Contoh gambar:</p>
+  <img src="https://images.unsplash.com/photo-1707362142719-60675f05b4d7?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=512&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMjAxNDkxNQ&ixlib=rb-4.0.3&q=80&w=512" alt="contoh gambar">
 `;
 
 export const postRouter = createTRPCRouter({
