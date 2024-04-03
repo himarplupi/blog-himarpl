@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useContext } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
@@ -17,13 +17,14 @@ import { abbreviation } from "@/lib/utils";
 import logo from "@/images/logo.png";
 import type { Session } from "next-auth";
 import { EditorContext } from "./editor-context";
+import { EditorMenu } from "./editor-menu";
 
 export function EditorNavbar({ session }: { session: Session | null }) {
-  const { isSaving } = React.useContext(EditorContext);
+  const { isSaving } = useContext(EditorContext);
 
   return (
-    <nav className="fixed top-0 z-10 w-full drop-shadow-md">
-      <div className="container flex items-center justify-between bg-primary-foreground py-2 backdrop-blur-md">
+    <nav className="container fixed top-0 z-10 w-full space-y-2 bg-primary-foreground py-2 drop-shadow-md backdrop-blur-md">
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-5">
           <div className="flex items-center gap-x-2">
             <Image src={logo} alt="HIMARPL Logo" width={40} />
@@ -72,6 +73,8 @@ export function EditorNavbar({ session }: { session: Session | null }) {
           </DropdownMenu>
         </div>
       </div>
+
+      <EditorMenu />
     </nav>
   );
 }
