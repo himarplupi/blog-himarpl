@@ -134,6 +134,8 @@ export function EditorProvider({
     },
   });
   const [isSaving, setIsSaving] = useState(false);
+  const [title, setTitle] = useState(post.title);
+  const [content, setContent] = useState(post.content);
   const [debouncedEditor] = useDebounce(editor?.state.doc.content, 1000);
   const savePost = api.post.save.useMutation();
 
@@ -141,10 +143,6 @@ export function EditorProvider({
     if (!editor) {
       return;
     }
-    const rawHtml = editor?.getHTML();
-    const titleMatch = /<h1>(.*?)<\/h1>/.exec(rawHtml);
-    const title = titleMatch?.[1] ?? "";
-    const content = rawHtml.replace(/<h1>(.*?)<\/h1>/, "");
 
     if (savePost.data?.content === content && savePost.data?.title === title) {
       return;
@@ -164,26 +162,39 @@ export function EditorProvider({
     const rawHtml = editor?.getHTML();
 
     if (!rawHtml.includes("<h1>")) {
-      editor.commands.setHeading({ level: 1 });
+      editor.chain().focus().setHeading({ level: 1 }).run();
+      return;
     }
+
+    const titleMatch = /<h1>(.*?)<\/h1>/.exec(rawHtml);
+    const title = titleMatch?.[1] ?? "";
+    const content = rawHtml.replace(titleMatch?.[0] ?? "", "").trim();
+
+    const headingCount = (rawHtml.match(/<h1>/g) ?? []).length;
+    if (headingCount > 1) {
+      const content = rawHtml
+        .split("</h1>")
+        .join("</p>")
+        .split("<h1>")
+        .join("<p>")
+        .trim();
+      editor.commands.setContent(content);
+    }
+
+    setTitle(title);
+    setContent(content);
   }, [editor, editor?.state.doc.content, post.content, post.title]);
 
   useEffect(() => {
     if (!editor) {
       return;
     }
-
-    const rawHtml = editor.getHTML();
-    const titleMatch = /<h1>(.*?)<\/h1>/.exec(rawHtml);
-    const title = titleMatch?.[1] ?? "";
-    const content = rawHtml.replace(/<h1>(.*?)<\/h1>/, "");
+    setIsSaving(true);
 
     if (savePost.data?.content === content && savePost.data?.title === title) {
       return setIsSaving(false);
     }
-
-    setIsSaving(true);
-  }, [editor, editor?.state.selection, savePost.data]);
+  }, [editor, content, title, savePost.data]);
 
   useEffect(() => {
     if (savePost.data) {
