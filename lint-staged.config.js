@@ -1,4 +1,4 @@
-module.exports = {
+const lintStagedConfig = {
   "**/*.{js,jsx,ts,tsx}": (filenames) => [
     `npx eslint --fix ${filenames
       .map((filename) => `"${filename}"`)
@@ -9,3 +9,5 @@ module.exports = {
       .map((filename) => `"${filename}"`)
       .join(" ")}`,
 };
+
+export default lintStagedConfig;

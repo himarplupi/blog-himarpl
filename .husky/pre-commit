@@ -21,4 +21,4 @@ fi
 echo ">> Finish checking branch name"
 echo ">> Linting your files and fixing them if needed..."
 
-bun lint-staged
+npx lint-staged
