@@ -176,6 +176,9 @@ export const postRouter = createTRPCRouter({
         authorId: currentUser.id,
         publishedAt: null,
       },
+      orderBy: {
+        updatedAt: "desc",
+      },
       include: {
         tags: {
           select: {
@@ -198,6 +201,9 @@ export const postRouter = createTRPCRouter({
         publishedAt: {
           not: null,
         },
+      },
+      orderBy: {
+        publishedAt: "desc",
       },
       include: {
         tags: {
