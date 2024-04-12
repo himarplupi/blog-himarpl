@@ -21,10 +21,6 @@ import { cn } from "@/lib/utils";
 import type { User, Post } from "@prisma/client";
 
 type PostExpanded = Post & {
-  category: {
-    title: string;
-    slug: string;
-  } | null;
   tags: {
     title: string;
     slug: string;

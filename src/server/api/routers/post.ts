@@ -119,12 +119,6 @@ export const postRouter = createTRPCRouter({
               slug: input.slug,
             },
             include: {
-              category: {
-                select: {
-                  title: true,
-                  slug: true,
-                },
-              },
               tags: {
                 select: {
                   title: true,
@@ -148,7 +142,6 @@ export const postRouter = createTRPCRouter({
         slug: z.string(),
         title: z.string(),
         content: z.string(),
-        categoryId: z.string().optional(),
         tagIds: z.array(z.string()).optional(),
       }),
     )
@@ -158,7 +151,6 @@ export const postRouter = createTRPCRouter({
           title: input.title,
           metaTitle: parseMetaTitle(input.title),
           content: input.content,
-          categoryId: input.categoryId,
           tags: {
             connect: input.tagIds?.map((id) => ({ id })),
           },
@@ -183,12 +175,6 @@ export const postRouter = createTRPCRouter({
         publishedAt: null,
       },
       include: {
-        category: {
-          select: {
-            title: true,
-            slug: true,
-          },
-        },
         tags: {
           select: {
             title: true,
@@ -212,12 +198,6 @@ export const postRouter = createTRPCRouter({
         },
       },
       include: {
-        category: {
-          select: {
-            title: true,
-            slug: true,
-          },
-        },
         tags: {
           select: {
             title: true,
