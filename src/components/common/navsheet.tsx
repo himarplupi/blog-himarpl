@@ -1,9 +1,10 @@
 "use client";
 
+import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import * as React from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+
 import {
   Sheet,
   SheetContent,
@@ -11,8 +12,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
 import logo from "@/images/logo.png";
+import { cn } from "@/lib/utils";
 
 export function NavSheet({ children }: { children: React.ReactNode }) {
   const router = useRouter();

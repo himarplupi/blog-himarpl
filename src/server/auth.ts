@@ -1,15 +1,16 @@
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import {
-  getServerSession,
   type DefaultSession,
+  getServerSession,
   type NextAuthOptions,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import GoogleProvider from "next-auth/providers/google";
+
+import { env } from "@/env";
 import { db } from "@/server/db";
 import { api } from "@/trpc/server";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { User as PrismaUser } from "@prisma/client";
-import { env } from "@/env";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`

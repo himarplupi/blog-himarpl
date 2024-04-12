@@ -1,5 +1,6 @@
-import { getServerAuthSession } from "@/server/auth";
 import { redirect } from "next/navigation";
+
+import { getServerAuthSession } from "@/server/auth";
 
 async function RedirectMeToMyDrafts() {
   const session = await getServerAuthSession();

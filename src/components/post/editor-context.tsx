@@ -2,23 +2,23 @@
 
 import { createContext, useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
-import StarterKit from "@tiptap/starter-kit";
+
+import { cn } from "@/lib/utils";
+import { api } from "@/trpc/react";
+import type { Post, User } from "@prisma/client";
+import CharacterCount from "@tiptap/extension-character-count";
 import Document from "@tiptap/extension-document";
 import Heading from "@tiptap/extension-heading";
-import Placeholder from "@tiptap/extension-placeholder";
+import Highlight from "@tiptap/extension-highlight";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
-import Superscript from "@tiptap/extension-superscript";
+import Placeholder from "@tiptap/extension-placeholder";
 import Subscript from "@tiptap/extension-subscript";
-import Underline from "@tiptap/extension-underline";
-import Highlight from "@tiptap/extension-highlight";
-import CharacterCount from "@tiptap/extension-character-count";
+import Superscript from "@tiptap/extension-superscript";
 import TextAlign from "@tiptap/extension-text-align";
-import { useEditor, textblockTypeInputRule, type Editor } from "@tiptap/react";
-import { api } from "@/trpc/react";
-import { cn } from "@/lib/utils";
-
-import type { User, Post } from "@prisma/client";
+import Underline from "@tiptap/extension-underline";
+import { type Editor, textblockTypeInputRule, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 
 type PostExpanded = Post & {
   tags: {

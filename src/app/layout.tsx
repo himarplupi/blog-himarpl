@@ -1,11 +1,12 @@
-import "@/styles/globals.css";
-
 import { Montserrat as FontSans } from "next/font/google";
 import localFont from "next/font/local";
-import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
+
+import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 import { TRPCReactProvider } from "@/trpc/react";
-import { Toaster } from "@/components/ui/sonner";
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
+
+import "@/styles/globals.css";
 
 const fontSans = FontSans({
   subsets: ["latin"],

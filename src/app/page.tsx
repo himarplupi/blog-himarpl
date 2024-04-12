@@ -1,5 +1,4 @@
 import { Navbar } from "@/components/common/navbar";
-
 import { getServerAuthSession } from "@/server/auth";
 
 export default async function Home() {

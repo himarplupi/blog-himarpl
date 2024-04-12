@@ -3,19 +3,21 @@
 import { useContext } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import type { Session } from "next-auth";
 import { signOut } from "next-auth/react";
-import { LogOut, ExternalLink } from "lucide-react";
+import { ExternalLink, LogOut } from "lucide-react";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
   DropdownMenuLabel,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { abbreviation } from "@/lib/utils";
 import logo from "@/images/logo.png";
-import type { Session } from "next-auth";
+import { abbreviation } from "@/lib/utils";
+
 import { EditorContext } from "./editor-context";
 import { EditorMenu } from "./editor-menu";
 
