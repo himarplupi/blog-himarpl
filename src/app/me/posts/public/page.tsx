@@ -68,11 +68,15 @@ export default function DraftsPage() {
             </div>
           </Link>
           <div className="mt-2 flex items-center gap-x-2">
-            {post.category && (
-              <Badge variant="secondary" className="truncate font-normal">
-                {post.category.title}
+            {post.tags?.map((tag) => (
+              <Badge
+                key={tag.slug}
+                variant="secondary"
+                className="truncate font-normal"
+              >
+                {tag.title}
               </Badge>
-            )}
+            ))}
             <span className="text-nowrap text-sm text-muted-foreground">
               {`Dipublish pada hari ${momentId(post.updatedAt).format("LLLL")}`}
             </span>

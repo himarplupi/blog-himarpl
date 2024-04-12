@@ -9,24 +9,20 @@ import {
 import type { Post } from "@prisma/client";
 import type { Session } from "next-auth";
 
-type PostWithCategoryAndTags = Post & {
+type PostWithTags = Post & {
   tags:
     | {
         title: string;
         slug: string;
       }[]
     | null;
-  category: {
-    title: string;
-    slug: string;
-  } | null;
 };
 
 type MePostContextType = {
-  draftPosts: PostWithCategoryAndTags[];
-  setDraftPosts: Dispatch<SetStateAction<PostWithCategoryAndTags[]>> | null;
-  publishedPosts: PostWithCategoryAndTags[];
-  setPublishedPosts: Dispatch<SetStateAction<PostWithCategoryAndTags[]>> | null;
+  draftPosts: PostWithTags[];
+  setDraftPosts: Dispatch<SetStateAction<PostWithTags[]>> | null;
+  publishedPosts: PostWithTags[];
+  setPublishedPosts: Dispatch<SetStateAction<PostWithTags[]>> | null;
   session: Session | null;
 };
 
@@ -44,15 +40,15 @@ export function MePostProvider({
   session,
   children,
 }: {
-  draftPosts: PostWithCategoryAndTags[];
-  publishedPosts: PostWithCategoryAndTags[];
+  draftPosts: PostWithTags[];
+  publishedPosts: PostWithTags[];
   session: Session | null;
   children: React.ReactNode;
 }) {
   const [draftPostsState, setDraftPostsState] =
-    useState<PostWithCategoryAndTags[]>(draftPosts);
+    useState<PostWithTags[]>(draftPosts);
   const [publishedPostsState, setPublishedPostsState] =
-    useState<PostWithCategoryAndTags[]>(publishedPosts);
+    useState<PostWithTags[]>(publishedPosts);
 
   return (
     <MePostContext.Provider
