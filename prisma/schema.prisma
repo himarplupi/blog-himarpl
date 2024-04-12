@@ -26,8 +26,8 @@ enum Role {
 
 model PostTag {
   id        String    @id @default(cuid())
-  title     String
-  slug      String
+  title     String    @unique
+  slug      String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
   parentId  String?
