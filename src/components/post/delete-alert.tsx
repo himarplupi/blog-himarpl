@@ -1,5 +1,8 @@
 "use client";
 
+import type { ReactNode } from "react";
+import { toast } from "sonner";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,9 +14,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import type { ReactNode } from "react";
 import { api } from "@/trpc/react";
-import { toast } from "sonner";
 
 export function DeleteAlertDialog({
   slug,

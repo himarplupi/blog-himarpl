@@ -1,10 +1,11 @@
+import { unstable_noStore as noStore } from "next/cache";
+import { redirect } from "next/navigation";
+
 import { Navbar } from "@/components/common/navbar";
-import { MeHeader, LayoutAnimationProvider } from "@/components/post/me-header";
+import { LayoutAnimationProvider, MeHeader } from "@/components/post/me-header";
 import { MePostProvider } from "@/components/post/me-post-context";
 import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
-import { redirect } from "next/navigation";
-import { unstable_noStore as noStore } from "next/cache";
 
 export default async function MeLayout({
   children,

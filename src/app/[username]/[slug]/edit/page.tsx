@@ -1,10 +1,11 @@
+import { unstable_noStore as noStore } from "next/cache";
+import { notFound, redirect } from "next/navigation";
+
+import { Editor } from "@/components/post/editor";
+import { EditorProvider } from "@/components/post/editor-context";
+import { EditorNavbar } from "@/components/post/editor-navbar";
 import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
-import { redirect, notFound } from "next/navigation";
-import { unstable_noStore as noStore } from "next/cache";
-import { EditorProvider } from "@/components/post/editor-context";
-import { Editor } from "@/components/post/editor";
-import { EditorNavbar } from "@/components/post/editor-navbar";
 
 type PostEditPageProps = {
   params: { username: string; slug: string };

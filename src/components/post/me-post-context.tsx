@@ -2,20 +2,21 @@
 
 import {
   createContext,
-  useState,
   type Dispatch,
   type SetStateAction,
+  useState,
 } from "react";
-import type { Post } from "@prisma/client";
 import type { Session } from "next-auth";
+
+import type { Post } from "@prisma/client";
 
 type PostWithTags = Post & {
   tags:
-    | {
-        title: string;
-        slug: string;
-      }[]
-    | null;
+  | {
+    title: string;
+    slug: string;
+  }[]
+  | null;
 };
 
 type MePostContextType = {

@@ -1,7 +1,8 @@
-import { accountRouter } from "./routers/account";
-import { userRouter } from "./routers/user";
-import { postRouter } from "./routers/post";
 import { createTRPCRouter } from "@/server/api/trpc";
+
+import { accountRouter } from "./routers/account";
+import { postRouter } from "./routers/post";
+import { userRouter } from "./routers/user";
 
 /**
  * This is the primary router for your server.

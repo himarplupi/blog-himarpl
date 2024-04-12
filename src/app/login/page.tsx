@@ -1,7 +1,8 @@
-import { AlertCircle } from "lucide-react";
 import { redirect } from "next/navigation";
-import { getServerAuthSession } from "@/server/auth";
+import { AlertCircle } from "lucide-react";
+
 import { GoogleLoginButton } from "@/components/common/auth";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Card,
   CardContent,
@@ -10,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { getServerAuthSession } from "@/server/auth";
 
 export default async function LoginPage({
   searchParams,

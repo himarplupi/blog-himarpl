@@ -3,22 +3,23 @@
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import { LogOut, Book, User, Menu, Pen } from "lucide-react";
+import type { Session } from "next-auth";
+import { signOut } from "next-auth/react";
+import { Book, LogOut, Menu, Pen, User } from "lucide-react";
+
+import { NavSheet } from "@/components/common/navsheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
   DropdownMenuLabel,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { NavSheet } from "@/components/common/navsheet";
-import type { Session } from "next-auth";
-import { abbreviation, cn } from "@/lib/utils";
 import logo from "@/images/logo.png";
+import { abbreviation, cn } from "@/lib/utils";
 
 const hideNavbarOnRoutes = ["/login"];
 
@@ -49,7 +50,7 @@ export function Navbar({ session }: { session: Session | null }) {
                 className={cn(
                   "text-muted-foreground transition hover:text-muted-foreground/80",
                   pathname === "/" &&
-                    "text-foreground hover:text-foreground/80",
+                  "text-foreground hover:text-foreground/80",
                 )}
               >
                 Post
