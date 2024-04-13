@@ -3,17 +3,18 @@
 import { useContext, useEffect, useState } from "react";
 import {
   Bold,
+  Code,
   Heading2,
   Heading3,
   Heading4,
   Heading5,
-  Highlighter,
   Image as ImageIcon,
   Italic,
   Link as LinkIcon,
   Redo2,
   Strikethrough,
   Superscript,
+  TextQuote,
   Underline,
   Undo2,
 } from "lucide-react";
@@ -153,9 +154,11 @@ export function EditorMenu() {
             editor?.isActive("italic") ? "italic" : "",
             editor?.isActive("underline") ? "underline" : "",
             editor?.isActive("strike") ? "strike" : "",
+            editor?.isActive("code") ? "code" : "",
             editor?.isActive("highlight") ? "highlight" : "",
             editor?.isActive("superscript") ? "superscript" : "",
             editor?.isActive("subscript") ? "subscript" : "",
+            editor?.isActive("blockquote") ? "blockquote" : "",
           ]}
         >
           <Tooltip>
@@ -202,6 +205,23 @@ export function EditorMenu() {
             <TooltipContent>{`Underline (Ctrl + U)`}</TooltipContent>
           </Tooltip>
 
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div>
+                <ToggleGroupItem
+                  value="code"
+                  onClick={() =>
+                    editor?.chain().focus().toggleCode().run()
+                  }
+                >
+                  <Code className="h-4 w-4" />
+                </ToggleGroupItem>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>{`Code (Ctrl + E)`}</TooltipContent>
+          </Tooltip>
+
           <Tooltip>
             <TooltipTrigger asChild>
               <div>
@@ -213,23 +233,23 @@ export function EditorMenu() {
                 </ToggleGroupItem>
               </div>
             </TooltipTrigger>
-            <TooltipContent>{`Strikethrough`}</TooltipContent>
+            <TooltipContent>{`Strikethrough (Ctrl + Shift + S)`}</TooltipContent>
           </Tooltip>
 
           <Tooltip>
             <TooltipTrigger asChild>
               <div>
                 <ToggleGroupItem
-                  value="highlight"
+                  value="blockquote"
                   onClick={() =>
-                    editor?.chain().focus().toggleHighlight().run()
+                    editor?.chain().focus().toggleBlockquote().run()
                   }
                 >
-                  <Highlighter className="h-4 w-4" />
+                  <TextQuote className="h-4 w-4" />
                 </ToggleGroupItem>
               </div>
             </TooltipTrigger>
-            <TooltipContent>{`Highlight`}</TooltipContent>
+            <TooltipContent>{`Blockquote (Ctrl + Shift + B)`}</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -245,7 +265,7 @@ export function EditorMenu() {
                 </ToggleGroupItem>
               </div>
             </TooltipTrigger>
-            <TooltipContent>{`Superscript`}</TooltipContent>
+            <TooltipContent>{`Superscript (Ctrl + .)`}</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -261,7 +281,7 @@ export function EditorMenu() {
                 </ToggleGroupItem>
               </div>
             </TooltipTrigger>
-            <TooltipContent>{`Subscript`}</TooltipContent>
+            <TooltipContent>{`Subscript (Ctrl + ,)`}</TooltipContent>
           </Tooltip>
         </ToggleGroup>
 
