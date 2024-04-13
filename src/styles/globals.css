@@ -65,3 +65,8 @@
   outline: none !important;
   opacity: 1;
 }
+
+.tiptap .ProseMirror-selectednode {
+  outline: 2px solid hsl(var(--primary));
+  border-radius: var(--radius);
+}
