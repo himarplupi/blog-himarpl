@@ -55,3 +55,13 @@
   pointer-events: none;
   height: 0;
 }
+
+.ProseMirror {
+  opacity: 0.75;
+  transition: all 250ms ease-out;
+}
+
+.ProseMirror-focused {
+  outline: none !important;
+  opacity: 1;
+}
