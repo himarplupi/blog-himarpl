@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+
 import { RegisterUsername } from "@/components/common/auth";
 import { getServerAuthSession } from "@/server/auth";
 

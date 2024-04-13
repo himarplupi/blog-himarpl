@@ -1,9 +1,12 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useDebounce } from "use-debounce";
+import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { AlertCircle } from "lucide-react";
+import { useDebounce } from "use-debounce";
+
+import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,11 +16,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
-import { AlertCircle } from "lucide-react";
-import { SiGoogle } from "@icons-pack/react-simple-icons";
 import { api } from "@/trpc/react";
+import { SiGoogle } from "@icons-pack/react-simple-icons";
 
 export function GoogleLoginButton() {
   return (
