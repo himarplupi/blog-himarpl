@@ -4,13 +4,16 @@ import { useContext, useEffect, useState } from "react";
 import {
   Bold,
   Code,
+  FileCode,
   Heading2,
   Heading3,
   Heading4,
   Heading5,
-  Image as ImageIcon,
+  ImagePlus as ImageIcon,
   Italic,
   Link as LinkIcon,
+  List,
+  ListOrdered,
   Redo2,
   Strikethrough,
   Superscript,
@@ -159,6 +162,7 @@ export function EditorMenu() {
             editor?.isActive("superscript") ? "superscript" : "",
             editor?.isActive("subscript") ? "subscript" : "",
             editor?.isActive("blockquote") ? "blockquote" : "",
+            editor?.isActive("codeBlock") ? "codeblock" : "",
           ]}
         >
           <Tooltip>
@@ -205,21 +209,34 @@ export function EditorMenu() {
             <TooltipContent>{`Underline (Ctrl + U)`}</TooltipContent>
           </Tooltip>
 
-
           <Tooltip>
             <TooltipTrigger asChild>
               <div>
                 <ToggleGroupItem
                   value="code"
-                  onClick={() =>
-                    editor?.chain().focus().toggleCode().run()
-                  }
+                  onClick={() => editor?.chain().focus().toggleCode().run()}
                 >
                   <Code className="h-4 w-4" />
                 </ToggleGroupItem>
               </div>
             </TooltipTrigger>
             <TooltipContent>{`Code (Ctrl + E)`}</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div>
+                <ToggleGroupItem
+                  value="blockquote"
+                  onClick={() =>
+                    editor?.chain().focus().toggleBlockquote().run()
+                  }
+                >
+                  <TextQuote className="h-4 w-4" />
+                </ToggleGroupItem>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>{`Blockquote (Ctrl + Shift + B)`}</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -240,16 +257,16 @@ export function EditorMenu() {
             <TooltipTrigger asChild>
               <div>
                 <ToggleGroupItem
-                  value="blockquote"
+                  value="codeblock"
                   onClick={() =>
-                    editor?.chain().focus().toggleBlockquote().run()
+                    editor?.chain().focus().toggleCodeBlock().run()
                   }
                 >
-                  <TextQuote className="h-4 w-4" />
+                  <FileCode className="h-4 w-4" />
                 </ToggleGroupItem>
               </div>
             </TooltipTrigger>
-            <TooltipContent>{`Blockquote (Ctrl + Shift + B)`}</TooltipContent>
+            <TooltipContent>{`Code Block (Ctrl + Alt + C)`}</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -282,6 +299,49 @@ export function EditorMenu() {
               </div>
             </TooltipTrigger>
             <TooltipContent>{`Subscript (Ctrl + ,)`}</TooltipContent>
+          </Tooltip>
+        </ToggleGroup>
+
+        <Separator orientation="vertical" />
+
+        <ToggleGroup
+          type="multiple"
+          disabled={isHeading}
+          value={[
+            editor?.isActive("orderedList") ? "orderedlist" : "",
+            editor?.isActive("bulletList") ? "bulletlist" : "",
+          ]}
+        >
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div>
+                <ToggleGroupItem
+                  value="orderedlist"
+                  onClick={() =>
+                    editor?.chain().focus().toggleOrderedList().run()
+                  }
+                >
+                  <ListOrdered className="h-4 w-4" />
+                </ToggleGroupItem>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>{`Ordered List (Ctrl + Shift + 7)`}</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div>
+                <ToggleGroupItem
+                  value="bulletlist"
+                  onClick={() =>
+                    editor?.chain().focus().toggleBulletList().run()
+                  }
+                >
+                  <List className="h-4 w-4" />
+                </ToggleGroupItem>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>{`Bullet List (Ctrl + Shift + 8)`}</TooltipContent>
           </Tooltip>
         </ToggleGroup>
 
