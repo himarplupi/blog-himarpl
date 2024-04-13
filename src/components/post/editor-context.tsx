@@ -98,7 +98,9 @@ export function EditorProvider({
       }),
       DocumentWithTitle,
       CustomHeading,
-      Link,
+      Link.configure({
+        openOnClick: false,
+      }),
       TextAlign,
       Highlight,
       CharacterCount,
