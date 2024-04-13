@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Bold,
@@ -52,6 +52,7 @@ export function EditorMenu() {
   const { editor } = useContext(EditorContext);
   const [isHeading, setIsHeading] = useState(true);
   const [currentHref, setCurrentHref] = useState<string>("");
+  const inputLinkRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!editor) return;
@@ -75,12 +76,26 @@ export function EditorMenu() {
     if (link.href !== currentHref && link.href) {
       setCurrentHref(link.href);
     }
-  }, [editor?.state.selection, editor, currentHref]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editor?.state.selection, editor]);
 
   useEffect(() => {
     if (!editor) return;
 
-    console.log("currentHref", currentHref);
+    if (currentHref === "") {
+      editor.chain().focus().unsetLink().run();
+      return;
+    }
+
+    editor
+      .chain()
+      .extendMarkRange("link")
+      .setLink({
+        href: currentHref,
+        target: "_blank",
+      })
+      .run();
   }, [currentHref, editor]);
 
   return (
@@ -424,12 +439,13 @@ export function EditorMenu() {
                   onClick={() => {
                     editor
                       ?.chain()
-                      .extendMarkRange("link")
                       .setLink({
                         href: "https://example.com",
                         target: "_blank",
                       })
                       .run();
+                    setCurrentHref("https://example.com");
+                    inputLinkRef.current?.focus();
                   }}
                 >
                   <LinkIcon className="h-4 w-4" />
@@ -469,21 +485,14 @@ export function EditorMenu() {
           className="border-primary/50 bg-primary/10"
           type="text"
           value={currentHref}
-          onChange={(e) => {
-            const value = e.target.value;
-
-            if (value === currentHref) return;
-
-            if (value === "") {
-              editor?.chain().extendMarkRange("link").unsetLink().run();
-              return;
+          ref={inputLinkRef}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              editor?.chain().focus().setLink({ href: currentHref }).run();
             }
-
-            editor
-              ?.chain()
-              .extendMarkRange("link")
-              .setLink({ href: value, target: "_blank" })
-              .run();
+          }}
+          onChange={(e) => {
+            setCurrentHref(e.target.value);
           }}
         />
       </div>
