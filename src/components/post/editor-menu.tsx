@@ -24,7 +24,18 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
@@ -79,7 +90,7 @@ export function EditorMenu() {
         className="container fixed top-14 z-20 w-full bg-primary-foreground pb-2"
         initial={{ y: -64 }}
         animate={{ y: 0 }}
-        onAnimationEnd={(e) => e.currentTarget.style.zIndex = "30"}
+        onAnimationEnd={(e) => (e.currentTarget.style.zIndex = "30")}
         transition={{ duration: 0.25, delay: 0.5 }}
       >
         <motion.div className="z-20 flex h-10 items-center gap-x-1 rounded-full bg-muted/50 px-3 py-1">
@@ -427,14 +438,20 @@ export function EditorMenu() {
               <TooltipContent>{`Insert Link`}</TooltipContent>
             </Tooltip>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button size="icon" variant="ghost" disabled={isHeading}>
-                  <ImageIcon className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>{`Insert Image`}</TooltipContent>
-            </Tooltip>
+            <ButtonInsertImage
+              onInsert={({ src, alt }) =>
+                editor
+                  ?.chain()
+                  .focus()
+                  .setImage({
+                    src,
+                    alt,
+                    title: alt,
+                  })
+                  .run()
+              }
+              disabled={isHeading}
+            />
           </TooltipProvider>
         </motion.div>
       </motion.aside>
@@ -471,5 +488,69 @@ export function EditorMenu() {
         />
       </div>
     </AnimatePresence>
+  );
+}
+
+function ButtonInsertImage({
+  onInsert,
+  disabled = false,
+}: {
+  onInsert: (val: { src: string; alt: string }) => void;
+  disabled: boolean;
+}) {
+  const [src, setSrc] = useState("");
+  const [alt, setAlt] = useState("");
+
+  return (
+    <Dialog>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div>
+            <DialogTrigger asChild>
+              <Button size="icon" variant="ghost" disabled={disabled}>
+                <ImageIcon className="h-4 w-4" />
+              </Button>
+            </DialogTrigger>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent>{`Insert Image`}</TooltipContent>
+      </Tooltip>
+
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Sisipkan Gambar</DialogTitle>
+          <DialogDescription>
+            {"Pastikan link gambar yang Anda masukkan benar dan valid."}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-2">
+          <div className="space-y-1">
+            <Label htmlFor="src">Link Gambar</Label>
+            <Input
+              id="src"
+              type="url"
+              value={src}
+              onChange={(e) => setSrc(e.target.value)}
+              placeholder="https://example.com/image.jpg"
+            />
+          </div>
+          <div className="space-y-1">
+            <Label htmlFor="alt">Judul Gambar</Label>
+            <Input
+              id="alt"
+              type="text"
+              value={alt}
+              onChange={(e) => setAlt(e.target.value)}
+              placeholder="Kucing Lucu"
+            />
+          </div>
+        </div>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button onClick={() => onInsert({ src, alt })}>Sisipkan</Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
