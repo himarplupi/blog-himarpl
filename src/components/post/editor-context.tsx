@@ -175,6 +175,7 @@ export function EditorProvider({
         .join("<p>")
         .trim();
       editor.commands.setContent(content);
+      editor.commands.focus("start");
     }
 
     setTitle(title);
