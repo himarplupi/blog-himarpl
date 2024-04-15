@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Bold,
@@ -44,12 +44,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useEditor } from "@/hooks/useEditor";
 import { cn } from "@/lib/utils";
-
-import { EditorContext } from "./editor-context";
+import { SiYoutube } from "@icons-pack/react-simple-icons";
 
 export function EditorMenu() {
-  const { editor } = useContext(EditorContext);
+  const { editor } = useEditor();
   const [isHeading, setIsHeading] = useState(true);
   const [currentHref, setCurrentHref] = useState<string>("");
   const inputLinkRef = useRef<HTMLInputElement>(null);
@@ -468,6 +468,19 @@ export function EditorMenu() {
               }
               disabled={isHeading}
             />
+
+            <ButtonInsertYoutube
+              onInsert={({ src }) =>
+                editor
+                  ?.chain()
+                  .focus()
+                  .setYoutubeVideo({
+                    src,
+                  })
+                  .run()
+              }
+              disabled={isHeading}
+            />
           </TooltipProvider>
         </motion.div>
       </motion.aside>
@@ -557,6 +570,60 @@ function ButtonInsertImage({
         <DialogFooter>
           <DialogClose asChild>
             <Button onClick={() => onInsert({ src, alt })}>Sisipkan</Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function ButtonInsertYoutube({
+  onInsert,
+  disabled = false,
+}: {
+  onInsert: (val: { src: string }) => void;
+  disabled: boolean;
+}) {
+  const [src, setSrc] = useState("");
+
+  return (
+    <Dialog>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div>
+            <DialogTrigger asChild>
+              <Button size="icon" variant="ghost" disabled={disabled}>
+                {/* @ts-expect-error: Entahlah SimpleIcon gaje */}
+                <SiYoutube color="hsl(var(--foreground))" className="h-4 w-4" />
+              </Button>
+            </DialogTrigger>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent>{`Insert Youtube Video`}</TooltipContent>
+      </Tooltip>
+
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Sisipkan Video Youtube</DialogTitle>
+          <DialogDescription>
+            {"Pastikan link Youtube yang Anda masukkan benar dan valid."}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-2">
+          <div className="space-y-1">
+            <Label htmlFor="src">Link Youtube</Label>
+            <Input
+              id="src"
+              type="url"
+              value={src}
+              onChange={(e) => setSrc(e.target.value)}
+              placeholder="https://www.youtube.com/watch?v=s33x6tCNkiE"
+            />
+          </div>
+        </div>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button onClick={() => onInsert({ src })}>Sisipkan</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

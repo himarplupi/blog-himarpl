@@ -67,6 +67,17 @@
 }
 
 .tiptap .ProseMirror-selectednode {
+  cursor: move;
   outline: 2px solid hsl(var(--primary));
   border-radius: var(--radius);
+}
+
+div[data-youtube-video] {
+  cursor: move;
+  padding: 24px 0;
+  margin: 0 16px;
+}
+
+div[data-youtube-video].ProseMirror-selectednode {
+  background: hsl(var(--muted));
 }
