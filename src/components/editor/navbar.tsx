@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Session } from "next-auth";
 import { signOut } from "next-auth/react";
-import { ExternalLink, LogOut } from "lucide-react";
+import { Book, LogOut, User } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -56,10 +56,18 @@ export function EditorNavbar({ session }: { session: Session | null }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuLabel>{session?.user.name}</DropdownMenuLabel>
-              <DropdownMenuItem className="cursor-pointer">
-                <ExternalLink className="mr-2 h-4 w-4" />
-                My Profile
-              </DropdownMenuItem>
+              <Link href="/me">
+                <DropdownMenuItem className="cursor-pointer">
+                  <User className="mr-2 h-4 w-4" />
+                  Profilku
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/me/posts/drafts">
+                <DropdownMenuItem className="cursor-pointer">
+                  <Book className="mr-2 h-4 w-4" />
+                  Postinganku
+                </DropdownMenuItem>
+              </Link>
 
               <DropdownMenuItem
                 className="cursor-pointer"
