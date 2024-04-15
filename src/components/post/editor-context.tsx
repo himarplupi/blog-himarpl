@@ -109,7 +109,7 @@ export function EditorProvider({
       Underline,
       Image.configure({
         HTMLAttributes: {
-          class: "sm:w-2/3 w-full h-auto max-w-full rounded",
+          class: "mx-auto sm:w-[60vw] w-full h-auto max-w-full rounded",
         },
       }),
       Placeholder.configure({
