@@ -63,7 +63,7 @@ export function Navbar({ session }: { session: Session | null }) {
               href="/new"
               className={cn(buttonVariants({ size: "sm", variant: "outline" }))}
             >
-              <Pen className="mr-2 h-4 w-4" /> New Post
+              <Pen className="h-4 w-4" /><span className="ml-2 hidden sm:inline">New Post</span>
             </Link>
 
             <DropdownMenu>
