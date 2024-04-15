@@ -1,9 +1,12 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { notFound, redirect } from "next/navigation";
 
-import { Editor } from "@/components/post/editor";
-import { EditorProvider } from "@/components/post/editor-context";
-import { EditorNavbar } from "@/components/post/editor-navbar";
+import {
+  EditorContent,
+  EditorMenu,
+  EditorNavbar,
+  EditorProvider,
+} from "@/components/editor";
 import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
 
@@ -46,8 +49,9 @@ export default async function PostEditPage({ params }: PostEditPageProps) {
   return (
     <EditorProvider author={author} post={post}>
       <EditorNavbar session={session} />
+      <EditorMenu />
       <main className="container mt-24 min-h-screen space-y-8 py-8">
-        <Editor />
+        <EditorContent />
       </main>
     </EditorProvider>
   );
