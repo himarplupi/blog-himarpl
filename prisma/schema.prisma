@@ -33,7 +33,7 @@ model PostTag {
   parentId  String?
   parent    PostTag?  @relation("ParentChildren", fields: [parentId], references: [id])
   children  PostTag[] @relation("ParentChildren")
-  Post      Post?     @relation(fields: [id], references: [id])
+  posts     Post[]
 }
 
 model Post {
