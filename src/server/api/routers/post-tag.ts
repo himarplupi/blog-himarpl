@@ -7,7 +7,7 @@ export const postTagRouter = createTRPCRouter({
   create: protectedProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
-      const title = input;
+      const title = input.toLowerCase();
       const existingTag = await ctx.db.postTag.findFirst({
         where: { title },
       });
