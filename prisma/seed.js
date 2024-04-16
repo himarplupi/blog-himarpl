@@ -20,63 +20,19 @@ async function main() {
   // });
 
   const data = [
-    {
-      title: "Berita",
-      slug: "berita",
-    },
-    {
-      title: "Penelitian",
-      slug: "penelitian",
-    },
-    {
-      title: "Pengembangan Diri",
-      slug: "pengembangan-diri",
-    },
-    {
-      title: "Aktivitas",
-      slug: "aktivitas",
-    },
-    {
-      title: "Perkualiahan",
-      slug: "perkualiahan",
-    },
-    {
-      title: "Teknologi",
-      slug: "teknologi",
-    },
-    {
-      title: "Perangkat Lunak",
-      slug: "perangkat-lunak",
-    },
-    {
-      title: "Sosial",
-      slug: "sosial",
-    },
-    {
-      title: "Budaya",
-      slug: "budaya",
-    },
-    {
-      title: "Media",
-      slug: "media",
-    },
     ...[...Array(25)].map(() => ({
+      authorId: "clu89j9sq0000s8madq1o1cbc",
+      content: faker.lorem.paragraph(),
       title: faker.lorem.sentence(),
       slug: faker.lorem.slug(),
+      metaTitle: faker.lorem.sentence(),
     })),
   ];
 
   console.log(data);
 
-  // const postTags = await prisma.postTag.createMany({
-  //   data: data,
-  // });
-
-  const postTags = await prisma.postTag.create({
-    data: {
-      title: "Berita",
-      slug: "berita",
-    },
+  const postTags = await prisma.post.createMany({
+    data: data,
   });
 
   console.log(postTags);
