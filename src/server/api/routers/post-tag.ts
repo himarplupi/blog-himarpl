@@ -28,9 +28,10 @@ export const postTagRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const inputs = input.split(" ");
       return await ctx.db.postTag.findMany({
-        select: {
-          title: true,
-          id: true,
+        include: {
+          _count: {
+            select: { posts: true },
+          },
         },
         where: {
           OR: inputs.map((input) => ({
