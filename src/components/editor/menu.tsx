@@ -39,9 +39,23 @@ export function EditorMenu() {
                 <Separator orientation="vertical" />
               </CarouselItem>
 
-              <CarouselItem className="basis-auto pl-1">
-                <MenuItems.Headings />
-              </CarouselItem>
+              <MenuItems.HeadingsProvider>
+                <CarouselItem className="basis-auto pl-1">
+                  <MenuItems.Heading2 />
+                </CarouselItem>
+
+                <CarouselItem className="basis-auto pl-1">
+                  <MenuItems.Heading3 />
+                </CarouselItem>
+
+                <CarouselItem className="basis-auto pl-1">
+                  <MenuItems.Heading4 />
+                </CarouselItem>
+
+                <CarouselItem className="basis-auto pl-1">
+                  <MenuItems.Heading5 />
+                </CarouselItem>
+              </MenuItems.HeadingsProvider>
 
               <CarouselItem className="basis-auto pl-1">
                 <Separator orientation="vertical" />
@@ -93,9 +107,15 @@ export function EditorMenu() {
                 <Separator orientation="vertical" />
               </CarouselItem>
 
-              <CarouselItem className="basis-auto pl-1">
-                <MenuItems.Lists />
-              </CarouselItem>
+              <MenuItems.ListsProvider>
+                <CarouselItem className="basis-auto pl-1">
+                  <MenuItems.OrderedList />
+                </CarouselItem>
+
+                <CarouselItem className="basis-auto pl-1">
+                  <MenuItems.BulletList />
+                </CarouselItem>
+              </MenuItems.ListsProvider>
 
               <CarouselItem className="basis-auto pl-1">
                 <Separator orientation="vertical" />

@@ -12,8 +12,8 @@ import {
 } from "react";
 import { Link as LinkIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Toggle } from "@/components/ui/toggle";
 import {
   Tooltip,
   TooltipContent,
@@ -52,43 +52,39 @@ export function Link() {
     if (!editor) return;
 
     if (currentHref === "") {
-      editor.chain().focus().unsetLink().run();
+      editor.chain().focus().extendMarkRange("link").unsetLink().run();
       return;
     }
-
-    editor
-      .chain()
-      .extendMarkRange("link")
-      .setLink({
-        href: currentHref,
-        target: "_blank",
-      })
-      .run();
   }, [currentHref, editor]);
 
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
-            size="icon"
-            variant="ghost"
-            disabled={isHeading}
-            onClick={() => {
-              if (!setCurrentHref || !inputLinkRef) return;
-              editor
-                ?.chain()
-                .setLink({
-                  href: "https://example.com",
-                  target: "_blank",
-                })
-                .run();
-              setCurrentHref("https://example.com");
-              inputLinkRef.current?.focus();
-            }}
-          >
-            <LinkIcon className="h-4 w-4" />
-          </Button>
+          <div>
+            <Toggle
+              disabled={isHeading}
+              pressed={editor?.isActive("link")}
+              onClick={() => {
+                if (!setCurrentHref || !inputLinkRef) return;
+                editor
+                  ?.chain()
+                  .toggleLink({
+                    href: currentHref || "https://example.com",
+                    target: "_blank",
+                  })
+                  .run();
+
+                if (!editor?.isActive("link")) {
+                  editor?.chain().focus().run();
+                } else {
+                  inputLinkRef.current?.focus();
+                }
+              }}
+            >
+              <LinkIcon className="h-4 w-4" />
+            </Toggle>
+          </div>
         </TooltipTrigger>
         <TooltipContent>{`Insert Link`}</TooltipContent>
       </Tooltip>
@@ -104,7 +100,7 @@ export function LinkInput() {
     <div
       key="link-input"
       className={cn(
-        "duration-400 container fixed top-24 z-10 w-full bg-primary-foreground px-10 py-4 ease-in-out fill-mode-forwards",
+        "duration-400 container fixed top-28 z-10 w-full bg-primary-foreground px-10 py-4 ease-in-out fill-mode-forwards",
         editor?.isActive("link")
           ? "animate-in fade-in slide-in-from-top-16"
           : "animate-out fade-out slide-out-to-top-16",

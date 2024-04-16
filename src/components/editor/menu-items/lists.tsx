@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useEditor } from "@/hooks/useEditor";
 
-export function Lists() {
+export function ListsProvider({ children }: { children: React.ReactNode }) {
   const { editor, isHeading } = useEditor();
 
   return (
@@ -22,38 +22,49 @@ export function Lists() {
         editor?.isActive("orderedList") ? "orderedlist" : "",
         editor?.isActive("bulletList") ? "bulletlist" : "",
       ]}
+      asChild
     >
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div>
-              <ToggleGroupItem
-                value="orderedlist"
-                onClick={() =>
-                  editor?.chain().focus().toggleOrderedList().run()
-                }
-              >
-                <ListOrdered className="h-4 w-4" />
-              </ToggleGroupItem>
-            </div>
-          </TooltipTrigger>
-          <TooltipContent>{`Ordered List (Ctrl + Shift + 7)`}</TooltipContent>
-        </Tooltip>
-
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div>
-              <ToggleGroupItem
-                value="bulletlist"
-                onClick={() => editor?.chain().focus().toggleBulletList().run()}
-              >
-                <List className="h-4 w-4" />
-              </ToggleGroupItem>
-            </div>
-          </TooltipTrigger>
-          <TooltipContent>{`Bullet List (Ctrl + Shift + 8)`}</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <TooltipProvider>{children}</TooltipProvider>
     </ToggleGroup>
+  );
+}
+
+export function OrderedList() {
+  const { editor } = useEditor();
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div>
+          <ToggleGroupItem
+            value="orderedlist"
+            onClick={() => editor?.chain().focus().toggleOrderedList().run()}
+          >
+            <ListOrdered className="h-4 w-4" />
+          </ToggleGroupItem>
+        </div>
+      </TooltipTrigger>
+      <TooltipContent>{`Ordered List (Ctrl + Shift + 7)`}</TooltipContent>
+    </Tooltip>
+  );
+}
+
+export function BulletList() {
+  const { editor } = useEditor();
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div>
+          <ToggleGroupItem
+            value="bulletlist"
+            onClick={() => editor?.chain().focus().toggleBulletList().run()}
+          >
+            <List className="h-4 w-4" />
+          </ToggleGroupItem>
+        </div>
+      </TooltipTrigger>
+      <TooltipContent>{`Bullet List (Ctrl + Shift + 8)`}</TooltipContent>
+    </Tooltip>
   );
 }
