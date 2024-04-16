@@ -28,6 +28,7 @@ export function TextFormatsProvider({
         editor?.isActive("blockquote") ? "blockquote" : "",
         editor?.isActive("codeBlock") ? "codeblock" : "",
       ]}
+      asChild
     >
       {children}
     </ToggleGroup>
