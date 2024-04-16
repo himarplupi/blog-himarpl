@@ -4,6 +4,8 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import { Separator } from "@/components/ui/separator";
 
+import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
+
 import * as MenuItems from "./menu-items";
 
 export function EditorMenu() {
@@ -18,40 +20,100 @@ export function EditorMenu() {
           onAnimationEnd={(e) => (e.currentTarget.style.zIndex = "30")}
           transition={{ duration: 0.25, delay: 0.5 }}
         >
-          <motion.div className="z-20 flex h-10 items-center gap-x-1 rounded-full bg-muted/50 px-3 py-1">
-            <MenuItems.Undo />
+          <Carousel
+            className="z-20 w-full rounded-full bg-muted/50 px-2 py-1"
+            opts={{
+              align: "start",
+            }}
+          >
+            <CarouselContent className="mx-2">
+              <CarouselItem className="basis-auto pl-1">
+                <MenuItems.Undo />
+              </CarouselItem>
 
-            <MenuItems.Redo />
+              <CarouselItem className="basis-auto pl-1">
+                <MenuItems.Redo />
+              </CarouselItem>
 
-            <Separator orientation="vertical" />
+              <CarouselItem className="basis-auto pl-1">
+                <Separator orientation="vertical" />
+              </CarouselItem>
 
-            <MenuItems.Headings />
+              <CarouselItem className="basis-auto pl-1">
+                <MenuItems.Headings />
+              </CarouselItem>
 
-            <Separator orientation="vertical" />
+              <CarouselItem className="basis-auto pl-1">
+                <Separator orientation="vertical" />
+              </CarouselItem>
 
-            <MenuItems.TextFormatsProvider>
-              <MenuItems.Bold />
-              <MenuItems.Italic />
-              <MenuItems.Underline />
-              <MenuItems.Strike />
-              <MenuItems.Code />
-              <MenuItems.Superscript />
-              <MenuItems.Subscript />
-              <MenuItems.Blockquote />
-              <MenuItems.Highlight />
-              <MenuItems.CodeBlock />
-            </MenuItems.TextFormatsProvider>
+              <MenuItems.TextFormatsProvider>
+                <CarouselItem className="basis-auto pl-1">
+                  <MenuItems.Bold />
+                </CarouselItem>
 
-            <Separator orientation="vertical" />
+                <CarouselItem className="basis-auto pl-1">
+                  <MenuItems.Italic />
+                </CarouselItem>
 
-            <MenuItems.Lists />
+                <CarouselItem className="basis-auto pl-1">
+                  <MenuItems.Underline />
+                </CarouselItem>
 
-            <Separator orientation="vertical" />
+                <CarouselItem className="basis-auto pl-1">
+                  <MenuItems.Strike />
+                </CarouselItem>
 
-            <MenuItems.Link />
-            <MenuItems.Image />
-            <MenuItems.Youtube />
-          </motion.div>
+                <CarouselItem className="basis-auto pl-1">
+                  <MenuItems.Code />
+                </CarouselItem>
+
+                <CarouselItem className="basis-auto pl-1">
+                  <MenuItems.Superscript />
+                </CarouselItem>
+
+                <CarouselItem className="basis-auto pl-1">
+                  <MenuItems.Subscript />
+                </CarouselItem>
+
+                <CarouselItem className="basis-auto pl-1">
+                  <MenuItems.Blockquote />
+                </CarouselItem>
+
+                <CarouselItem className="basis-auto pl-1">
+                  <MenuItems.Highlight />
+                </CarouselItem>
+
+                <CarouselItem className="basis-auto pl-1">
+                  <MenuItems.CodeBlock />
+                </CarouselItem>
+              </MenuItems.TextFormatsProvider>
+
+              <CarouselItem className="basis-auto pl-1">
+                <Separator orientation="vertical" />
+              </CarouselItem>
+
+              <CarouselItem className="basis-auto pl-1">
+                <MenuItems.Lists />
+              </CarouselItem>
+
+              <CarouselItem className="basis-auto pl-1">
+                <Separator orientation="vertical" />
+              </CarouselItem>
+
+              <CarouselItem className="basis-auto pl-1">
+                <MenuItems.Link />
+              </CarouselItem>
+
+              <CarouselItem className="basis-auto pl-1">
+                <MenuItems.Image />
+              </CarouselItem>
+
+              <CarouselItem className="basis-auto pl-1">
+                <MenuItems.Youtube />
+              </CarouselItem>
+            </CarouselContent>
+          </Carousel>
         </motion.aside>
 
         <MenuItems.LinkInput />
