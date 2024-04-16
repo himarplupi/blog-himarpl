@@ -2,8 +2,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { PrismaClient } from "@prisma/client";
 import { faker } from "@faker-js/faker";
+import { PrismaClient } from "@prisma/client";
+
 const prisma = new PrismaClient();
 
 async function main() {
@@ -18,16 +19,67 @@ async function main() {
   //   })),
   // });
 
-  const users = await prisma.user.createMany({
-    data: [...Array(25)].map(() => ({
-      name: faker.person.fullName(),
-      email: faker.internet.email(),
-      image: faker.image.avatar(),
-      role: faker.helpers.arrayElement(["member", "admin"]),
+  const data = [
+    {
+      title: "Berita",
+      slug: "berita",
+    },
+    {
+      title: "Penelitian",
+      slug: "penelitian",
+    },
+    {
+      title: "Pengembangan Diri",
+      slug: "pengembangan-diri",
+    },
+    {
+      title: "Aktivitas",
+      slug: "aktivitas",
+    },
+    {
+      title: "Perkualiahan",
+      slug: "perkualiahan",
+    },
+    {
+      title: "Teknologi",
+      slug: "teknologi",
+    },
+    {
+      title: "Perangkat Lunak",
+      slug: "perangkat-lunak",
+    },
+    {
+      title: "Sosial",
+      slug: "sosial",
+    },
+    {
+      title: "Budaya",
+      slug: "budaya",
+    },
+    {
+      title: "Media",
+      slug: "media",
+    },
+    ...[...Array(25)].map(() => ({
+      title: faker.lorem.sentence(),
+      slug: faker.lorem.slug(),
     })),
+  ];
+
+  console.log(data);
+
+  // const postTags = await prisma.postTag.createMany({
+  //   data: data,
+  // });
+
+  const postTags = await prisma.postTag.create({
+    data: {
+      title: "Berita",
+      slug: "berita",
+    },
   });
 
-  console.log({ users });
+  console.log(postTags);
 }
 
 main()
