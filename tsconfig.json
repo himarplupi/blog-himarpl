@@ -38,10 +38,5 @@
     "**/*.js",
     ".next/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "lint-staged.config.js",
-    "commitlint.config.js",
-    "**/*.helper.js"
-  ]
+  "exclude": ["node_modules", "lint-staged.config.js", "commitlint.config.js"]
 }
