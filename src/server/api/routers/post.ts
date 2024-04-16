@@ -1,8 +1,9 @@
+import GithubSlugger from "github-slugger";
+import { z } from "zod";
+
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { faker } from "@faker-js/faker";
-import { z } from "zod";
 import { createId } from "@paralleldrive/cuid2";
-import GithubSlugger from "github-slugger";
 
 const contentGuide = `
   <h2>Ini adalah heading 2</h2>
@@ -54,14 +55,13 @@ export const postRouter = createTRPCRouter({
       z.object({
         title: z.string(),
         content: z.string(),
-        slug: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       const currentUser = ctx.session.user;
 
       if (!currentUser.username) {
-        throw new Error("User must have a username to create a post");
+        throw new Error("User must have a username to publish a post");
       }
 
       const title = input.title;
@@ -81,12 +81,14 @@ export const postRouter = createTRPCRouter({
         slugger.slug(post.slug);
       });
 
+      const slug = slugger.slug(metaTitle);
+
       // Insert new post
       const post = await ctx.db.post.update({
         where: {
           authorId_slug: {
             authorId: currentUser.id,
-            slug: input.slug,
+            slug: slug,
           },
         },
         data: {

@@ -1,7 +1,8 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { redirect } from "next/navigation";
+
 import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
-import { unstable_noStore as noStore } from "next/cache";
 
 async function RedirectMeToNewPost() {
   noStore();

@@ -2,17 +2,18 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import LogoUPICibiru from "@/images/logo-upi-cibiru.png";
-import LogoHIMARPL from "@/images/logo-landscape-dark.png";
+import { Mail } from "lucide-react";
+
+import { buttonVariants } from "@/components/ui/button";
 import LogoKabinetAscendia from "@/images/logo-ascendia-landscape-dark.png";
+import LogoHIMARPL from "@/images/logo-landscape-dark.png";
+import LogoUPICibiru from "@/images/logo-upi-cibiru.png";
+import { cn } from "@/lib/utils";
 import {
   SiInstagram,
-  SiYoutube,
   SiTiktok,
+  SiYoutube,
 } from "@icons-pack/react-simple-icons";
-import { Mail } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 export function GlobalFooter() {
   return (

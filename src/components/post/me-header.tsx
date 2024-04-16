@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 import { Pen } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
