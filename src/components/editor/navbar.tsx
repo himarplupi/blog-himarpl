@@ -18,6 +18,8 @@ import { useEditor } from "@/hooks/useEditor";
 import logo from "@/images/logo.png";
 import { abbreviation } from "@/lib/utils";
 
+import { Publish } from "./publish";
+
 export function EditorNavbar({ session }: { session: Session | null }) {
   const { isSaving } = useEditor();
 
@@ -44,7 +46,9 @@ export function EditorNavbar({ session }: { session: Session | null }) {
           </div>
         </div>
 
-        <div className="ml-auto flex items-center gap-x-4">
+        <div className="ml-auto flex items-center gap-x-2 md:gap-x-4">
+          <Publish session={session} />
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar className="cursor-pointer">
