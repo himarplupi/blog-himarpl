@@ -10,7 +10,7 @@
   "eslint.format.enable": true,
   "[javascript][typescript][typescriptreact]": {
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": [
       "source.addMissingImports",
       "source.fixAll.eslint"
@@ -20,8 +20,5 @@
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.words": ["Flashlist", "Lato"],
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
-  }
+  "cSpell.words": ["Flashlist", "Lato"]
 }
