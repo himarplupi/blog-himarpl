@@ -39,10 +39,6 @@ export function RegisterUsername() {
   const router = useRouter();
 
   useEffect(() => {
-    console.log(usernameTaken.data);
-  }, [usernameTaken.data]);
-
-  useEffect(() => {
     const limitedUsername = username.slice(0, 32);
     const formattedUsername = limitedUsername.replace(/\s+/g, "-");
     setOutputUsername(formattedUsername);

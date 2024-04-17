@@ -43,14 +43,14 @@ export const userRouter = createTRPCRouter({
     return ctx.db.user.findFirst({ where: { email: input } });
   }),
   byUsername: publicProcedure.input(z.string()).query(({ ctx, input }) => {
-    return ctx.db.user.findFirst({ where: { username: input } });
+    return ctx.db.user.findFirst({ where: { username: input.toLowerCase() } });
   }),
   setSelfUsername: protectedProcedure
     .input(z.string())
     .mutation(({ ctx, input }) => {
       return ctx.db.user.update({
         where: { id: ctx.session.user.id },
-        data: { username: input },
+        data: { username: input.toLowerCase() },
       });
     }),
 });
