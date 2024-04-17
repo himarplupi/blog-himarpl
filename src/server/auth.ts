@@ -78,6 +78,8 @@ export const authOptions: NextAuthOptions = {
         if (!res) return "/login?errorMsg=Failed to insert account";
       }
 
+      await api.user.updateLastLoginAt.mutate();
+
       return true;
     },
     session: async ({ session, user }) => {

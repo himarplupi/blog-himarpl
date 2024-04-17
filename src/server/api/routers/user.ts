@@ -53,4 +53,10 @@ export const userRouter = createTRPCRouter({
         data: { username: input },
       });
     }),
+  updateLastLoginAt: protectedProcedure.mutation(({ ctx }) => {
+    return ctx.db.user.update({
+      where: { id: ctx.session.user.id },
+      data: { lastLoginAt: new Date() },
+    });
+  }),
 });
