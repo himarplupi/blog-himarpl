@@ -50,7 +50,7 @@ export const useEditorConfig = (post: PostExpanded) => {
         rawHtml: rawHtml,
         title: title,
         slug: post.slug,
-        image: getFirstImageSrc(rawHtml),
+        image: getFirstImageSrc(rawHtml) ?? "",
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
