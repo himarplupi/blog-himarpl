@@ -46,7 +46,7 @@ export const useEditorConfig = (post: PostExpanded) => {
 
     if (debouncedEditor) {
       savePost.mutate({
-        content: editor.getText(),
+        content: editor.getText().replace(title, ""),
         rawHtml: rawHtml,
         title: title,
         slug: post.slug,
