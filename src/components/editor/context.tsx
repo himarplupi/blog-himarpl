@@ -18,21 +18,19 @@ type EditorContextValue = {
   editor: Editor | null;
   savePost: ReturnType<typeof api.post.save.useMutation> | null;
   isSaving: boolean;
-  title: string;
 };
 
 export const EditorContext = createContext<EditorContextValue>({
   editor: null,
   savePost: null,
   isSaving: false,
-  title: "",
 });
 
 export function EditorProvider({ post, children }: EditorProviderProps) {
-  const { editor, isSaving, savePost, title } = useEditorConfig(post);
+  const { editor, isSaving, savePost } = useEditorConfig(post);
 
   return (
-    <EditorContext.Provider value={{ editor, savePost, isSaving, title }}>
+    <EditorContext.Provider value={{ editor, savePost, isSaving }}>
       {children}
     </EditorContext.Provider>
   );
