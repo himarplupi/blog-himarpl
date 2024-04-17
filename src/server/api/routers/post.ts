@@ -152,7 +152,7 @@ export const postRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      revalidatePath("/me");
+      revalidatePath("/me", "layout");
       return ctx.db.post.update({
         data: {
           title: input.title,
