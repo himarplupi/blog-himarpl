@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 
 import { editorConfig } from "@/lib/editor-config";
+import { getFirstImageSrc } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import type { Post } from "@prisma/client";
 import { type User } from "@prisma/client";
@@ -23,14 +24,14 @@ export type PostExpanded = Post & {
 
 export type Author = User & { posts: PostExpanded[] };
 
-export const useEditorConfig = (post: PostExpanded, author: Author) => {
+export const useEditorConfig = (post: PostExpanded) => {
   const editor = useTipTapEditor({
     ...editorConfig,
-    content: post.title + post.content,
+    content: post.title + post.rawHtml,
   });
   const [isSaving, setIsSaving] = useState(false);
   const [title, setTitle] = useState(post.title);
-  const [content, setContent] = useState(post.content);
+  const [rawHtml, setRawHtml] = useState(post.rawHtml);
   const savePost = api.post.save.useMutation();
   const [debouncedEditor] = useDebounce(editor?.state.doc.content, 1000);
 
@@ -39,12 +40,18 @@ export const useEditorConfig = (post: PostExpanded, author: Author) => {
       return;
     }
 
-    if (savePost.data?.content === content && savePost.data?.title === title) {
+    if (savePost.data?.content === rawHtml && savePost.data?.title === title) {
       return;
     }
 
     if (debouncedEditor) {
-      savePost.mutate({ authorId: author.id, content, title, slug: post.slug });
+      savePost.mutate({
+        content: editor.getText(),
+        rawHtml: rawHtml,
+        title: title,
+        slug: post.slug,
+        image: getFirstImageSrc(rawHtml),
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedEditor, editor]);
@@ -63,22 +70,24 @@ export const useEditorConfig = (post: PostExpanded, author: Author) => {
 
     const titleMatch = /<h1>(.*?)<\/h1>/.exec(rawHtml);
     const title = titleMatch?.[1] ?? "";
-    const content = rawHtml.replace(titleMatch?.[0] ?? "", "").trim();
+    const rawHtmlWithoutTitle = rawHtml
+      .replace(titleMatch?.[0] ?? "", "")
+      .trim();
 
     const headingCount = (rawHtml.match(/<h1>/g) ?? []).length;
     if (headingCount > 1) {
-      const content = rawHtml
+      const rawHtmlWithoutTitle = rawHtml
         .split("</h1>")
         .join("</p>")
         .split("<h1>")
         .join("<p>")
         .trim();
-      editor.commands.setContent(content);
+      editor.commands.setContent(rawHtmlWithoutTitle);
       editor.commands.focus("start");
     }
 
     setTitle(title);
-    setContent(content);
+    setRawHtml(rawHtmlWithoutTitle);
   }, [editor, editor?.state.doc.content, post.content, post.title]);
 
   useEffect(() => {
@@ -87,10 +96,10 @@ export const useEditorConfig = (post: PostExpanded, author: Author) => {
     }
     setIsSaving(true);
 
-    if (savePost.data?.content === content && savePost.data?.title === title) {
+    if (savePost.data?.rawHtml === rawHtml && savePost.data?.title === title) {
       return setIsSaving(false);
     }
-  }, [editor, content, title, savePost.data]);
+  }, [editor, rawHtml, title, savePost.data]);
 
   useEffect(() => {
     if (savePost.data) {
@@ -98,5 +107,5 @@ export const useEditorConfig = (post: PostExpanded, author: Author) => {
     }
   }, [savePost.data]);
 
-  return { editor, isSaving, title, setTitle, content, setContent, savePost };
+  return { editor, isSaving, title, setTitle, rawHtml, setRawHtml, savePost };
 };

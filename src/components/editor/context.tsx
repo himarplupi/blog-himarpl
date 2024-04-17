@@ -3,7 +3,6 @@
 import { createContext } from "react";
 
 import {
-  type Author,
   type Editor,
   type PostExpanded,
   useEditorConfig,
@@ -12,7 +11,6 @@ import { type api } from "@/trpc/react";
 
 type EditorProviderProps = {
   post: PostExpanded;
-  author: Author;
   children: React.ReactNode;
 };
 
@@ -30,12 +28,8 @@ export const EditorContext = createContext<EditorContextValue>({
   title: "",
 });
 
-export function EditorProvider({
-  author,
-  post,
-  children,
-}: EditorProviderProps) {
-  const { editor, isSaving, savePost, title } = useEditorConfig(post, author);
+export function EditorProvider({ post, children }: EditorProviderProps) {
+  const { editor, isSaving, savePost, title } = useEditorConfig(post);
 
   return (
     <EditorContext.Provider value={{ editor, savePost, isSaving, title }}>

@@ -143,10 +143,11 @@ export const postRouter = createTRPCRouter({
   save: protectedProcedure
     .input(
       z.object({
-        authorId: z.string(),
         slug: z.string(),
         title: z.string(),
         content: z.string(),
+        rawHtml: z.string(),
+        image: z.string().optional(),
         tagIds: z.array(z.string()).optional(),
       }),
     )
@@ -157,13 +158,15 @@ export const postRouter = createTRPCRouter({
           title: input.title,
           metaTitle: parseMetaTitle(input.title),
           content: input.content,
+          rawHtml: input.rawHtml,
+          image: input.image,
           tags: {
             connect: input.tagIds?.map((id) => ({ id })),
           },
         },
         where: {
           authorId_slug: {
-            authorId: input.authorId,
+            authorId: ctx.session.user.id,
             slug: input.slug,
           },
         },
