@@ -26,10 +26,16 @@ import {
 import { useDebounceTagSave } from "@/hooks/useDebounceTagSave";
 import { usePublishPost } from "@/hooks/usePublishPost";
 
+type InitialState = {
+  tags: TagOption[] | null;
+  image: string | null;
+};
+
 export function Publish({ session }: { session: Session | null }) {
-  const [initialTags, setInitialTags] = React.useState<TagOption[] | null>(
-    null,
-  );
+  const [initialState, setInitialState] = React.useState<InitialState>({
+    tags: null,
+    image: null,
+  });
   const [input, setInput] = React.useState("");
   const [tags, setTags] = React.useState<TagOption[]>([]);
   const { savePost } = useDebounceTagSave({ tags, delay: 1000 });
@@ -47,7 +53,7 @@ export function Publish({ session }: { session: Session | null }) {
     if (!savePost.data) return;
     if (!savePost.data.tags) return;
 
-    if (!hasRun.current && tags !== initialTags) {
+    if (!hasRun.current && tags !== initialState.tags) {
       hasRun.current = true;
       const tags = savePost.data.tags.map((tag) => ({
         label: tag.title,
@@ -55,7 +61,10 @@ export function Publish({ session }: { session: Session | null }) {
       }));
 
       setTags(tags);
-      setInitialTags(tags);
+      setInitialState({
+        tags,
+        image: savePost.data.image,
+      });
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -101,16 +110,16 @@ export function Publish({ session }: { session: Session | null }) {
               <div className="space-y-1">
                 <div className="sm:w-64">
                   <AspectRatio ratio={16 / 9} className="bg-muted">
-                    {!savePost?.data?.image && (
+                    {!initialState.image && (
                       <div className="flex h-full items-center justify-center text-muted-foreground">
                         <span className="text-center text-sm lowercase">
                           Sisipkan satu gambar untuk dijadikan thumbnail
                         </span>
                       </div>
                     )}
-                    {savePost?.data?.image && (
+                    {initialState.image && (
                       <Image
-                        src={savePost?.data?.image ?? ""}
+                        src={initialState.image ?? ""}
                         alt={savePost?.data?.title + " cover"}
                         fill
                         className="rounded-md object-cover"
