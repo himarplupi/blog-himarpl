@@ -1,12 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { type Dispatch, useEffect, useState } from "react";
+import { toast } from "sonner";
 import { useDebounce } from "use-debounce";
 
 import { api } from "@/trpc/react";
 
-export const useDebounceTagOptions = (input: string, delay: number) => {
+export type TagOption = {
+  label: string;
+  value: string;
+};
+
+export type Props = {
+  input: string;
+  delay: number;
+  setTags: Dispatch<React.SetStateAction<TagOption[]>>;
+};
+
+export const useDebounceTagOptions = ({ input, delay, setTags }: Props) => {
   const tagOptions = api.postTag.search.useMutation();
+  const tagCreate = api.postTag.create.useMutation();
   const [debouncedInput] = useDebounce(input, delay);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,8 +40,27 @@ export const useDebounceTagOptions = (input: string, delay: number) => {
   }, [debouncedInput]);
 
   useEffect(() => {
-    setIsLoading(tagOptions.isLoading);
-  }, [tagOptions.isLoading]);
+    setIsLoading(tagOptions.isLoading || tagCreate.isLoading);
+  }, [tagOptions.isLoading, tagCreate.isLoading]);
 
-  return { tagOptions, isLoading };
+  const handleCreateTag = (value: string) => {
+    const lowerCaseValue = value.toLowerCase();
+    tagCreate.mutate(lowerCaseValue);
+    tagOptions
+      .mutateAsync(lowerCaseValue)
+      .then(() => {
+        setTags((prev) => [
+          ...prev,
+          {
+            label: `${lowerCaseValue} (0)`,
+            value: lowerCaseValue,
+          },
+        ]);
+      })
+      .catch(() => {
+        toast.error("Gagal membuat label");
+      });
+  };
+
+  return { tagOptions, handleCreateTag, isLoading };
 };
