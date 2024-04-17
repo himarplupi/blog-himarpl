@@ -9,8 +9,8 @@ export const usePublishPost = () => {
   const router = useRouter();
   const publishPost = api.post.publish.useMutation();
 
-  const publish = (title: string) => {
-    const publishPromise = publishPost.mutateAsync({ title });
+  const publish = (id: string, title: string) => {
+    const publishPromise = publishPost.mutateAsync({ id, title });
 
     toast.promise(publishPromise, {
       loading: "Mengubah status postingan menjadi publik",

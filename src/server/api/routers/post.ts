@@ -56,6 +56,7 @@ export const postRouter = createTRPCRouter({
   publish: protectedProcedure
     .input(
       z.object({
+        id: z.string(),
         title: z.string(),
       }),
     )
@@ -83,15 +84,10 @@ export const postRouter = createTRPCRouter({
         slugger.slug(post.slug);
       });
 
-      const slug = slugger.slug(metaTitle);
-
       // Insert new post
       const post = await ctx.db.post.update({
         where: {
-          authorId_slug: {
-            authorId: currentUser.id,
-            slug: slug,
-          },
+          id: input.id,
         },
         data: {
           title,
