@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { badgeVariants } from "@/components/ui/badge"
+import { abbreviation } from "@/lib/utils"
 import { getData } from "@/services/getData";
 
 import { type PostTagType, type UserType } from "../common/type";
@@ -34,7 +35,9 @@ export async function Sidebar({ className }: { className?: string }) {
             <Link key={user.id} href={"/"} className="flex items-center gap-4 group">
               <Avatar className="w-6 h-6">
                 <AvatarImage src={user.image} />
-                <AvatarFallback className='text-xs font-semibold uppercase'>{user.name?.split(' ').slice(0, 2).map(word => word[0]).join('')}</AvatarFallback>
+                <AvatarFallback className='text-xs font-semibold uppercase'>
+                  {abbreviation(user.name)}
+                </AvatarFallback>
               </Avatar>
               <p className="mb-0 font-medium transition group-hover:text-muted-foreground">{user.name}</p>
             </Link>

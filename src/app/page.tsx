@@ -17,6 +17,7 @@ import { momentId } from "@/lib/utils";
 import { getServerAuthSession } from "@/server/auth";
 import { getData } from "@/services/getData";
 
+
 export default async function Home() {
   const session = await getServerAuthSession();
   const articles = (await getData(`${process.env.NEXT_BASE_URL}/api/post`) as PostType[]);
@@ -49,6 +50,9 @@ export default async function Home() {
                       <Separator />
                     </>
                   ))}
+                  {articles.length === 0 && (
+                    <p>Tidak ada artikel yang dipublikasi</p>
+                  )}
                   {/* End looping artikel */}
                 </div>
               </TabsContent>
