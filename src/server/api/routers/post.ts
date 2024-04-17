@@ -2,6 +2,7 @@ import { revalidatePath } from "next/cache";
 import GithubSlugger from "github-slugger";
 import { z } from "zod";
 
+import { getContent } from "@/lib/utils";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { faker } from "@faker-js/faker";
 import { createId } from "@paralleldrive/cuid2";
@@ -44,7 +45,8 @@ export const postRouter = createTRPCRouter({
       data: {
         id,
         title,
-        content: contentGuide,
+        content: getContent(contentGuide),
+        rawHtml: contentGuide,
         slug: id,
         metaTitle: parseMetaTitle(title),
         authorId: ctx.session.user.id,
