@@ -2,7 +2,6 @@
 
 import React from "react";
 import { type Session } from "next-auth";
-import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,45 +16,26 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { CreateableSelect } from "@/components/ui/react-select";
-import { useDebounceTagOptions } from "@/hooks/useDebounceTagOptions";
+import {
+  type TagOption,
+  useDebounceTagOptions,
+} from "@/hooks/useDebounceTagOptions";
 import { useEditor } from "@/hooks/useEditor";
-import { api } from "@/trpc/react";
-
-type TagOption = {
-  label: string;
-  value: string;
-};
 
 export function Publish({ session }: { session: Session | null }) {
-  const tagCreate = api.postTag.create.useMutation();
   const [tags, setTags] = React.useState<TagOption[]>([]);
   const [input, setInput] = React.useState("");
-  const { tagOptions, isLoading } = useDebounceTagOptions(input, 1000);
   const { title } = useEditor();
+  const { tagOptions, handleCreateTag, isLoading } = useDebounceTagOptions({
+    input,
+    setTags,
+    delay: 1000,
+  });
 
   // TODO: Save Tags
 
   const handleSubmit = async () => {
     console.log("Publishing...", session);
-  };
-
-  const handleCreateTag = (value: string) => {
-    const lowerCaseValue = value.toLowerCase();
-    tagCreate.mutate(lowerCaseValue);
-    tagOptions
-      .mutateAsync(lowerCaseValue)
-      .then(() => {
-        setTags((prev) => [
-          ...prev,
-          {
-            label: `${lowerCaseValue} (0)`,
-            value: lowerCaseValue,
-          },
-        ]);
-      })
-      .catch(() => {
-        toast.error("Gagal membuat label");
-      });
   };
 
   return (
@@ -86,7 +66,7 @@ export function Publish({ session }: { session: Session | null }) {
               isMulti
               inputId="label-select"
               placeholder="Beri label..."
-              isLoading={tagCreate.isLoading || isLoading}
+              isLoading={isLoading}
               onInputChange={(value) => {
                 setInput(value);
               }}
