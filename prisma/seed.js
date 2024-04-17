@@ -25,6 +25,8 @@ async function main() {
       content: faker.lorem.paragraph(),
       title: faker.lorem.sentence(),
       slug: faker.lorem.slug(),
+      rawHtml: faker.lorem.paragraph(),
+      image: faker.image.url(),
       metaTitle: faker.lorem.sentence(),
     })),
   ];
@@ -32,7 +34,7 @@ async function main() {
   console.log(data);
 
   const postTags = await prisma.post.createMany({
-    data: data,
+    data: [...data],
   });
 
   console.log(postTags);
