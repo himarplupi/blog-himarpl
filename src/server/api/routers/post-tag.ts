@@ -43,4 +43,17 @@ export const postTagRouter = createTRPCRouter({
         },
       });
     }),
+  inPost: protectedProcedure
+    .input(z.object({ postId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.postTag.findMany({
+        where: {
+          posts: {
+            some: {
+              id: input.postId,
+            },
+          },
+        },
+      });
+    }),
 });
