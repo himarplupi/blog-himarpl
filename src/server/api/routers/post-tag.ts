@@ -2,6 +2,7 @@ import GithubSlugger from "github-slugger";
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { TRPCError } from "@trpc/server";
 
 export const postTagRouter = createTRPCRouter({
   create: protectedProcedure
@@ -12,7 +13,12 @@ export const postTagRouter = createTRPCRouter({
         where: { title },
       });
 
-      if (existingTag) throw new Error("Tag already exists");
+      if (existingTag) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Tag already exists",
+        });
+      }
 
       const slugger = new GithubSlugger();
       const slug = slugger.slug(title);
