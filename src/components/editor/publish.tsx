@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import { type Session } from "next-auth";
 
@@ -27,6 +27,9 @@ import { useDebounceTagSave } from "@/hooks/useDebounceTagSave";
 import { usePublishPost } from "@/hooks/usePublishPost";
 
 export function Publish({ session }: { session: Session | null }) {
+  const [initialTags, setInitialTags] = React.useState<TagOption[] | null>(
+    null,
+  );
   const [input, setInput] = React.useState("");
   const [tags, setTags] = React.useState<TagOption[]>([]);
   const { savePost } = useDebounceTagSave({ tags, delay: 1000 });
@@ -36,6 +39,27 @@ export function Publish({ session }: { session: Session | null }) {
     delay: 1000,
   });
   const { publish } = usePublishPost();
+  const hasRun = useRef(false);
+
+  // Set initial tags
+  useEffect(() => {
+    if (!savePost) return;
+    if (!savePost.data) return;
+    if (!savePost.data.tags) return;
+
+    if (!hasRun.current && tags !== initialTags) {
+      hasRun.current = true;
+      const tags = savePost.data.tags.map((tag) => ({
+        label: tag.title,
+        value: tag.title,
+      }));
+
+      setTags(tags);
+      setInitialTags(tags);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [savePost]);
 
   const handleSubmit = () => {
     if (!session) throw new Error("Session is required");
