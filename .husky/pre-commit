@@ -21,11 +21,6 @@ fi
 echo ">> Finish checking branch name"
 echo ">> Linting your files and fixing them if needed..."
 
-<<<<<<< HEAD
-npx lint-staged
-npm run lint
-=======
 
 npx lint-staged
 npm run lint
->>>>>>> c585b84 (feat(prisma): post image and rawHtml attributes (#5))

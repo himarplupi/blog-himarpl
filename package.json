@@ -7,12 +7,8 @@
     "build": "next build",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-<<<<<<< HEAD
     "db:seed": "node prisma/seed.js",
-    "dev": "next dev",
-=======
     "dev": "next dev --turbo",
->>>>>>> c585b84 (feat(prisma): post image and rawHtml attributes (#5))
     "postinstall": "prisma generate",
     "lint": "next lint",
     "commitlint": "npx commitlint -f",
