@@ -50,7 +50,7 @@ export function Navbar({ session }: { session: Session | null }) {
                 className={cn(
                   "text-muted-foreground transition hover:text-muted-foreground/80",
                   pathname === "/" &&
-                  "text-foreground hover:text-foreground/80",
+                    "text-foreground hover:text-foreground/80",
                 )}
               >
                 Post
@@ -63,7 +63,7 @@ export function Navbar({ session }: { session: Session | null }) {
               href="/new"
               className={cn(buttonVariants({ size: "sm", variant: "outline" }))}
             >
-              <Pen className="mr-2 h-4 w-4" /> New Post
+              <Pen className="mr-2 h-4 w-4" /> Buat
             </Link>
 
             <DropdownMenu>
