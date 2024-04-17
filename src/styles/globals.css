@@ -55,3 +55,29 @@
   pointer-events: none;
   height: 0;
 }
+
+.ProseMirror {
+  opacity: 0.75;
+  transition: all 250ms ease-out;
+}
+
+.ProseMirror-focused {
+  outline: none !important;
+  opacity: 1;
+}
+
+.tiptap .ProseMirror-selectednode {
+  cursor: move;
+  outline: 2px solid hsl(var(--primary));
+  border-radius: var(--radius);
+}
+
+div[data-youtube-video] {
+  cursor: move;
+  padding: 24px 0;
+  margin: 0 16px;
+}
+
+div[data-youtube-video].ProseMirror-selectednode {
+  background: hsl(var(--muted));
+}

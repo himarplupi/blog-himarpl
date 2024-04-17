@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import GithubSlugger from "github-slugger";
 import { z } from "zod";
 
@@ -148,6 +149,7 @@ export const postRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      revalidatePath("/me", "layout");
       return ctx.db.post.update({
         data: {
           title: input.title,
@@ -176,6 +178,9 @@ export const postRouter = createTRPCRouter({
         authorId: currentUser.id,
         publishedAt: null,
       },
+      orderBy: {
+        updatedAt: "desc",
+      },
       include: {
         tags: {
           select: {
@@ -198,6 +203,9 @@ export const postRouter = createTRPCRouter({
         publishedAt: {
           not: null,
         },
+      },
+      orderBy: {
+        publishedAt: "desc",
       },
       include: {
         tags: {
