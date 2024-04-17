@@ -66,8 +66,9 @@ export function Publish({ session }: { session: Session | null }) {
     if (!savePost) throw new Error("Post not found");
     if (!savePost.data) throw new Error("Post data not found");
     if (!savePost.data.title) throw new Error("Post title not found");
+    const { id, title } = savePost.data;
 
-    publish(savePost.data.title);
+    publish(id, title);
   };
 
   return (
