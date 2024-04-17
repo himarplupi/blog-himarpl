@@ -19,12 +19,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  calculateReadTime,
-  getContent,
-  getFirstImageSrc,
-  momentId,
-} from "@/lib/utils";
+import { calculateReadTime, momentId } from "@/lib/utils";
 
 export default function DraftsPage() {
   const {
@@ -50,16 +45,16 @@ export default function DraftsPage() {
             <div className="flex-grow justify-between gap-x-4 sm:flex">
               <div className="w-fit">
                 <h3 className="line-clamp-2 text-pretty font-serif text-xl font-bold capitalize leading-7 sm:text-2xl">
-                  {getContent(post.title)}
+                  {post.title}
                 </h3>
                 <p className="line-clamp-3 text-pretty text-sm leading-5 tracking-wide">
-                  {getContent(post.content)}
+                  {post.content}
                 </p>
               </div>
-              {getFirstImageSrc(post.content) && (
+              {post?.image && (
                 <div className="relative mt-2 aspect-video w-full max-w-96 overflow-hidden rounded sm:w-32">
                   <Image
-                    src={getFirstImageSrc(post.content) ?? ""}
+                    src={post.image ?? ""}
                     alt={`${post.title} thumbnail`}
                     className="object-cover object-center"
                     fill
@@ -79,7 +74,7 @@ export default function DraftsPage() {
               </Badge>
             ))}
             <span className="text-nowrap text-sm text-muted-foreground">
-              {`Dipublish pada hari ${momentId(post.updatedAt).format("LLLL")}`}
+              {`Dipublikasikan pada hari ${momentId(post.updatedAt).format("LLLL")}`}
             </span>
             <span>
               <Circle fill="hsl(var(--muted-foreground))" className="h-1 w-1" />
