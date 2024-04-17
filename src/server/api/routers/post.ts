@@ -148,12 +148,15 @@ export const postRouter = createTRPCRouter({
         content: z.string(),
         rawHtml: z.string(),
         image: z.string().optional(),
-        tagIds: z.array(z.string()).optional(),
+        tagTitles: z.array(z.string()).optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       revalidatePath("/me", "layout");
       return ctx.db.post.update({
+        include: {
+          tags: true,
+        },
         data: {
           title: input.title,
           metaTitle: parseMetaTitle(input.title),
@@ -161,7 +164,9 @@ export const postRouter = createTRPCRouter({
           rawHtml: input.rawHtml,
           image: input.image,
           tags: {
-            connect: input.tagIds?.map((id) => ({ id })),
+            connect: input.tagTitles?.map((title) => ({
+              title,
+            })),
           },
         },
         where: {
