@@ -24,6 +24,7 @@ import {
   useDebounceTagOptions,
 } from "@/hooks/useDebounceTagOptions";
 import { useDebounceTagSave } from "@/hooks/useDebounceTagSave";
+import { usePublishPost } from "@/hooks/usePublishPost";
 
 export function Publish({ session }: { session: Session | null }) {
   const [input, setInput] = React.useState("");
@@ -34,9 +35,15 @@ export function Publish({ session }: { session: Session | null }) {
     setTags,
     delay: 1000,
   });
+  const { publish } = usePublishPost();
 
-  const handleSubmit = async () => {
-    console.log("Publishing...", session);
+  const handleSubmit = () => {
+    if (!session) throw new Error("Session is required");
+    if (!savePost) throw new Error("Post not found");
+    if (!savePost.data) throw new Error("Post data not found");
+    if (!savePost.data.title) throw new Error("Post title not found");
+
+    publish(savePost.data.title);
   };
 
   return (
