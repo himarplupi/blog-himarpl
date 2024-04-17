@@ -57,7 +57,6 @@ export const postRouter = createTRPCRouter({
     .input(
       z.object({
         title: z.string(),
-        content: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -97,8 +96,8 @@ export const postRouter = createTRPCRouter({
         data: {
           title,
           metaTitle,
-          content: input.content,
           slug: slugger.slug(metaTitle),
+          publishedAt: new Date(),
         },
       });
 
