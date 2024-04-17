@@ -15,6 +15,7 @@
 >>>>>>> c585b84 (feat(prisma): post image and rawHtml attributes (#5))
     "postinstall": "prisma generate",
     "lint": "next lint",
+    "commitlint": "npx commitlint -f",
     "start": "next start",
     "prepare": "husky"
   },
