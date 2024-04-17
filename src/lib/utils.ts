@@ -39,3 +39,15 @@ export function abbreviation(name: string | undefined | null) {
     .join("")
     .substring(0, 2);
 }
+
+export function parseMetaTitle(title: string) {
+  // Remove special characters and convert to lowercase
+  const safeTitle = title.replace(/[^\w\s]/gi, "").toLowerCase();
+
+  // Set safe meta title length by word length
+  const maxWords = 10;
+  const words = safeTitle.split(" ");
+  const truncatedTitle = words.slice(0, maxWords).join(" ");
+
+  return truncatedTitle;
+}
