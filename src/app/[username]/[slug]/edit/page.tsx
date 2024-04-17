@@ -47,7 +47,7 @@ export default async function PostEditPage({ params }: PostEditPageProps) {
   }
 
   return (
-    <EditorProvider author={author} post={post}>
+    <EditorProvider post={post}>
       <EditorNavbar session={session} />
       <EditorMenu />
       <main className="container mt-24 min-h-screen space-y-8 py-8">
