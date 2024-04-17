@@ -111,7 +111,7 @@ export const postRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const author = await ctx.db.user.findUnique({
         where: {
-          username: input.username,
+          username: input.username.toLowerCase(),
         },
         include: {
           posts: {
