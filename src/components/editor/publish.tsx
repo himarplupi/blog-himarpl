@@ -3,7 +3,9 @@
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import { type Session } from "next-auth";
+import { AlertCircle, TagsIcon } from "lucide-react";
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import {
@@ -159,17 +161,40 @@ export function Publish({ session }: { session: Session | null }) {
                 )}
                 {!initialState.tags && <Skeleton className="h-9 w-full" />}
               </div>
-              <div className="flex flex-col gap-y-1 text-pretty text-sm tracking-wide text-muted-foreground">
-                <p>
-                  Tuliskan label yang sesuai dengan isi postingan kamu. Beberapa
-                  rekomendasi label populer diantaranya yaitu berita,
+              <Alert className="duration-300 animate-in zoom-in slide-in-from-top">
+                <TagsIcon className="h-4 w-4" />
+                <AlertTitle>
+                  Tuliskan label yang sesuai dengan isi postingan kamu
+                </AlertTitle>
+                <AlertDescription className="text-pretty">
+                  Beberapa rekomendasi label populer diantaranya yaitu berita,
                   penelitian, kompetisi, pengembangan diri, perkuliahan,
                   perangkat lunak, teknologi, dan media.
-                  <span className="text-destructive">
-                    *Postingan sangat direkomendasikan untuk diberi label!
-                  </span>
-                </p>
-              </div>
+                </AlertDescription>
+              </Alert>
+              {tags.length === 0 && (
+                <Alert
+                  variant="destructive"
+                  className="duration-300 animate-in zoom-in slide-in-from-top"
+                >
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>
+                    Postingan sangat direkomendasikan untuk diberi label!
+                  </AlertTitle>
+                </Alert>
+              )}
+              {tags.length > 4 && (
+                <Alert
+                  variant="warning"
+                  className="duration-300 animate-in zoom-in slide-in-from-top"
+                >
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>Jumlah label terlalu banyak</AlertTitle>
+                  <AlertDescription>
+                    Direkomendiasikan untuk memilih maksimal 4 label.
+                  </AlertDescription>
+                </Alert>
+              )}
             </div>
             <DialogFooter>
               <DialogClose asChild>
