@@ -28,6 +28,7 @@ import {
 } from "@/hooks/useDebounceTagOptions";
 import { useDebounceTagSave } from "@/hooks/useDebounceTagSave";
 import { usePublishPost } from "@/hooks/usePublishPost";
+import { isWordInSentenceMoreThan, isWordMoreThan } from "@/lib/utils";
 
 type InitialState = {
   tags: TagOption[] | null;
@@ -180,6 +181,26 @@ export function Publish({ session }: { session: Session | null }) {
                   <AlertCircle className="h-4 w-4" />
                   <AlertTitle>
                     Postingan sangat direkomendasikan untuk diberi label!
+                  </AlertTitle>
+                </Alert>
+              )}
+              {isWordMoreThan(input, 3) && (
+                <Alert
+                  variant="destructive"
+                  className="duration-300 animate-in zoom-in slide-in-from-top"
+                >
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>Maksimum 3 kata untuk setiap label</AlertTitle>
+                </Alert>
+              )}
+              {isWordInSentenceMoreThan(input, 16) && (
+                <Alert
+                  variant="destructive"
+                  className="duration-300 animate-in zoom-in slide-in-from-top"
+                >
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>
+                    Maksimum 16 huruf untuk setiap kata dalam label
                   </AlertTitle>
                 </Alert>
               )}

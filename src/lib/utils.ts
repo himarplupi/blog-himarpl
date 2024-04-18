@@ -51,3 +51,11 @@ export function parseMetaTitle(title: string) {
 
   return truncatedTitle;
 }
+
+export function isWordMoreThan(content: string, length: number) {
+  return content.split(" ").length > length;
+}
+
+export function isWordInSentenceMoreThan(content: string, length: number) {
+  return content.split(" ").filter((word) => word.length > length).length > 0;
+}

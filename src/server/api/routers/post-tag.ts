@@ -1,6 +1,7 @@
 import GithubSlugger from "github-slugger";
 import { z } from "zod";
 
+import { isWordInSentenceMoreThan, isWordMoreThan } from "@/lib/utils";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 
@@ -9,6 +10,21 @@ export const postTagRouter = createTRPCRouter({
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
       const title = input.toLowerCase();
+
+      if (isWordMoreThan(title, 3)) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Maximum 3 words for tags",
+        });
+      }
+
+      if (isWordInSentenceMoreThan(title, 16)) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Maximum 16 characters for each word in tags",
+        });
+      }
+
       const existingTag = await ctx.db.postTag.findFirst({
         where: { title },
       });

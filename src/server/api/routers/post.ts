@@ -130,8 +130,6 @@ export const postRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      revalidatePath("/me", "layout");
-
       const prevTags = await ctx.db.postTag.findMany({
         where: {
           posts: {
@@ -143,7 +141,7 @@ export const postRouter = createTRPCRouter({
         },
       });
 
-      return ctx.db.post.update({
+      const postResult = await ctx.db.post.update({
         include: {
           tags: true,
         },
@@ -169,6 +167,10 @@ export const postRouter = createTRPCRouter({
           },
         },
       });
+
+      revalidatePath("/me", "layout");
+
+      return postResult;
     }),
   selectSelfDrafts: protectedProcedure.query(async ({ ctx }) => {
     const currentUser = ctx.session.user;
