@@ -51,6 +51,7 @@ export const useEditorConfig = (post: PostExpanded) => {
         title: title,
         slug: post.slug,
         image: getFirstImageSrc(rawHtml) ?? "",
+        tagTitles: post.tags.map((tag) => tag.title),
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

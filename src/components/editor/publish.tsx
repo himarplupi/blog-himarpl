@@ -3,7 +3,9 @@
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import { type Session } from "next-auth";
+import { AlertCircle, TagsIcon, UsersRoundIcon } from "lucide-react";
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,22 +21,26 @@ import {
 import { Label } from "@/components/ui/label";
 import { CreateableSelect } from "@/components/ui/react-select";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   type TagOption,
   useDebounceTagOptions,
 } from "@/hooks/useDebounceTagOptions";
 import { useDebounceTagSave } from "@/hooks/useDebounceTagSave";
 import { usePublishPost } from "@/hooks/usePublishPost";
+import { isWordInSentenceMoreThan, isWordMoreThan } from "@/lib/utils";
 
 type InitialState = {
   tags: TagOption[] | null;
   image: string | null;
+  title: string | null;
 };
 
 export function Publish({ session }: { session: Session | null }) {
   const [initialState, setInitialState] = React.useState<InitialState>({
     tags: null,
     image: null,
+    title: null,
   });
   const [input, setInput] = React.useState("");
   const [tags, setTags] = React.useState<TagOption[]>([]);
@@ -63,6 +69,7 @@ export function Publish({ session }: { session: Session | null }) {
       setTags(tags);
       setInitialState({
         tags,
+        title: savePost.data.title,
         image: savePost.data.image,
       });
     }
@@ -83,7 +90,14 @@ export function Publish({ session }: { session: Session | null }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="success" size="sm">
+        <Button
+          variant="success"
+          size="sm"
+          disabled={
+            savePost?.data?.content.length === 0 ||
+            savePost?.data?.title.length === 0
+          }
+        >
           Publish
         </Button>
       </DialogTrigger>
@@ -100,15 +114,43 @@ export function Publish({ session }: { session: Session | null }) {
                 kembali. Pastikan postingan telah sesuai.`}
               </DialogDescription>
             </DialogHeader>
-            <div className="my-6 space-y-4">
-              <div className="space-y-1">
-                <h4 className="scroll-m-20 truncate font-serif text-xl font-semibold tracking-tight">
-                  {savePost?.data?.title}
-                </h4>
-                <p className="text-sm text-muted-foreground">{`Penulis: ${session?.user.name}`}</p>
-              </div>
-              <div className="space-y-1">
-                <div className="sm:w-64">
+            <div className="my-6 space-y-8">
+              <div className="grid-cols-4 md:grid">
+                <div className="md:col-span-3 md:mr-8">
+                  {initialState.title && (
+                    <h4 className="scroll-m-20 truncate font-serif text-xl font-semibold tracking-tight">
+                      {initialState.title}
+                    </h4>
+                  )}
+                  {!initialState.title && (
+                    <Skeleton className="h-8 w-full md:w-1/2" />
+                  )}
+                  <p className="mb-4 text-sm text-muted-foreground">{`Penulis: ${session?.user.name}`}</p>
+
+                  <div className="space-y-1">
+                    <Label htmlFor="label-select">Label</Label>
+                    {initialState.tags && (
+                      <CreateableSelect
+                        isMulti
+                        maxMenuHeight={128}
+                        inputId="label-select"
+                        placeholder="Beri label..."
+                        isLoading={isLoading}
+                        onInputChange={(value) => {
+                          setInput(value);
+                        }}
+                        onCreateOption={handleCreateTag}
+                        onChange={(value) => {
+                          setTags(value as TagOption[]);
+                        }}
+                        value={tags}
+                        options={tagOptions.data?.map(mapTags) ?? []}
+                      />
+                    )}
+                    {!initialState.tags && <Skeleton className="h-9 w-full" />}
+                  </div>
+                </div>
+                <div className="my-10 md:m-0">
                   <AspectRatio ratio={16 / 9} className="bg-muted">
                     {!initialState.image && (
                       <div className="flex h-full items-center justify-center text-muted-foreground">
@@ -128,35 +170,72 @@ export function Publish({ session }: { session: Session | null }) {
                   </AspectRatio>
                 </div>
               </div>
-              <div className="space-y-1">
-                <Label htmlFor="label-select">Label</Label>
-                <CreateableSelect
-                  isMulti
-                  maxMenuHeight={128}
-                  inputId="label-select"
-                  placeholder="Beri label..."
-                  isLoading={isLoading}
-                  onInputChange={(value) => {
-                    setInput(value);
-                  }}
-                  onCreateOption={handleCreateTag}
-                  onChange={(value) => {
-                    setTags(value as TagOption[]);
-                  }}
-                  value={tags}
-                  options={tagOptions.data?.map(mapTags) ?? []}
-                />
-              </div>
-              <div className="flex flex-col gap-y-1 text-pretty text-sm tracking-wide text-muted-foreground">
-                <p>
-                  Tuliskan label yang sesuai dengan isi postingan kamu. Beberapa
-                  rekomendasi label populer diantaranya yaitu berita,
-                  penelitian, kompetisi, pengembangan diri, perkuliahan,
-                  perangkat lunak, teknologi, dan media.
-                  <span className="text-destructive">
-                    *Postingan sangat direkomendasikan untuk diberi label!
-                  </span>
-                </p>
+              <div className="space-y-4">
+                <Alert className="duration-300 animate-in zoom-in slide-in-from-top">
+                  <TagsIcon className="h-4 w-4" />
+                  <AlertTitle>
+                    Tuliskan label yang sesuai dengan isi postingan kamu
+                  </AlertTitle>
+                  <AlertDescription className="text-pretty">
+                    Beberapa rekomendasi label populer diantaranya yaitu berita,
+                    penelitian, kompetisi, pengembangan diri, perkuliahan,
+                    perangkat lunak, teknologi, dan media.
+                  </AlertDescription>
+                </Alert>
+
+                <Alert className="duration-300 animate-in zoom-in slide-in-from-top">
+                  <UsersRoundIcon className="h-4 w-4" />
+                  <AlertTitle>Info Untuk Departemen Advokastra</AlertTitle>
+                  <AlertDescription className="text-pretty">
+                    Berikut ini adalah label yang direkomendasikan agar
+                    postingan dapat masuk ke website pmb-himarpl: pmb, snbp,
+                    snbt, sm upi, dan prestasi istimewa.
+                  </AlertDescription>
+                </Alert>
+
+                {tags.length === 0 && (
+                  <Alert
+                    variant="destructive"
+                    className="duration-300 animate-in zoom-in slide-in-from-top"
+                  >
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>
+                      Postingan sangat direkomendasikan untuk diberi label!
+                    </AlertTitle>
+                  </Alert>
+                )}
+                {isWordMoreThan(input, 3) && (
+                  <Alert
+                    variant="destructive"
+                    className="duration-300 animate-in zoom-in slide-in-from-top"
+                  >
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Maksimum 3 kata untuk setiap label</AlertTitle>
+                  </Alert>
+                )}
+                {isWordInSentenceMoreThan(input, 16) && (
+                  <Alert
+                    variant="destructive"
+                    className="duration-300 animate-in zoom-in slide-in-from-top"
+                  >
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>
+                      Maksimum 16 huruf untuk setiap kata dalam label
+                    </AlertTitle>
+                  </Alert>
+                )}
+                {tags.length > 4 && (
+                  <Alert
+                    variant="warning"
+                    className="duration-300 animate-in zoom-in slide-in-from-top"
+                  >
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Jumlah label terlalu banyak</AlertTitle>
+                    <AlertDescription>
+                      Direkomendiasikan untuk memilih maksimal 4 label.
+                    </AlertDescription>
+                  </Alert>
+                )}
               </div>
             </div>
             <DialogFooter>
@@ -164,7 +243,12 @@ export function Publish({ session }: { session: Session | null }) {
                 <Button
                   variant="success"
                   onClick={handleSubmit}
-                  disabled={tags.length === 0 || isLoading}
+                  disabled={
+                    tags.length === 0 ||
+                    isLoading ||
+                    savePost?.data?.content.length === 0 ||
+                    savePost?.data?.title.length === 0
+                  }
                 >
                   Publish
                 </Button>

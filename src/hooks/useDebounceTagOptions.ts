@@ -45,8 +45,8 @@ export const useDebounceTagOptions = ({ input, delay, setTags }: Props) => {
 
   const handleCreateTag = (value: string) => {
     const lowerCaseValue = value.toLowerCase();
-    tagCreate.mutate(lowerCaseValue);
-    tagOptions
+
+    tagCreate
       .mutateAsync(lowerCaseValue)
       .then(() => {
         setTags((prev) => [
@@ -58,7 +58,10 @@ export const useDebounceTagOptions = ({ input, delay, setTags }: Props) => {
         ]);
       })
       .catch(() => {
-        toast.error("Gagal membuat label");
+        toast.error("Gagal membuat label", {
+          description: lowerCaseValue + " gagal dibuat",
+          duration: 4000,
+        });
       });
   };
 
