@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import { type Session } from "next-auth";
-import { AlertCircle, TagsIcon } from "lucide-react";
+import { AlertCircle, TagsIcon, UsersRoundIcon } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
@@ -173,6 +173,17 @@ export function Publish({ session }: { session: Session | null }) {
                   perangkat lunak, teknologi, dan media.
                 </AlertDescription>
               </Alert>
+
+              <Alert className="duration-300 animate-in zoom-in slide-in-from-top">
+                <UsersRoundIcon className="h-4 w-4" />
+                <AlertTitle>Info Untuk Departemen Advokastra</AlertTitle>
+                <AlertDescription className="text-pretty">
+                  Berikut ini adalah label yang direkomendasikan agar postingan
+                  dapat masuk ke website pmb-himarpl: pmb, snbp, snbt, sm upi,
+                  dan prestasi istimewa.
+                </AlertDescription>
+              </Alert>
+
               {tags.length === 0 && (
                 <Alert
                   variant="destructive"
