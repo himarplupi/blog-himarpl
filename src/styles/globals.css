@@ -37,13 +37,47 @@
 
     --radius: 0.4rem;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
+    color-scheme: dark;
   }
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.tiptap h1.is-empty::before,
+.tiptap p.is-empty:nth-child(2):last-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: hsl(var(--muted-foreground));
+  pointer-events: none;
+  height: 0;
+}
+
+.ProseMirror {
+  opacity: 0.75;
+  transition: all 250ms ease-out;
+}
+
+.ProseMirror-focused {
+  outline: none !important;
+  opacity: 1;
+}
+
+.tiptap .ProseMirror-selectednode {
+  cursor: move;
+  outline: 2px solid hsl(var(--primary));
+  border-radius: var(--radius);
+}
+
+div[data-youtube-video] {
+  cursor: move;
+  padding: 24px 0;
+  margin: 0 16px;
+}
+
+div[data-youtube-video].ProseMirror-selectednode {
+  background: hsl(var(--muted));
 }

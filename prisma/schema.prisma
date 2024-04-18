@@ -25,40 +25,33 @@ enum Role {
 }
 
 model PostTag {
-  id        String   @id @default(cuid())
-  title     String
-  metaTitle String
-  slug      String
-  content   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-  posts     Post[]
-}
-
-model PostCategory {
-  id        String   @id @default(cuid())
-  title     String
-  metaTitle String
-  slug      String
-  content   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  id        String    @id @default(cuid())
+  title     String    @unique
+  slug      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+  parentId  String?
+  parent    PostTag?  @relation("ParentChildren", fields: [parentId], references: [id])
+  children  PostTag[] @relation("ParentChildren")
   posts     Post[]
 }
 
 model Post {
-  id          String         @id @default(cuid())
+  id          String    @id @default(cuid())
   authorId    String
   title       String
   metaTitle   String
   slug        String
   content     String
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @default(now()) @updatedAt
+  rawHtml     String
+  image       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
   publishedAt DateTime?
-  author      User           @relation(fields: [authorId], references: [id])
-  categories  PostCategory[]
+  author      User      @relation(fields: [authorId], references: [id])
   tags        PostTag[]
+
+  @@unique([authorId, slug])
 }
 
 // Define the department model
@@ -78,6 +71,7 @@ model SocialMedia {
   userId   String
   name     String
   username String
+  url      String
   user     User   @relation(fields: [userId], references: [id])
 
   @@unique([userId, name, username])
@@ -91,8 +85,9 @@ model User {
   image         String?
   username      String?       @unique
   bio           String?
+  position      String?
   role          Role          @default(member)
-  lastLoginAt   DateTime      @default(now())
+  lastLoginAt   DateTime?
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @default(now()) @updatedAt
   departmentId  String?

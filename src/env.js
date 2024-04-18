@@ -1,5 +1,6 @@
-import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
+
+import { createEnv } from "@t3-oss/env-nextjs";
 
 export const env = createEnv({
   /**
@@ -14,9 +15,6 @@ export const env = createEnv({
         (str) => !str.includes("YOUR_MYSQL_URL_HERE"),
         "You forgot to change the default URL",
       ),
-    NODE_ENV: z
-      .enum(["development", "test", "production"])
-      .default("development"),
     NEXTAUTH_SECRET:
       process.env.NODE_ENV === "production"
         ? z.string()
@@ -30,6 +28,11 @@ export const env = createEnv({
     ),
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
+    NODE_ENV: z
+      .enum(["development", "test", "production"])
+      .default("development"),
+    BASE_URL: z.string().url(),
+    BASE_PATH: z.string().optional(),
   },
 
   /**
@@ -48,10 +51,17 @@ export const env = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
+    BASE_URL: process.env.NEXT_PUBLIC_BASE_URL
+      ? process.env.NEXT_PUBLIC_BASE_URL
+      : process.env.NEXT_PUBLIC_VERCEL_URL
+        ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+        : "https://himarpl.com",
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    BASE_PATH: process.env.NEXT_PUBLIC_BASE_PATH || "",
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-    GOOGLE_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
@@ -59,8 +69,8 @@ export const env = createEnv({
    */
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
   /**
-   * Makes it so that empty strings are treated as undefined. `SOME_VAR: z.string()` and
-   * `SOME_VAR=''` will throw an error.
+   * Makes it so that empty strings are treated as undefined.
+   * `SOME_VAR: z.string()` and `SOME_VAR=''` will throw an error.
    */
   emptyStringAsUndefined: true,
 });

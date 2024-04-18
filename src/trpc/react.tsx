@@ -1,11 +1,12 @@
 "use client";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client";
-import { createTRPCReact } from "@trpc/react-query";
 import { useState } from "react";
 
 import { type AppRouter } from "@/server/api/root";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client";
+import { createTRPCReact } from "@trpc/react-query";
+
 import { getUrl, transformer } from "./shared";
 
 const createQueryClient = () => new QueryClient();
@@ -38,7 +39,7 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
           url: getUrl(),
         }),
       ],
-    })
+    }),
   );
 
   return (

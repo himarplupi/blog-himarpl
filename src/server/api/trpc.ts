@@ -7,12 +7,12 @@
  * need to use are documented accordingly near the end.
  */
 
-import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { getServerAuthSession } from "@/server/auth";
 import { db } from "@/server/db";
+import { initTRPC, TRPCError } from "@trpc/server";
 
 /**
  * 1. CONTEXT
@@ -88,10 +88,20 @@ export const publicProcedure = t.procedure;
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
+export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
   if (!ctx.session || !ctx.session.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
+
+  if (ctx.session.user.role !== "admin") {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  await ctx.db.user.update({
+    where: { id: ctx.session.user.id },
+    data: { lastLoginAt: new Date() },
+  });
+
   return next({
     ctx: {
       // infers the `session` as non-nullable

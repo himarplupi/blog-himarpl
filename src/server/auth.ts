@@ -1,15 +1,16 @@
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import {
-  getServerSession,
   type DefaultSession,
+  getServerSession,
   type NextAuthOptions,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import GoogleProvider from "next-auth/providers/google";
+
+import { env } from "@/env";
 import { db } from "@/server/db";
 import { api } from "@/trpc/server";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { User as PrismaUser } from "@prisma/client";
-import { env } from "@/env";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -22,6 +23,7 @@ declare module "next-auth" {
     user: {
       id: string;
       role: "admin" | "member";
+      username: string | null;
     } & DefaultSession["user"];
   }
 
@@ -52,10 +54,6 @@ export const authOptions: NextAuthOptions = {
         return `/login?errorMsg=Account with email ${email} is not registered`;
       }
 
-      if (user.role !== "admin") {
-        return "/login?errorMsg=You are not an admin";
-      }
-
       const account = await api.account.getByUserId.query(user.id);
 
       if (!account) {
@@ -80,17 +78,18 @@ export const authOptions: NextAuthOptions = {
         if (!res) return "/login?errorMsg=Failed to insert account";
       }
 
+      await api.user.updateLastLoginAt.mutate();
+
       return true;
     },
     session: async ({ session, user }) => {
-      await api.user.putLastLogin.mutate(user.id);
-
       return {
         ...session,
         user: {
           ...session.user,
           id: user.id,
           role: user.role,
+          username: user.username,
         },
       };
     },

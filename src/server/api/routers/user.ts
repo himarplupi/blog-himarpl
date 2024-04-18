@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -41,58 +42,21 @@ export const userRouter = createTRPCRouter({
   getByEmail: publicProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.user.findFirst({ where: { email: input } });
   }),
-  putLastLogin: publicProcedure
+  byUsername: publicProcedure.input(z.string()).query(({ ctx, input }) => {
+    return ctx.db.user.findFirst({ where: { username: input.toLowerCase() } });
+  }),
+  setSelfUsername: protectedProcedure
     .input(z.string())
-    .mutation(async ({ ctx, input }) => {
-      return await ctx.db.user.update({
-        where: { id: input },
-        data: { lastLoginAt: new Date() },
+    .mutation(({ ctx, input }) => {
+      return ctx.db.user.update({
+        where: { id: ctx.session.user.id },
+        data: { username: input.toLowerCase() },
       });
     }),
-  deleteMany: protectedProcedure
-    .input(z.array(z.string()))
-    .mutation(async ({ ctx, input }) => {
-      return await ctx.db.user.deleteMany({
-        where: { id: { in: input } },
-      });
-    }),
-  create: protectedProcedure
-    .input(
-      z.object({
-        name: z.string(),
-        email: z.string().email(),
-        image: z.string(),
-        role: z.enum(["admin", "member"]),
-        departmentId: z.string().optional(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      return await ctx.db.user.create({
-        data: input,
-      });
-    }),
-  update: protectedProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        name: z.string().optional(),
-        email: z.string().email().optional(),
-        image: z.string().optional(),
-        role: z.enum(["admin", "member"]).optional(),
-        departmentId: z.string().optional(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      console.log(input);
-      return await ctx.db.user.update({
-        where: { id: input.id },
-        data: {
-          name: input.name,
-          email: input.email,
-          image: input.image,
-          role: input.role,
-          departmentId: input.departmentId,
-        },
-      });
-    }),
+  updateLastLoginAt: protectedProcedure.mutation(({ ctx }) => {
+    return ctx.db.user.update({
+      where: { id: ctx.session.user.id },
+      data: { lastLoginAt: new Date() },
+    });
+  }),
 });
