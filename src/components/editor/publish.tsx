@@ -107,20 +107,43 @@ export function Publish({ session }: { session: Session | null }) {
                 kembali. Pastikan postingan telah sesuai.`}
               </DialogDescription>
             </DialogHeader>
-            <div className="my-6 space-y-4">
-              <div className="space-y-1">
-                {initialState.title && (
-                  <h4 className="scroll-m-20 truncate font-serif text-xl font-semibold tracking-tight">
-                    {initialState.title}
-                  </h4>
-                )}
-                {!initialState.title && (
-                  <Skeleton className="h-8 w-full md:w-1/2" />
-                )}
-                <p className="text-sm text-muted-foreground">{`Penulis: ${session?.user.name}`}</p>
-              </div>
-              <div className="space-y-1">
-                <div className="sm:w-64">
+            <div className="my-6 space-y-8">
+              <div className="grid-cols-4 md:grid">
+                <div className="md:col-span-3 md:mr-8">
+                  {initialState.title && (
+                    <h4 className="scroll-m-20 truncate font-serif text-xl font-semibold tracking-tight">
+                      {initialState.title}
+                    </h4>
+                  )}
+                  {!initialState.title && (
+                    <Skeleton className="h-8 w-full md:w-1/2" />
+                  )}
+                  <p className="mb-4 text-sm text-muted-foreground">{`Penulis: ${session?.user.name}`}</p>
+
+                  <div className="space-y-1">
+                    <Label htmlFor="label-select">Label</Label>
+                    {initialState.tags && (
+                      <CreateableSelect
+                        isMulti
+                        maxMenuHeight={128}
+                        inputId="label-select"
+                        placeholder="Beri label..."
+                        isLoading={isLoading}
+                        onInputChange={(value) => {
+                          setInput(value);
+                        }}
+                        onCreateOption={handleCreateTag}
+                        onChange={(value) => {
+                          setTags(value as TagOption[]);
+                        }}
+                        value={tags}
+                        options={tagOptions.data?.map(mapTags) ?? []}
+                      />
+                    )}
+                    {!initialState.tags && <Skeleton className="h-9 w-full" />}
+                  </div>
+                </div>
+                <div className="my-10 md:m-0">
                   <AspectRatio ratio={16 / 9} className="bg-muted">
                     {!initialState.image && (
                       <div className="flex h-full items-center justify-center text-muted-foreground">
@@ -140,93 +163,73 @@ export function Publish({ session }: { session: Session | null }) {
                   </AspectRatio>
                 </div>
               </div>
-              <div className="space-y-1">
-                <Label htmlFor="label-select">Label</Label>
-                {initialState.tags && (
-                  <CreateableSelect
-                    isMulti
-                    maxMenuHeight={128}
-                    inputId="label-select"
-                    placeholder="Beri label..."
-                    isLoading={isLoading}
-                    onInputChange={(value) => {
-                      setInput(value);
-                    }}
-                    onCreateOption={handleCreateTag}
-                    onChange={(value) => {
-                      setTags(value as TagOption[]);
-                    }}
-                    value={tags}
-                    options={tagOptions.data?.map(mapTags) ?? []}
-                  />
-                )}
-                {!initialState.tags && <Skeleton className="h-9 w-full" />}
-              </div>
-              <Alert className="duration-300 animate-in zoom-in slide-in-from-top">
-                <TagsIcon className="h-4 w-4" />
-                <AlertTitle>
-                  Tuliskan label yang sesuai dengan isi postingan kamu
-                </AlertTitle>
-                <AlertDescription className="text-pretty">
-                  Beberapa rekomendasi label populer diantaranya yaitu berita,
-                  penelitian, kompetisi, pengembangan diri, perkuliahan,
-                  perangkat lunak, teknologi, dan media.
-                </AlertDescription>
-              </Alert>
-
-              <Alert className="duration-300 animate-in zoom-in slide-in-from-top">
-                <UsersRoundIcon className="h-4 w-4" />
-                <AlertTitle>Info Untuk Departemen Advokastra</AlertTitle>
-                <AlertDescription className="text-pretty">
-                  Berikut ini adalah label yang direkomendasikan agar postingan
-                  dapat masuk ke website pmb-himarpl: pmb, snbp, snbt, sm upi,
-                  dan prestasi istimewa.
-                </AlertDescription>
-              </Alert>
-
-              {tags.length === 0 && (
-                <Alert
-                  variant="destructive"
-                  className="duration-300 animate-in zoom-in slide-in-from-top"
-                >
-                  <AlertCircle className="h-4 w-4" />
+              <div className="space-y-4">
+                <Alert className="duration-300 animate-in zoom-in slide-in-from-top">
+                  <TagsIcon className="h-4 w-4" />
                   <AlertTitle>
-                    Postingan sangat direkomendasikan untuk diberi label!
+                    Tuliskan label yang sesuai dengan isi postingan kamu
                   </AlertTitle>
-                </Alert>
-              )}
-              {isWordMoreThan(input, 3) && (
-                <Alert
-                  variant="destructive"
-                  className="duration-300 animate-in zoom-in slide-in-from-top"
-                >
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Maksimum 3 kata untuk setiap label</AlertTitle>
-                </Alert>
-              )}
-              {isWordInSentenceMoreThan(input, 16) && (
-                <Alert
-                  variant="destructive"
-                  className="duration-300 animate-in zoom-in slide-in-from-top"
-                >
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>
-                    Maksimum 16 huruf untuk setiap kata dalam label
-                  </AlertTitle>
-                </Alert>
-              )}
-              {tags.length > 4 && (
-                <Alert
-                  variant="warning"
-                  className="duration-300 animate-in zoom-in slide-in-from-top"
-                >
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Jumlah label terlalu banyak</AlertTitle>
-                  <AlertDescription>
-                    Direkomendiasikan untuk memilih maksimal 4 label.
+                  <AlertDescription className="text-pretty">
+                    Beberapa rekomendasi label populer diantaranya yaitu berita,
+                    penelitian, kompetisi, pengembangan diri, perkuliahan,
+                    perangkat lunak, teknologi, dan media.
                   </AlertDescription>
                 </Alert>
-              )}
+
+                <Alert className="duration-300 animate-in zoom-in slide-in-from-top">
+                  <UsersRoundIcon className="h-4 w-4" />
+                  <AlertTitle>Info Untuk Departemen Advokastra</AlertTitle>
+                  <AlertDescription className="text-pretty">
+                    Berikut ini adalah label yang direkomendasikan agar
+                    postingan dapat masuk ke website pmb-himarpl: pmb, snbp,
+                    snbt, sm upi, dan prestasi istimewa.
+                  </AlertDescription>
+                </Alert>
+
+                {tags.length === 0 && (
+                  <Alert
+                    variant="destructive"
+                    className="duration-300 animate-in zoom-in slide-in-from-top"
+                  >
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>
+                      Postingan sangat direkomendasikan untuk diberi label!
+                    </AlertTitle>
+                  </Alert>
+                )}
+                {isWordMoreThan(input, 3) && (
+                  <Alert
+                    variant="destructive"
+                    className="duration-300 animate-in zoom-in slide-in-from-top"
+                  >
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Maksimum 3 kata untuk setiap label</AlertTitle>
+                  </Alert>
+                )}
+                {isWordInSentenceMoreThan(input, 16) && (
+                  <Alert
+                    variant="destructive"
+                    className="duration-300 animate-in zoom-in slide-in-from-top"
+                  >
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>
+                      Maksimum 16 huruf untuk setiap kata dalam label
+                    </AlertTitle>
+                  </Alert>
+                )}
+                {tags.length > 4 && (
+                  <Alert
+                    variant="warning"
+                    className="duration-300 animate-in zoom-in slide-in-from-top"
+                  >
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Jumlah label terlalu banyak</AlertTitle>
+                    <AlertDescription>
+                      Direkomendiasikan untuk memilih maksimal 4 label.
+                    </AlertDescription>
+                  </Alert>
+                )}
+              </div>
             </div>
             <DialogFooter>
               <DialogClose asChild>
