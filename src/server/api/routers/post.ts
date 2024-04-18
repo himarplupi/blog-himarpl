@@ -131,6 +131,18 @@ export const postRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       revalidatePath("/me", "layout");
+
+      const prevTags = await ctx.db.postTag.findMany({
+        where: {
+          posts: {
+            some: {
+              authorId: ctx.session.user.id,
+              slug: input.slug,
+            },
+          },
+        },
+      });
+
       return ctx.db.post.update({
         include: {
           tags: true,
@@ -145,6 +157,9 @@ export const postRouter = createTRPCRouter({
             connect: input.tagTitles?.map((title) => ({
               title,
             })),
+            disconnect: prevTags.filter((tag) => {
+              return !input.tagTitles?.includes(tag.title);
+            }),
           },
         },
         where: {
