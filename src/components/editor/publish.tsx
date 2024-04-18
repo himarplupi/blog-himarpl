@@ -90,7 +90,14 @@ export function Publish({ session }: { session: Session | null }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="success" size="sm">
+        <Button
+          variant="success"
+          size="sm"
+          disabled={
+            savePost?.data?.content.length === 0 ||
+            savePost?.data?.title.length === 0
+          }
+        >
           Publish
         </Button>
       </DialogTrigger>
@@ -236,7 +243,12 @@ export function Publish({ session }: { session: Session | null }) {
                 <Button
                   variant="success"
                   onClick={handleSubmit}
-                  disabled={tags.length === 0 || isLoading}
+                  disabled={
+                    tags.length === 0 ||
+                    isLoading ||
+                    savePost?.data?.content.length === 0 ||
+                    savePost?.data?.title.length === 0
+                  }
                 >
                   Publish
                 </Button>
