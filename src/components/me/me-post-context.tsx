@@ -10,14 +10,7 @@ import type { Session } from "next-auth";
 
 import type { Post } from "@prisma/client";
 
-type PostWithTags = Post & {
-  tags:
-  | {
-    title: string;
-    slug: string;
-  }[]
-  | null;
-};
+type PostWithTags = Post & { tags: { title: string; slug: string }[] | null };
 
 type MePostContextType = {
   draftPosts: PostWithTags[];
