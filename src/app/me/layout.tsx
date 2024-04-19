@@ -2,8 +2,8 @@ import { unstable_noStore as noStore } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { Navbar } from "@/components/common/navbar";
-import { LayoutAnimationProvider, MeHeader } from "@/components/post/me-header";
-import { MePostProvider } from "@/components/post/me-post-context";
+import { LayoutAnimationProvider, MeHeader } from "@/components/me/me-header";
+import { MePostProvider } from "@/components/me/me-post-context";
 import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
 

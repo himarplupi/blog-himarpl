@@ -74,6 +74,27 @@ export function Publish({ session }: { session: Session | null }) {
       });
     }
 
+    if (initialState.title !== savePost.data.title) {
+      setInitialState({
+        ...initialState,
+        title: savePost.data.title,
+      });
+    }
+
+    if (initialState.image !== savePost.data.image) {
+      setInitialState({
+        ...initialState,
+        image: savePost.data.image,
+      });
+    }
+
+    if (initialState.tags !== tags) {
+      setInitialState({
+        ...initialState,
+        tags,
+      });
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [savePost]);
 
@@ -118,14 +139,14 @@ export function Publish({ session }: { session: Session | null }) {
               <div className="grid-cols-4 md:grid">
                 <div className="md:col-span-3 md:mr-8">
                   {initialState.title && (
-                    <h4 className="scroll-m-20 truncate font-serif text-xl font-semibold tracking-tight">
+                    <h4 className="scroll-m-20 truncate font-serif text-xl font-semibold tracking-tight duration-300 animate-in fade-in">
                       {initialState.title}
                     </h4>
                   )}
                   {!initialState.title && (
                     <Skeleton className="h-8 w-full md:w-1/2" />
                   )}
-                  <p className="mb-4 text-sm text-muted-foreground">{`Penulis: ${session?.user.name}`}</p>
+                  <p className="mb-4 text-sm text-muted-foreground duration-300 animate-in fade-in">{`Penulis: ${session?.user.name}`}</p>
 
                   <div className="space-y-1">
                     <Label htmlFor="label-select">Label</Label>
@@ -135,6 +156,7 @@ export function Publish({ session }: { session: Session | null }) {
                         maxMenuHeight={128}
                         inputId="label-select"
                         placeholder="Beri label..."
+                        className="duration-300 animate-in fade-in"
                         isLoading={isLoading}
                         onInputChange={(value) => {
                           setInput(value);
