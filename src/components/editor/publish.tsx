@@ -146,6 +146,7 @@ export function Publish({ session }: { session: Session | null }) {
                   {!initialState.title && (
                     <Skeleton className="h-8 w-full md:w-1/2" />
                   )}
+
                   <p className="mb-4 text-sm text-muted-foreground duration-300 animate-in fade-in">{`Penulis: ${session?.user.name}`}</p>
 
                   <div className="space-y-1">
