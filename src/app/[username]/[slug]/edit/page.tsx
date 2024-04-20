@@ -18,11 +18,6 @@ export default async function PostEditPage({ params }: PostEditPageProps) {
   noStore();
   const session = await getServerAuthSession();
 
-  // handle route without @ symbol
-  if (!params.username.startsWith("%40")) {
-    return notFound();
-  }
-
   const username = params.username.substring(3);
 
   if (!session) {
