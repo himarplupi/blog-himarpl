@@ -20,12 +20,12 @@ export const usePublishPost = () => {
 
     publishPromise
       .then(() => {
-        router.push("/me");
+        router.push("/me/posts/public");
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
-  return { publish };
+  return { publish, isPublishing: publishPost.isLoading };
 };
