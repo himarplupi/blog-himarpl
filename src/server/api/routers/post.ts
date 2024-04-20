@@ -81,6 +81,7 @@ export const postRouter = createTRPCRouter({
       });
 
       slugger.reset();
+      revalidatePath("/me", "layout");
 
       return post;
     }),
