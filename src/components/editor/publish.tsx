@@ -127,7 +127,7 @@ export function Publish({ session }: { session: Session | null }) {
         <ScrollArea className="max-h-screen">
           <div className="p-6">
             <DialogHeader>
-              <DialogTitle className="font-serif text-2xl tracking-wide">
+              <DialogTitle className="font-serif text-3xl tracking-tight">
                 Publish Postingan
               </DialogTitle>
               <DialogDescription>
@@ -137,9 +137,9 @@ export function Publish({ session }: { session: Session | null }) {
             </DialogHeader>
             <div className="my-6 space-y-8">
               <div className="grid-cols-4 md:grid">
-                <div className="md:col-span-3 md:mr-8">
+                <div className="md:col-span-3 md:mr-32">
                   {initialState.title && (
-                    <h4 className="scroll-m-20 truncate font-serif text-xl font-semibold tracking-tight duration-300 animate-in fade-in">
+                    <h4 className="scroll-m-20 truncate font-serif text-2xl font-semibold tracking-tight duration-300 animate-in fade-in">
                       {initialState.title}
                     </h4>
                   )}
@@ -147,10 +147,15 @@ export function Publish({ session }: { session: Session | null }) {
                     <Skeleton className="h-8 w-full md:w-1/2" />
                   )}
 
-                  <p className="mb-4 text-sm text-muted-foreground duration-300 animate-in fade-in">{`Penulis: ${session?.user.name}`}</p>
+                  <p className="mb-3 text-sm text-muted-foreground duration-300 animate-in fade-in">{`Penulis: ${session?.user.name}`}</p>
 
                   <div className="space-y-1">
-                    <Label htmlFor="label-select">Label</Label>
+                    <Label
+                      htmlFor="label-select"
+                      className="font-serif text-lg"
+                    >
+                      Label
+                    </Label>
                     {initialState.tags && (
                       <CreateableSelect
                         isMulti
@@ -173,7 +178,7 @@ export function Publish({ session }: { session: Session | null }) {
                     {!initialState.tags && <Skeleton className="h-9 w-full" />}
                   </div>
                 </div>
-                <div className="my-10 md:m-0">
+                <div className="my-10 self-end md:m-0">
                   <AspectRatio ratio={16 / 9} className="bg-muted">
                     {!initialState.image && (
                       <div className="flex h-full items-center justify-center text-muted-foreground">
@@ -194,22 +199,24 @@ export function Publish({ session }: { session: Session | null }) {
                 </div>
               </div>
               <div className="space-y-4">
-                <Alert className="duration-300 animate-in zoom-in slide-in-from-top">
+                <Alert>
                   <TagsIcon className="h-4 w-4" />
-                  <AlertTitle>
+                  <AlertTitle className="font-serif">
                     Tuliskan label yang sesuai dengan isi postingan kamu
                   </AlertTitle>
-                  <AlertDescription className="text-pretty">
+                  <AlertDescription className="text-pretty text-xs text-muted-foreground">
                     Beberapa rekomendasi label populer diantaranya yaitu berita,
                     penelitian, kompetisi, pengembangan diri, perkuliahan,
                     perangkat lunak, teknologi, dan media.
                   </AlertDescription>
                 </Alert>
 
-                <Alert className="duration-300 animate-in zoom-in slide-in-from-top">
+                <Alert>
                   <UsersRoundIcon className="h-4 w-4" />
-                  <AlertTitle>Info Untuk Departemen Advokastra</AlertTitle>
-                  <AlertDescription className="text-pretty">
+                  <AlertTitle className="font-serif">
+                    Info Untuk Departemen Advokastra
+                  </AlertTitle>
+                  <AlertDescription className="text-pretty text-xs text-muted-foreground">
                     Berikut ini adalah label yang direkomendasikan agar
                     postingan dapat masuk ke website pmb-himarpl: pmb, snbp,
                     snbt, sm upi, dan prestasi istimewa.
@@ -222,7 +229,7 @@ export function Publish({ session }: { session: Session | null }) {
                     className="duration-300 animate-in zoom-in slide-in-from-top"
                   >
                     <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>
+                    <AlertTitle className="font-serif">
                       Postingan sangat direkomendasikan untuk diberi label!
                     </AlertTitle>
                   </Alert>
@@ -233,7 +240,9 @@ export function Publish({ session }: { session: Session | null }) {
                     className="duration-300 animate-in zoom-in slide-in-from-top"
                   >
                     <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>Maksimum 3 kata untuk setiap label</AlertTitle>
+                    <AlertTitle className="font-serif">
+                      Maksimum 3 kata untuk setiap label
+                    </AlertTitle>
                   </Alert>
                 )}
                 {isWordInSentenceMoreThan(input, 16) && (
@@ -242,7 +251,7 @@ export function Publish({ session }: { session: Session | null }) {
                     className="duration-300 animate-in zoom-in slide-in-from-top"
                   >
                     <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>
+                    <AlertTitle className="font-serif">
                       Maksimum 16 huruf untuk setiap kata dalam label
                     </AlertTitle>
                   </Alert>
@@ -253,8 +262,10 @@ export function Publish({ session }: { session: Session | null }) {
                     className="duration-300 animate-in zoom-in slide-in-from-top"
                   >
                     <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>Jumlah label terlalu banyak</AlertTitle>
-                    <AlertDescription>
+                    <AlertTitle className="font-serif">
+                      Jumlah label terlalu banyak
+                    </AlertTitle>
+                    <AlertDescription className="text-xs">
                       Direkomendiasikan untuk memilih maksimal 4 label.
                     </AlertDescription>
                   </Alert>
