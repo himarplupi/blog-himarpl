@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
-import { useFormState } from "react-dom";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { z } from "zod";
 
 import { SubmitButton } from "@/components/me/button-submit";
 import {
@@ -13,91 +14,146 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useMe } from "@/hooks/useMe";
-import { handleSubmitSocialMedia } from "@/server/me-actions";
+import { api } from "@/trpc/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { SiGithub, SiInstagram } from "@icons-pack/react-simple-icons";
+
+const socialMediaSchema = z.object({
+  instagram: z.string().optional(),
+  github: z.string().optional(),
+});
 
 export function FormSocialMedia() {
   const me = useMe();
-  const [state, formAction] = useFormState(handleSubmitSocialMedia, null);
+
+  const mutation = api.user.updateSelf.useMutation();
+
+  const form = useForm<z.infer<typeof socialMediaSchema>>({
+    resolver: zodResolver(socialMediaSchema),
+    defaultValues: {
+      instagram:
+        me?.socialMedia?.find((value) => value.name === "instagram")
+          ?.username ?? "",
+      github:
+        me?.socialMedia?.find((value) => value.name === "github")?.username ??
+        "",
+    },
+  });
 
   useEffect(() => {
-    if (state?.errors) {
+    if (mutation.isError) {
       toast.error("Gagal menyimpan perubahan sosial media", {
+        description: mutation.error.message,
         duration: 3000,
       });
     }
-    if (state?.data) {
+    if (mutation.isSuccess) {
       toast.success("Berhasil menyimpan perubahan sosial media", {
         duration: 3000,
       });
     }
-  }, [state]);
+  }, [mutation.isSuccess, mutation.isError]);
+
+  const onSubmit = (values: z.infer<typeof socialMediaSchema>) => {
+    const socialMedia = [];
+
+    if (values.instagram) {
+      socialMedia.push({
+        name: "instagram",
+        username: values.instagram,
+        url: `https://instagram.com/${values.instagram}`,
+      });
+    }
+
+    if (values.github) {
+      socialMedia.push({
+        name: "github",
+        username: values.github,
+        url: `https://github.com/${values.github}`,
+      });
+    }
+
+    mutation.mutate({ socialMedia });
+  };
 
   return (
     <Card className="mt-4 h-fit basis-4/12">
-      <form action={formAction}>
-        <CardHeader>
-          <CardTitle className="scroll-m-20 font-serif text-2xl font-semibold tracking-wide">
-            Sosial Media
-          </CardTitle>
-          <CardDescription>
-            Tambahkan akun sosial media kamu agar orang lain bisa lebih mudah
-            mengenal kamu.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-6">
-            <div className="grid gap-3">
-              <Label htmlFor="instagram" className="flex items-center gap-x-2">
-                <span>
-                  {/* @ts-expect-error: Simple Icon onpointer error */}
-                  <SiInstagram color="hsl(var(--foreground))" />
-                </span>
-                <span>Instagram</span>
-              </Label>
-              <Input
-                id="instagram"
-                type="text"
-                className="w-full"
+      <CardHeader>
+        <CardTitle className="scroll-m-20 font-serif text-2xl font-semibold tracking-wide">
+          Sosial Media
+        </CardTitle>
+        <CardDescription>
+          Tambahkan akun sosial media kamu agar orang lain bisa lebih mudah
+          mengenal kamu.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} id="social-media-form">
+            <div className="grid gap-6">
+              <FormField
+                control={form.control}
                 name="instagram"
-                defaultValue={
-                  me?.socialMedia?.find((value) => value.name === "Instagram")
-                    ?.username ?? ""
-                }
-              />
-              <p className="text-sm text-muted-foreground">
-                {"Jangan menggunakan karakter '@.'"}
-              </p>
-            </div>
+                render={({ field }) => (
+                  <FormItem className="grid gap-1">
+                    <FormLabel className="flex items-center gap-x-2">
+                      <span>
+                        {/* @ts-expect-error: Simple Icon onpointer error */}
+                        <SiInstagram color="hsl(var(--foreground))" />
+                      </span>
+                      <span>Instagram</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
 
-            <div className="grid gap-3">
-              <Label htmlFor="github" className="flex items-center gap-x-2">
-                <span>
-                  {/* @ts-expect-error: Simple Icon onpointer error */}
-                  <SiGithub color="hsl(var(--foreground))" />
-                </span>
-                <span>Github</span>
-              </Label>
-              <Input
-                id="github"
-                type="text"
-                className="w-full"
+                    <FormDescription>
+                      {"Jangan menggunakan karakter '@.'"}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="github"
-                defaultValue={
-                  me?.socialMedia?.find((value) => value.name === "github")
-                    ?.username ?? ""
-                }
+                render={({ field }) => (
+                  <FormItem className="grid gap-1">
+                    <FormLabel className="flex items-center gap-x-2">
+                      <span>
+                        {/* @ts-expect-error: Simple Icon onpointer error */}
+                        <SiGithub color="hsl(var(--foreground))" />
+                      </span>
+                      <span>Github</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
-          </div>
-        </CardContent>
-        <CardFooter className="justify-end">
-          <SubmitButton>Simpan Perubahan</SubmitButton>
-        </CardFooter>
-      </form>
+          </form>
+        </Form>
+      </CardContent>
+      <CardFooter className="justify-end">
+        <SubmitButton isLoading={mutation.isLoading} form="social-media-form">
+          Simpan Perubahan
+        </SubmitButton>
+      </CardFooter>
     </Card>
   );
 }
