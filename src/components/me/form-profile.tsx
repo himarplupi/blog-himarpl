@@ -60,7 +60,9 @@ export function FormProfile() {
         duration: 3000,
       });
     }
-  }, [mutation.data, mutation.isError]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mutation.isSuccess, mutation.isError]);
 
   const onSubmit = (values: z.infer<typeof profileSchema>) => {
     mutation.mutate({ bio: values.bio });

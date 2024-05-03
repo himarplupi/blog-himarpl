@@ -63,6 +63,8 @@ export function FormSocialMedia() {
         duration: 3000,
       });
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mutation.isSuccess, mutation.isError]);
 
   const onSubmit = (values: z.infer<typeof socialMediaSchema>) => {
