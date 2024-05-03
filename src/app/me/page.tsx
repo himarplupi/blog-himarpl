@@ -13,7 +13,7 @@ export default async function MePage() {
           Kelola Profil
         </h2>
 
-        <div className="mt-4 flex flex-grow justify-center gap-x-8 gap-y-4">
+        <div className="mt-4 flex flex-grow flex-col justify-center gap-x-8 gap-y-4 lg:flex-row">
           <FormProfile />
           <FormSocialMedia />
         </div>

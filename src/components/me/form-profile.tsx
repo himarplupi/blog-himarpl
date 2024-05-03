@@ -69,7 +69,7 @@ export function FormProfile() {
   };
 
   return (
-    <Card className="mt-4 h-fit basis-8/12">
+    <Card className="mt-4 h-fit md:basis-8/12">
       <CardHeader>
         <CardTitle className="scroll-m-20 font-serif text-2xl font-semibold tracking-wide">
           Profil

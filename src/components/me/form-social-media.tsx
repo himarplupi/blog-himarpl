@@ -90,7 +90,7 @@ export function FormSocialMedia() {
   };
 
   return (
-    <Card className="mt-4 h-fit basis-4/12">
+    <Card className="mt-4 h-fit md:basis-4/12">
       <CardHeader>
         <CardTitle className="scroll-m-20 font-serif text-2xl font-semibold tracking-wide">
           Sosial Media
