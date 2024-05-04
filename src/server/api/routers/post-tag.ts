@@ -81,7 +81,7 @@ export const postTagRouter = createTRPCRouter({
           _count: "desc",
         },
       },
-      take: 5,
+      take: 15,
     });
   }),
 });

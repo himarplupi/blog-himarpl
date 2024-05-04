@@ -3,7 +3,11 @@ import GithubSlugger from "github-slugger";
 import { z } from "zod";
 
 import { parseMetaTitle } from "@/lib/utils";
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "@/server/api/trpc";
 import { createId } from "@paralleldrive/cuid2";
 import { TRPCError } from "@trpc/server";
 
@@ -234,4 +238,43 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
+  all: publicProcedure.query(async ({ ctx }) => {
+    return ctx.db.post.findMany({
+      include: {
+        tags: {
+          select: {
+            title: true,
+            slug: true,
+          },
+        },
+        author: {
+          select: {
+            username: true,
+            name: true,
+            image: true,
+          },
+        },
+      },
+      orderBy: {
+        publishedAt: "desc",
+      },
+      take: 5,
+    });
+  }),
+
+  // popular: publicProcedure.query(async ({ ctx }) => {
+  //   return await ctx.db.postTag.findMany({
+  //     include: {
+  //       _count: {
+  //         select: { posts: true },
+  //       },
+  //     },
+  //     orderBy: {
+  //       posts: {
+  //         _count: "desc",
+  //       },
+  //     },
+  //     take: 5,
+  //   });
+  // }),
 });
