@@ -238,43 +238,68 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
-  all: publicProcedure.query(async ({ ctx }) => {
-    return ctx.db.post.findMany({
-      include: {
-        tags: {
-          select: {
-            title: true,
-            slug: true,
+  all: publicProcedure
+    .input(z.string().optional())
+    .query(async ({ ctx, input }) => {
+      if (input == null) {
+        return ctx.db.post.findMany({
+          include: {
+            tags: {
+              select: {
+                title: true,
+                slug: true,
+              },
+            },
+            author: {
+              select: {
+                username: true,
+                name: true,
+                image: true,
+              },
+            },
           },
-        },
-        author: {
-          select: {
-            username: true,
-            name: true,
-            image: true,
+          where: {
+            publishedAt: {
+              not: null,
+            },
           },
-        },
-      },
-      orderBy: {
-        publishedAt: "desc",
-      },
-      take: 5,
-    });
-  }),
-
-  // popular: publicProcedure.query(async ({ ctx }) => {
-  //   return await ctx.db.postTag.findMany({
-  //     include: {
-  //       _count: {
-  //         select: { posts: true },
-  //       },
-  //     },
-  //     orderBy: {
-  //       posts: {
-  //         _count: "desc",
-  //       },
-  //     },
-  //     take: 5,
-  //   });
-  // }),
+          orderBy: {
+            publishedAt: "desc",
+          },
+          take: 10,
+        });
+      } else {
+        return ctx.db.post.findMany({
+          include: {
+            tags: {
+              select: {
+                title: true,
+                slug: true,
+              },
+            },
+            author: {
+              select: {
+                username: true,
+                name: true,
+                image: true,
+              },
+            },
+          },
+          where: {
+            publishedAt: {
+              not: null,
+            },
+            tags: {
+              some: {
+                slug: input,
+              },
+            },
+          },
+          orderBy: {
+            publishedAt: "desc",
+          },
+          take: 10,
+        });
+      }
+    }),
 });
