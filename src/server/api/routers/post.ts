@@ -238,68 +238,39 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
+
   all: publicProcedure
-    .input(z.string().optional())
-    .query(async ({ ctx, input }) => {
-      if (input == null) {
-        return ctx.db.post.findMany({
-          include: {
-            tags: {
-              select: {
-                title: true,
-                slug: true,
-              },
-            },
-            author: {
-              select: {
-                username: true,
-                name: true,
-                image: true,
-              },
+    .input(
+      z.object({
+        topic: z.string().optional().nullable(),
+        cursor: z.number().default(1),
+      }),
+    )
+    .query(async ({ ctx }) => {
+      return ctx.db.post.findMany({
+        include: {
+          tags: {
+            select: {
+              title: true,
+              slug: true,
             },
           },
-          where: {
-            publishedAt: {
-              not: null,
+          author: {
+            select: {
+              username: true,
+              name: true,
+              image: true,
             },
           },
-          orderBy: {
-            publishedAt: "desc",
+        },
+        where: {
+          publishedAt: {
+            not: null,
           },
-          take: 10,
-        });
-      } else {
-        return ctx.db.post.findMany({
-          include: {
-            tags: {
-              select: {
-                title: true,
-                slug: true,
-              },
-            },
-            author: {
-              select: {
-                username: true,
-                name: true,
-                image: true,
-              },
-            },
-          },
-          where: {
-            publishedAt: {
-              not: null,
-            },
-            tags: {
-              some: {
-                slug: input,
-              },
-            },
-          },
-          orderBy: {
-            publishedAt: "desc",
-          },
-          take: 10,
-        });
-      }
+        },
+        orderBy: {
+          publishedAt: "desc",
+        },
+      });
     }),
 });

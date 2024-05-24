@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import moment from "moment";
 
+import { Skeleton } from "../ui/skeleton";
+
 
 export default function Article({
   userUrl,
@@ -54,4 +56,25 @@ export default function Article({
       </div>
     </div>
   );
+}
+
+export function ArticleSkeleton() {
+  return (
+    <div className="">
+      <div className="flex gap-1 items-center mb-2">
+        <Skeleton className="w-5 h-5 rounded-full" />
+        <Skeleton className="w-4/5 sm:w-1/2 xl:w-1/3 h-4 rounded-full" />
+      </div>
+      <div className="grid grid-cols-3 gap-x-4">
+        <div className="col-span-2">
+          <Skeleton className="w-full h-5 rounded-full mb-4" />
+          <Skeleton className="w-full h-4 rounded-md hidden lg:block mb-1" />
+          <Skeleton className="w-full h-4 rounded-md hidden lg:block mb-1" />
+          <Skeleton className="w-full h-4 rounded-md hidden lg:block mb-1" />
+        </div>
+        <Skeleton className="aspect-video rounded-md col-span-1" />
+      </div>
+
+    </div>
+  )
 }

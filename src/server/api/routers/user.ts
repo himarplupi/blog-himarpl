@@ -43,7 +43,14 @@ export const userRouter = createTRPCRouter({
     return ctx.db.user.findFirst({ where: { email: input } });
   }),
   byUsername: publicProcedure.input(z.string()).query(({ ctx, input }) => {
-    return ctx.db.user.findFirst({ where: { username: input.toLowerCase() } });
+    return ctx.db.user.findFirst({
+      where: { username: input.toLowerCase() },
+      include: {
+        department: true,
+        accounts: true,
+        socialMedia: true,
+      },
+    });
   }),
   setSelfUsername: protectedProcedure
     .input(z.string())
