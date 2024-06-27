@@ -93,10 +93,6 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
 
-  if (ctx.session.user.role !== "admin") {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
-  }
-
   await ctx.db.user.update({
     where: { id: ctx.session.user.id },
     data: { lastLoginAt: new Date() },

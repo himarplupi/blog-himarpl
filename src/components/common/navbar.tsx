@@ -77,7 +77,7 @@ export function Navbar({ session }: { session: Session | null }) {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuLabel>{session?.user.name}</DropdownMenuLabel>
-                <Link href="/me">
+                <Link href={`@${session?.user.username}`}>
                   <DropdownMenuItem className="cursor-pointer">
                     <User className="mr-2 h-4 w-4" />
                     Profilku
