@@ -62,13 +62,29 @@ const fontSerif = localFont({
 
 export const metadata = {
   title: "Blog | HIMARPL",
-  description: "Masih dalam tahap pengembangan!",
+  metadataBase: new URL("https://blog.himarpl.com"),
+  description: "Tulisan-tulisan pengurus HIMARPL",
   icons: [
     {
       rel: "icon",
       url: "/favicon.ico",
     },
   ],
+  openGraph: {
+    title: "Blog HIMARPL",
+    description: "Tulisan-tulisan pengurus HIMARPL",
+    url: "https://blog.himarpl.com",
+    siteName: "Blog HIMARPL",
+    images: "https://blog.himarpl.com/opengraph-image.gif",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog HIMARPL",
+    description: "Tulisan-tulisan pengurus HIMARPL",
+    creator: "@himarpl",
+    images: ["https://blog.himarpl.com/twitter-image.gif"], // Must be an absolute URL
+  },
 };
 
 export default async function RootLayout({
@@ -82,7 +98,7 @@ export default async function RootLayout({
 
       <body
         className={cn(
-          "bg-background font-sans antialiased",
+          "dark bg-background font-sans antialiased",
           fontSans.variable,
           fontSerif.variable,
         )}

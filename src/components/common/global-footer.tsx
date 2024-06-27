@@ -77,7 +77,6 @@ function SocialMediaLinks() {
             }),
           )}
         >
-          {/* @ts-expect-error: Entahlah SimpleIcon gaje */}
           <SiInstagram color="default" className="h-5 w-5" />
         </Link>
       </li>
@@ -91,7 +90,6 @@ function SocialMediaLinks() {
             }),
           )}
         >
-          {/* @ts-expect-error: Entahlah SimpleIcon gaje */}
           <SiYoutube color="default" className="h-5 w-5" />
         </Link>
       </li>
@@ -105,7 +103,6 @@ function SocialMediaLinks() {
             }),
           )}
         >
-          {/* @ts-expect-error: Entahlah SimpleIcon gaje */}
           <SiTiktok color="hsl(var(--foreground))" className="h-5 w-5" />
         </Link>
       </li>

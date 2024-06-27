@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { Navbar } from "@/components/common/navbar";
@@ -8,6 +9,7 @@ export default async function MeLayout({
 }: {
   children: React.ReactNode;
 }) {
+  noStore();
   const session = await getServerAuthSession();
 
   if (!session) redirect("/login");

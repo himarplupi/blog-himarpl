@@ -13,7 +13,7 @@ export function EditorMenu() {
       <aside
         key="menu"
         className={cn(
-          "fixed bottom-0 z-20 w-full bg-primary-foreground duration-500 ease-in-out animate-in slide-in-from-bottom-24 md:container md:bottom-auto md:top-14 md:slide-in-from-top-24 ",
+          "fixed bottom-0 z-20 w-full bg-background duration-500 ease-in-out animate-in slide-in-from-bottom-24 md:container md:bottom-auto md:top-14 md:slide-in-from-top-24 ",
         )}
       >
         <Carousel

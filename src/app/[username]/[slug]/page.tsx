@@ -71,7 +71,7 @@ export default async function PostPage({
           </div>
         </div>
 
-        <article className="prose prose-invert mt-4 min-h-screen max-w-none lg:prose-xl prose-headings:border-b prose-headings:font-serif prose-headings:font-semibold prose-headings:tracking-tight">
+        <article className="prose mt-4 min-h-screen max-w-none dark:prose-invert lg:prose-xl prose-headings:border-b prose-headings:font-serif prose-headings:font-semibold prose-headings:tracking-tight">
           {parse(post.rawHtml)}
         </article>
       </main>
