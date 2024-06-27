@@ -58,9 +58,10 @@ model Post {
 model Department {
   id          String         @id @default(cuid())
   name        String
-  acronym     String?
+  acronym     String         @unique
   image       String?
   description String?
+  programs    String[]
   type        DepartmentType
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @default(now()) @updatedAt
