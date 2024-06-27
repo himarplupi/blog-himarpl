@@ -46,7 +46,6 @@ export function Youtube() {
             <div>
               <DialogTrigger asChild>
                 <Button size="icon" variant="ghost" disabled={isHeading}>
-                  {/* @ts-expect-error: Entahlah SimpleIcon gaje */}
                   <SiYoutube
                     color="hsl(var(--foreground))"
                     className="h-4 w-4"

@@ -111,7 +111,6 @@ export function FormSocialMedia() {
                   <FormItem className="grid gap-1">
                     <FormLabel className="flex items-center gap-x-2">
                       <span>
-                        {/* @ts-expect-error: Simple Icon onpointer error */}
                         <SiInstagram color="hsl(var(--foreground))" />
                       </span>
                       <span>Instagram</span>
@@ -135,7 +134,6 @@ export function FormSocialMedia() {
                   <FormItem className="grid gap-1">
                     <FormLabel className="flex items-center gap-x-2">
                       <span>
-                        {/* @ts-expect-error: Simple Icon onpointer error */}
                         <SiGithub color="hsl(var(--foreground))" />
                       </span>
                       <span>Github</span>
