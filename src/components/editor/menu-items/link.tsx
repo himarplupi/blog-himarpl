@@ -100,7 +100,7 @@ export function LinkInput() {
     <div
       key="link-input"
       className={cn(
-        "duration-400 fixed bottom-12 z-10 w-full bg-primary-foreground px-2 py-4 ease-in-out fill-mode-forwards md:container md:bottom-auto md:top-28 md:px-10",
+        "duration-400 fixed bottom-12 z-10 w-full bg-background px-2 pb-4 pt-6 ease-in-out fill-mode-forwards md:container md:bottom-auto md:top-24 md:px-10",
         editor?.isActive("link")
           ? "animate-in fade-in slide-in-from-bottom-16 md:slide-in-from-top-16"
           : "animate-out fade-out slide-out-to-bottom-16 md:slide-out-to-top-16",
