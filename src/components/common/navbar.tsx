@@ -29,7 +29,7 @@ export function Navbar({ session }: { session: Session | null }) {
   return (
     !hideNavbarOnRoutes.includes(pathname) && (
       <nav className="fixed top-0 z-10 w-full drop-shadow-md">
-        <div className="container flex items-center justify-between bg-primary-foreground py-2 backdrop-blur-md">
+        <div className="container flex items-center justify-between bg-background py-2 backdrop-blur-md">
           <div className="flex items-center gap-x-5">
             <div className="flex items-center gap-x-2">
               <NavSheet>
@@ -77,7 +77,7 @@ export function Navbar({ session }: { session: Session | null }) {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuLabel>{session?.user.name}</DropdownMenuLabel>
-                <Link href="/me">
+                <Link href={`@${session?.user.username}`}>
                   <DropdownMenuItem className="cursor-pointer">
                     <User className="mr-2 h-4 w-4" />
                     Profilku

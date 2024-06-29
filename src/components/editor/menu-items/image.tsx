@@ -88,7 +88,9 @@ export function Image() {
           </div>
           <DialogFooter>
             <DialogClose asChild>
-              <Button onClick={handleSubmit}>Sisipkan</Button>
+              <Button disabled={src.length < 1} onClick={handleSubmit}>
+                Sisipkan
+              </Button>
             </DialogClose>
           </DialogFooter>
         </DialogContent>

@@ -85,7 +85,7 @@ export const postRouter = createTRPCRouter({
       });
 
       slugger.reset();
-      revalidatePath("/me", "layout");
+      revalidatePath("/me/posts", "layout");
 
       return post;
     }),
@@ -173,7 +173,7 @@ export const postRouter = createTRPCRouter({
         },
       });
 
-      revalidatePath("/me", "layout");
+      revalidatePath("/me/posts", "layout");
 
       return postResult;
     }),

@@ -60,6 +60,53 @@ export const userRouter = createTRPCRouter({
         data: { username: input.toLowerCase() },
       });
     }),
+  me: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.user.findFirst({
+      where: { id: ctx.session.user.id },
+      include: {
+        department: true,
+        socialMedia: true,
+      },
+    });
+  }),
+  updateSelf: protectedProcedure
+    .input(
+      z.object({
+        username: z.string().optional(),
+        bio: z.string().optional(),
+        socialMedia: z
+          .array(
+            z.object({
+              name: z.string(),
+              username: z.string(),
+              url: z.string(),
+            }),
+          )
+          .optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.user.update({
+        where: { id: ctx.session.user.id },
+        data: {
+          username: input.username,
+          bio: input.bio,
+          socialMedia: {
+            upsert: input.socialMedia?.map((socialMedia) => ({
+              where: {
+                userId_name_username: {
+                  name: socialMedia.name,
+                  username: socialMedia.username,
+                  userId: ctx.session.user.id,
+                },
+              },
+              create: socialMedia,
+              update: socialMedia,
+            })),
+          },
+        },
+      });
+    }),
   updateLastLoginAt: protectedProcedure.mutation(({ ctx }) => {
     return ctx.db.user.update({
       where: { id: ctx.session.user.id },

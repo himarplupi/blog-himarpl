@@ -78,7 +78,10 @@ export const authOptions: NextAuthOptions = {
         if (!res) return "/login?errorMsg=Failed to insert account";
       }
 
-      await api.user.updateLastLoginAt.mutate();
+      await db.user.update({
+        where: { id: user.id },
+        data: { lastLoginAt: new Date() },
+      });
 
       return true;
     },

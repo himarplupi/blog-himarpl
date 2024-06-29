@@ -4,44 +4,56 @@
 
 @layer base {
   :root {
-    --gradient: #ffcd29;
+    --background: 226 18% 95%;
+    --foreground: 226 5% 10%;
+    --card: 226 18% 90%;
+    --card-foreground: 226 5% 15%;
+    --popover: 226 18% 95%;
+    --popover-foreground: 226 95% 10%;
+    --primary: 226 100% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 226 18% 70%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 188 18% 85%;
+    --muted-foreground: 226 5% 35%;
+    --accent: 188 18% 80%;
+    --accent-foreground: 226 5% 15%;
+    --destructive: 341 87% 50%;
+    --destructive-foreground: 348 100% 97%;
+    --border: 226 20% 50%;
+    --input: 226 20% 28%;
+    --ring: 226 100% 58%;
+    --radius: 0.3rem;
+  }
 
-    --background: 220 9% 7%;
-    --foreground: 240 3% 94%;
-
-    --muted: 220 5% 17%;
-    --muted-foreground: 240 3% 58%;
-
-    --popover: 220 5% 9%;
-    --popover-foreground: 240 3% 94%;
-
-    --card: 220 5% 9%;
-    --card-foreground: 240 3% 94%;
-
-    --border: 220 5% 17%;
-    --input: 220 5% 17%;
-
-    --primary: 49 100% 58%;
-    --primary-foreground: 49 10% 5.8%;
-
-    --secondary: 220 5% 17%;
-    --secondary-foreground: 240 3% 94%;
-
-    --accent: 220 5% 17%;
-    --accent-foreground: 240 3% 94%;
-
-    --destructive: 0 84% 45.5%;
-    --destructive-foreground: 240 3% 94%;
-
-    --ring: 49 100% 58%;
-
-    --radius: 0.4rem;
+  .dark {
+    --background: 226 18% 10%;
+    --foreground: 226 5% 90%;
+    --card: 226 18% 10%;
+    --card-foreground: 226 5% 90%;
+    --popover: 226 18% 5%;
+    --popover-foreground: 226 5% 90%;
+    --primary: 226 100% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 226 18% 20%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 188 18% 25%;
+    --muted-foreground: 226 5% 60%;
+    --accent: 188 18% 25%;
+    --accent-foreground: 226 5% 90%;
+    --destructive: 341 87% 50%;
+    --destructive-foreground: 348 100% 97%;
+    --border: 226 20% 28%;
+    --input: 226 20% 28%;
+    --ring: 226 100% 58%;
+    --radius: 0.3rem;
   }
 
   * {
     @apply border-border;
     color-scheme: dark;
   }
+
   body {
     @apply bg-background text-foreground;
   }
