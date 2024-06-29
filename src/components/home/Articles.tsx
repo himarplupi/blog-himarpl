@@ -2,35 +2,58 @@
 
 import Link from "next/link";
 import { LoaderCircle } from "lucide-react";
+import { useQueryState } from "nuqs";
 
 import { Button } from "@/components/ui/button";
-import { api } from "@/trpc/react"
+import { api } from "@/trpc/react";
 
-import Article from "../common/article";
+import { Article } from "../common/article";
 
-// topic and user is nullable
-export default function Articles({ topic, user }: { topic: string | null, user: string | null }) {
+export function Articles({ user }: { user: string | null }) {
+  const [tagQuery, setTagQuery] = useQueryState("tag");
   const popularTag = api.postTag.popular.useQuery();
+
   if (user != null) {
     // get post by user
   }
 
   return (
     <>
-      {user != null && <div className="flex gap-2 pb-2 mb-2 overflow-x-scroll">
-        {popularTag.isLoading ?
-          <Button className="rounded-full" variant={"outline"}>
-            <LoaderCircle className="animate-spin" /></Button> :
-          <Link href={`/`}>
-            <Button className="rounded-full" variant={topic == null ? "default" : "outline"}>All</Button>
-          </Link>}
+      {user != null && (
+        <div className="mb-2 flex gap-2 overflow-x-scroll pb-2">
+          {popularTag.isLoading ? (
+            <Button
+              disabled
+              className="rounded-full capitalize"
+              variant={"outline"}
+              size="sm"
+            >
+              <LoaderCircle className="animate-spin" />
+            </Button>
+          ) : (
+            <Button
+              className="rounded-full capitalize"
+              variant={tagQuery == null ? "default" : "outline"}
+              onClick={() => setTagQuery(null)}
+              size="sm"
+            >
+              Untuk Kamu
+            </Button>
+          )}
 
-        {popularTag.data?.slice(0, 5).map((tag) => (
-          <Link key={tag.id} href={`/?topic=${tag.slug}`}>
-            <Button className="rounded-full" variant={topic == tag.slug ? "default" : "outline"}>{tag.title}</Button>
-          </Link>
-        ))}
-      </div>}
+          {popularTag.data?.map((tag) => (
+            <Button
+              className="rounded-full capitalize"
+              onClick={() => setTagQuery(tag.slug)}
+              variant={tagQuery == tag.slug ? "default" : "outline"}
+              key={tag.id}
+              size="sm"
+            >
+              {tag.title}
+            </Button>
+          ))}
+        </div>
+      )}
 
       <div className="flex flex-col gap-6">
         <Article
@@ -43,10 +66,13 @@ export default function Articles({ topic, user }: { topic: string | null, user: 
           teaser="Paulatim uterque aurum vallum inflammatio cunae socius statua curtus. Attonbitus sol complectus centum cursim cruentus. Comis urbanus aegrotatio.
           Alioqui campana texo. Stultus caecus ea. Deleo surculus vir.
           Neque ascisco utpote constans aperio volutabrum odit. Antea arbitro ciminatio accommodo architecto. Demitto valeo cursus."
-          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600">
+          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600"
+        >
           {/* Loop PostTag */}
-          <Link href={`/tag/test`} >
-            <Button className="rounded-full" variant={"secondary"} size={"sm"}>{"Test"}</Button>
+          <Link href={`/tag/test`}>
+            <Button size="sm" className="rounded-full" variant="secondary">
+              {"Test"}
+            </Button>
           </Link>
           {/* End loop PostTag */}
         </Article>
@@ -60,10 +86,13 @@ export default function Articles({ topic, user }: { topic: string | null, user: 
           teaser="Paulatim uterque aurum vallum inflammatio cunae socius statua curtus. Attonbitus sol complectus centum cursim cruentus. Comis urbanus aegrotatio.
           Alioqui campana texo. Stultus caecus ea. Deleo surculus vir.
           Neque ascisco utpote constans aperio volutabrum odit. Antea arbitro ciminatio accommodo architecto. Demitto valeo cursus."
-          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600">
+          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600"
+        >
           {/* Loop PostTag */}
-          <Link href={`/tag/test`} >
-            <Button className="rounded-full" variant={"secondary"} size={"sm"}>{"Test"}</Button>
+          <Link href={`/tag/test`}>
+            <Button className="rounded-full" variant={"secondary"} size={"sm"}>
+              {"Test"}
+            </Button>
           </Link>
           {/* End loop PostTag */}
         </Article>
@@ -77,10 +106,13 @@ export default function Articles({ topic, user }: { topic: string | null, user: 
           teaser="Paulatim uterque aurum vallum inflammatio cunae socius statua curtus. Attonbitus sol complectus centum cursim cruentus. Comis urbanus aegrotatio.
           Alioqui campana texo. Stultus caecus ea. Deleo surculus vir.
           Neque ascisco utpote constans aperio volutabrum odit. Antea arbitro ciminatio accommodo architecto. Demitto valeo cursus."
-          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600">
+          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600"
+        >
           {/* Loop PostTag */}
-          <Link href={`/tag/test`} >
-            <Button className="rounded-full" variant={"secondary"} size={"sm"}>{"Test"}</Button>
+          <Link href={`/tag/test`}>
+            <Button className="rounded-full" variant={"secondary"} size={"sm"}>
+              {"Test"}
+            </Button>
           </Link>
           {/* End loop PostTag */}
         </Article>
@@ -94,10 +126,13 @@ export default function Articles({ topic, user }: { topic: string | null, user: 
           teaser="Paulatim uterque aurum vallum inflammatio cunae socius statua curtus. Attonbitus sol complectus centum cursim cruentus. Comis urbanus aegrotatio.
           Alioqui campana texo. Stultus caecus ea. Deleo surculus vir.
           Neque ascisco utpote constans aperio volutabrum odit. Antea arbitro ciminatio accommodo architecto. Demitto valeo cursus."
-          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600">
+          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600"
+        >
           {/* Loop PostTag */}
-          <Link href={`/tag/test`} >
-            <Button className="rounded-full" variant={"secondary"} size={"sm"}>{"Test"}</Button>
+          <Link href={`/tag/test`}>
+            <Button className="rounded-full" variant={"secondary"} size={"sm"}>
+              {"Test"}
+            </Button>
           </Link>
           {/* End loop PostTag */}
         </Article>
@@ -111,10 +146,13 @@ export default function Articles({ topic, user }: { topic: string | null, user: 
           teaser="Paulatim uterque aurum vallum inflammatio cunae socius statua curtus. Attonbitus sol complectus centum cursim cruentus. Comis urbanus aegrotatio.
           Alioqui campana texo. Stultus caecus ea. Deleo surculus vir.
           Neque ascisco utpote constans aperio volutabrum odit. Antea arbitro ciminatio accommodo architecto. Demitto valeo cursus."
-          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600">
+          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600"
+        >
           {/* Loop PostTag */}
-          <Link href={`/tag/test`} >
-            <Button className="rounded-full" variant={"secondary"} size={"sm"}>{"Test"}</Button>
+          <Link href={`/tag/test`}>
+            <Button className="rounded-full" variant={"secondary"} size={"sm"}>
+              {"Test"}
+            </Button>
           </Link>
           {/* End loop PostTag */}
         </Article>
@@ -128,10 +166,13 @@ export default function Articles({ topic, user }: { topic: string | null, user: 
           teaser="Paulatim uterque aurum vallum inflammatio cunae socius statua curtus. Attonbitus sol complectus centum cursim cruentus. Comis urbanus aegrotatio.
           Alioqui campana texo. Stultus caecus ea. Deleo surculus vir.
           Neque ascisco utpote constans aperio volutabrum odit. Antea arbitro ciminatio accommodo architecto. Demitto valeo cursus."
-          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600">
+          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600"
+        >
           {/* Loop PostTag */}
-          <Link href={`/tag/test`} >
-            <Button className="rounded-full" variant={"secondary"} size={"sm"}>{"Test"}</Button>
+          <Link href={`/tag/test`}>
+            <Button className="rounded-full" variant={"secondary"} size={"sm"}>
+              {"Test"}
+            </Button>
           </Link>
           {/* End loop PostTag */}
         </Article>
@@ -145,10 +186,13 @@ export default function Articles({ topic, user }: { topic: string | null, user: 
           teaser="Paulatim uterque aurum vallum inflammatio cunae socius statua curtus. Attonbitus sol complectus centum cursim cruentus. Comis urbanus aegrotatio.
           Alioqui campana texo. Stultus caecus ea. Deleo surculus vir.
           Neque ascisco utpote constans aperio volutabrum odit. Antea arbitro ciminatio accommodo architecto. Demitto valeo cursus."
-          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600">
+          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600"
+        >
           {/* Loop PostTag */}
-          <Link href={`/tag/test`} >
-            <Button className="rounded-full" variant={"secondary"} size={"sm"}>{"Test"}</Button>
+          <Link href={`/tag/test`}>
+            <Button className="rounded-full" variant={"secondary"} size={"sm"}>
+              {"Test"}
+            </Button>
           </Link>
           {/* End loop PostTag */}
         </Article>
@@ -162,10 +206,13 @@ export default function Articles({ topic, user }: { topic: string | null, user: 
           teaser="Paulatim uterque aurum vallum inflammatio cunae socius statua curtus. Attonbitus sol complectus centum cursim cruentus. Comis urbanus aegrotatio.
           Alioqui campana texo. Stultus caecus ea. Deleo surculus vir.
           Neque ascisco utpote constans aperio volutabrum odit. Antea arbitro ciminatio accommodo architecto. Demitto valeo cursus."
-          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600">
+          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600"
+        >
           {/* Loop PostTag */}
-          <Link href={`/tag/test`} >
-            <Button className="rounded-full" variant={"secondary"} size={"sm"}>{"Test"}</Button>
+          <Link href={`/tag/test`}>
+            <Button className="rounded-full" variant={"secondary"} size={"sm"}>
+              {"Test"}
+            </Button>
           </Link>
           {/* End loop PostTag */}
         </Article>
@@ -179,10 +226,13 @@ export default function Articles({ topic, user }: { topic: string | null, user: 
           teaser="Paulatim uterque aurum vallum inflammatio cunae socius statua curtus. Attonbitus sol complectus centum cursim cruentus. Comis urbanus aegrotatio.
           Alioqui campana texo. Stultus caecus ea. Deleo surculus vir.
           Neque ascisco utpote constans aperio volutabrum odit. Antea arbitro ciminatio accommodo architecto. Demitto valeo cursus."
-          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600">
+          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600"
+        >
           {/* Loop PostTag */}
-          <Link href={`/tag/test`} >
-            <Button className="rounded-full" variant={"secondary"} size={"sm"}>{"Test"}</Button>
+          <Link href={`/tag/test`}>
+            <Button className="rounded-full" variant={"secondary"} size={"sm"}>
+              {"Test"}
+            </Button>
           </Link>
           {/* End loop PostTag */}
         </Article>
@@ -196,10 +246,13 @@ export default function Articles({ topic, user }: { topic: string | null, user: 
           teaser="Paulatim uterque aurum vallum inflammatio cunae socius statua curtus. Attonbitus sol complectus centum cursim cruentus. Comis urbanus aegrotatio.
           Alioqui campana texo. Stultus caecus ea. Deleo surculus vir.
           Neque ascisco utpote constans aperio volutabrum odit. Antea arbitro ciminatio accommodo architecto. Demitto valeo cursus."
-          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600">
+          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600"
+        >
           {/* Loop PostTag */}
-          <Link href={`/tag/test`} >
-            <Button className="rounded-full" variant={"secondary"} size={"sm"}>{"Test"}</Button>
+          <Link href={`/tag/test`}>
+            <Button className="rounded-full" variant={"secondary"} size={"sm"}>
+              {"Test"}
+            </Button>
           </Link>
           {/* End loop PostTag */}
         </Article>
@@ -209,5 +262,5 @@ export default function Articles({ topic, user }: { topic: string | null, user: 
         </div>
       </div>
     </>
-  )
+  );
 }

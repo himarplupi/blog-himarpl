@@ -1,14 +1,11 @@
 import { Navbar } from "@/components/common/navbar";
-import Articles from "@/components/home/Articles";
+import { Articles } from "@/components/home/Articles";
 import Sidebar from "@/components/home/sidebar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { getServerAuthSession } from "@/server/auth";
 
 export default async function Home() {
   const session = await getServerAuthSession();
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const topic = null;
 
   return (
     <>
@@ -45,7 +42,7 @@ export default async function Home() {
 
         <div className="xxl:gap-8 grid grid-cols-1 lg:grid-cols-3 lg:gap-4 xl:gap-6">
           <div className="col-span-1 flex flex-col gap-y-4 lg:col-span-2 lg:gap-y-6">
-            <Articles user={""} topic={topic} />
+            <Articles user={""} />
           </div>
           <div className="hidden lg:col-span-1 lg:block">
             <Sidebar />
