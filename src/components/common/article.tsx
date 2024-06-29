@@ -54,11 +54,11 @@ export function Article({
         <div className="col-span-2">
           <Link
             href={`/@${userUrl}/${articleUrl}`}
-            className="font-semibold underline-offset-4 hover:underline"
+            className="font-semibold capitalize underline-offset-4 hover:underline"
           >
             {title}
           </Link>
-          <p className="mt-2 hidden lg:inline-block">{teaser}</p>
+          <p className="mt-2  hidden lg:line-clamp-3">{teaser}</p>
           <div className="mt-2 flex flex-wrap gap-2 md:mt-4">{children}</div>
         </div>
         <Link

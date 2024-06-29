@@ -11,7 +11,17 @@ import { Article } from "../common/article";
 
 export function Articles({ user }: { user: string | null }) {
   const [tagQuery, setTagQuery] = useQueryState("tag");
-  const popularTag = api.postTag.popular.useQuery();
+  const popularTagQuery = api.postTag.popular.useQuery();
+
+  const infiniteQuery = api.post.infiniteByTag.useInfiniteQuery(
+    {
+      tag: tagQuery,
+      limit: 10,
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    },
+  );
 
   if (user != null) {
     // get post by user
@@ -21,7 +31,7 @@ export function Articles({ user }: { user: string | null }) {
     <>
       {user != null && (
         <div className="mb-2 flex gap-2 overflow-x-scroll pb-2">
-          {popularTag.isLoading ? (
+          {popularTagQuery.isLoading ? (
             <Button
               disabled
               className="rounded-full capitalize"
@@ -37,11 +47,11 @@ export function Articles({ user }: { user: string | null }) {
               onClick={() => setTagQuery(null)}
               size="sm"
             >
-              Untuk Kamu
+              Terbaru
             </Button>
           )}
 
-          {popularTag.data?.map((tag) => (
+          {popularTagQuery.data?.map((tag) => (
             <Button
               className="rounded-full capitalize"
               onClick={() => setTagQuery(tag.slug)}
@@ -55,212 +65,49 @@ export function Articles({ user }: { user: string | null }) {
         </div>
       )}
 
-      <div className="flex flex-col gap-6">
-        <Article
-          userUrl="dikdns"
-          userImage="https://avatars.githubusercontent.com/u/130320055?v=4"
-          userName="Andika Eka Kurnia"
-          published="Selasa, 20 Juli 2024"
-          articleUrl="autus-adstringo-sono"
-          title="Abbas debeo depono absque asperiores suasoria complectus ars verus trado."
-          teaser="Paulatim uterque aurum vallum inflammatio cunae socius statua curtus. Attonbitus sol complectus centum cursim cruentus. Comis urbanus aegrotatio.
-          Alioqui campana texo. Stultus caecus ea. Deleo surculus vir.
-          Neque ascisco utpote constans aperio volutabrum odit. Antea arbitro ciminatio accommodo architecto. Demitto valeo cursus."
-          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600"
-        >
-          {/* Loop PostTag */}
-          <Link href={`/tag/test`}>
-            <Button size="sm" className="rounded-full" variant="secondary">
-              {"Test"}
-            </Button>
-          </Link>
-          {/* End loop PostTag */}
-        </Article>
-        <Article
-          userUrl="dikdns"
-          userImage="https://avatars.githubusercontent.com/u/130320055?v=4"
-          userName="Andika Eka Kurnia"
-          published="Selasa, 20 Juli 2024"
-          articleUrl="autus-adstringo-sono"
-          title="Abbas debeo depono absque asperiores suasoria complectus ars verus trado."
-          teaser="Paulatim uterque aurum vallum inflammatio cunae socius statua curtus. Attonbitus sol complectus centum cursim cruentus. Comis urbanus aegrotatio.
-          Alioqui campana texo. Stultus caecus ea. Deleo surculus vir.
-          Neque ascisco utpote constans aperio volutabrum odit. Antea arbitro ciminatio accommodo architecto. Demitto valeo cursus."
-          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600"
-        >
-          {/* Loop PostTag */}
-          <Link href={`/tag/test`}>
-            <Button className="rounded-full" variant={"secondary"} size={"sm"}>
-              {"Test"}
-            </Button>
-          </Link>
-          {/* End loop PostTag */}
-        </Article>
-        <Article
-          userUrl="dikdns"
-          userImage="https://avatars.githubusercontent.com/u/130320055?v=4"
-          userName="Andika Eka Kurnia"
-          published="Selasa, 20 Juli 2024"
-          articleUrl="autus-adstringo-sono"
-          title="Abbas debeo depono absque asperiores suasoria complectus ars verus trado."
-          teaser="Paulatim uterque aurum vallum inflammatio cunae socius statua curtus. Attonbitus sol complectus centum cursim cruentus. Comis urbanus aegrotatio.
-          Alioqui campana texo. Stultus caecus ea. Deleo surculus vir.
-          Neque ascisco utpote constans aperio volutabrum odit. Antea arbitro ciminatio accommodo architecto. Demitto valeo cursus."
-          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600"
-        >
-          {/* Loop PostTag */}
-          <Link href={`/tag/test`}>
-            <Button className="rounded-full" variant={"secondary"} size={"sm"}>
-              {"Test"}
-            </Button>
-          </Link>
-          {/* End loop PostTag */}
-        </Article>
-        <Article
-          userUrl="dikdns"
-          userImage="https://avatars.githubusercontent.com/u/130320055?v=4"
-          userName="Andika Eka Kurnia"
-          published="Selasa, 20 Juli 2024"
-          articleUrl="autus-adstringo-sono"
-          title="Abbas debeo depono absque asperiores suasoria complectus ars verus trado."
-          teaser="Paulatim uterque aurum vallum inflammatio cunae socius statua curtus. Attonbitus sol complectus centum cursim cruentus. Comis urbanus aegrotatio.
-          Alioqui campana texo. Stultus caecus ea. Deleo surculus vir.
-          Neque ascisco utpote constans aperio volutabrum odit. Antea arbitro ciminatio accommodo architecto. Demitto valeo cursus."
-          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600"
-        >
-          {/* Loop PostTag */}
-          <Link href={`/tag/test`}>
-            <Button className="rounded-full" variant={"secondary"} size={"sm"}>
-              {"Test"}
-            </Button>
-          </Link>
-          {/* End loop PostTag */}
-        </Article>
-        <Article
-          userUrl="dikdns"
-          userImage="https://avatars.githubusercontent.com/u/130320055?v=4"
-          userName="Andika Eka Kurnia"
-          published="Selasa, 20 Juli 2024"
-          articleUrl="autus-adstringo-sono"
-          title="Abbas debeo depono absque asperiores suasoria complectus ars verus trado."
-          teaser="Paulatim uterque aurum vallum inflammatio cunae socius statua curtus. Attonbitus sol complectus centum cursim cruentus. Comis urbanus aegrotatio.
-          Alioqui campana texo. Stultus caecus ea. Deleo surculus vir.
-          Neque ascisco utpote constans aperio volutabrum odit. Antea arbitro ciminatio accommodo architecto. Demitto valeo cursus."
-          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600"
-        >
-          {/* Loop PostTag */}
-          <Link href={`/tag/test`}>
-            <Button className="rounded-full" variant={"secondary"} size={"sm"}>
-              {"Test"}
-            </Button>
-          </Link>
-          {/* End loop PostTag */}
-        </Article>
-        <Article
-          userUrl="dikdns"
-          userImage="https://avatars.githubusercontent.com/u/130320055?v=4"
-          userName="Andika Eka Kurnia"
-          published="Selasa, 20 Juli 2024"
-          articleUrl="autus-adstringo-sono"
-          title="Abbas debeo depono absque asperiores suasoria complectus ars verus trado."
-          teaser="Paulatim uterque aurum vallum inflammatio cunae socius statua curtus. Attonbitus sol complectus centum cursim cruentus. Comis urbanus aegrotatio.
-          Alioqui campana texo. Stultus caecus ea. Deleo surculus vir.
-          Neque ascisco utpote constans aperio volutabrum odit. Antea arbitro ciminatio accommodo architecto. Demitto valeo cursus."
-          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600"
-        >
-          {/* Loop PostTag */}
-          <Link href={`/tag/test`}>
-            <Button className="rounded-full" variant={"secondary"} size={"sm"}>
-              {"Test"}
-            </Button>
-          </Link>
-          {/* End loop PostTag */}
-        </Article>
-        <Article
-          userUrl="dikdns"
-          userImage="https://avatars.githubusercontent.com/u/130320055?v=4"
-          userName="Andika Eka Kurnia"
-          published="Selasa, 20 Juli 2024"
-          articleUrl="autus-adstringo-sono"
-          title="Abbas debeo depono absque asperiores suasoria complectus ars verus trado."
-          teaser="Paulatim uterque aurum vallum inflammatio cunae socius statua curtus. Attonbitus sol complectus centum cursim cruentus. Comis urbanus aegrotatio.
-          Alioqui campana texo. Stultus caecus ea. Deleo surculus vir.
-          Neque ascisco utpote constans aperio volutabrum odit. Antea arbitro ciminatio accommodo architecto. Demitto valeo cursus."
-          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600"
-        >
-          {/* Loop PostTag */}
-          <Link href={`/tag/test`}>
-            <Button className="rounded-full" variant={"secondary"} size={"sm"}>
-              {"Test"}
-            </Button>
-          </Link>
-          {/* End loop PostTag */}
-        </Article>
-        <Article
-          userUrl="dikdns"
-          userImage="https://avatars.githubusercontent.com/u/130320055?v=4"
-          userName="Andika Eka Kurnia"
-          published="Selasa, 20 Juli 2024"
-          articleUrl="autus-adstringo-sono"
-          title="Abbas debeo depono absque asperiores suasoria complectus ars verus trado."
-          teaser="Paulatim uterque aurum vallum inflammatio cunae socius statua curtus. Attonbitus sol complectus centum cursim cruentus. Comis urbanus aegrotatio.
-          Alioqui campana texo. Stultus caecus ea. Deleo surculus vir.
-          Neque ascisco utpote constans aperio volutabrum odit. Antea arbitro ciminatio accommodo architecto. Demitto valeo cursus."
-          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600"
-        >
-          {/* Loop PostTag */}
-          <Link href={`/tag/test`}>
-            <Button className="rounded-full" variant={"secondary"} size={"sm"}>
-              {"Test"}
-            </Button>
-          </Link>
-          {/* End loop PostTag */}
-        </Article>
-        <Article
-          userUrl="dikdns"
-          userImage="https://avatars.githubusercontent.com/u/130320055?v=4"
-          userName="Andika Eka Kurnia"
-          published="Selasa, 20 Juli 2024"
-          articleUrl="autus-adstringo-sono"
-          title="Abbas debeo depono absque asperiores suasoria complectus ars verus trado."
-          teaser="Paulatim uterque aurum vallum inflammatio cunae socius statua curtus. Attonbitus sol complectus centum cursim cruentus. Comis urbanus aegrotatio.
-          Alioqui campana texo. Stultus caecus ea. Deleo surculus vir.
-          Neque ascisco utpote constans aperio volutabrum odit. Antea arbitro ciminatio accommodo architecto. Demitto valeo cursus."
-          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600"
-        >
-          {/* Loop PostTag */}
-          <Link href={`/tag/test`}>
-            <Button className="rounded-full" variant={"secondary"} size={"sm"}>
-              {"Test"}
-            </Button>
-          </Link>
-          {/* End loop PostTag */}
-        </Article>
-        <Article
-          userUrl="dikdns"
-          userImage="https://avatars.githubusercontent.com/u/130320055?v=4"
-          userName="Andika Eka Kurnia"
-          published="Selasa, 20 Juli 2024"
-          articleUrl="autus-adstringo-sono"
-          title="Abbas debeo depono absque asperiores suasoria complectus ars verus trado."
-          teaser="Paulatim uterque aurum vallum inflammatio cunae socius statua curtus. Attonbitus sol complectus centum cursim cruentus. Comis urbanus aegrotatio.
-          Alioqui campana texo. Stultus caecus ea. Deleo surculus vir.
-          Neque ascisco utpote constans aperio volutabrum odit. Antea arbitro ciminatio accommodo architecto. Demitto valeo cursus."
-          articleImage="https://images.unsplash.com/photo-1709403337893-594bcbdb735e?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=900&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxMzIyNDg0NQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1600"
-        >
-          {/* Loop PostTag */}
-          <Link href={`/tag/test`}>
-            <Button className="rounded-full" variant={"secondary"} size={"sm"}>
-              {"Test"}
-            </Button>
-          </Link>
-          {/* End loop PostTag */}
-        </Article>
-        <div className="flex justify-center gap-2 md:gap-3 xl:gap-4">
-          <LoaderCircle className="animate-spin" />
-          <span>Tunggu sebentar</span>
-        </div>
-      </div>
+      {infiniteQuery.data
+        ? infiniteQuery.data.pages.map(({ items, nextCursor }) => {
+            return (
+              <div key={nextCursor}>
+                {items.map((post) => (
+                  <Article
+                    key={post.id}
+                    userUrl={post.author.username ?? ""}
+                    userImage={post.author.image ?? ""}
+                    userName={post.author.name ?? ""}
+                    published={post.publishedAt ?? ""}
+                    articleUrl={post.slug}
+                    title={post.title}
+                    teaser={post.content}
+                    articleImage={
+                      post.image ??
+                      "https://placehold.co/400x200/EEE/31343C/png?font=montserrat&text=No+Image"
+                    }
+                  >
+                    {/* Loop PostTag */}
+                    {post.tags.map((tag) => (
+                      <Link key={tag.id} href={`/tag/${tag.slug}`}>
+                        <Button
+                          size="sm"
+                          className="rounded-full"
+                          variant="secondary"
+                        >
+                          {tag.title}
+                        </Button>
+                      </Link>
+                    ))}
+                    {/* End loop PostTag */}
+                  </Article>
+                ))}
+
+                <div className="flex justify-center gap-2 md:gap-3 xl:gap-4">
+                  <LoaderCircle className="animate-spin" />
+                  <span>Tunggu sebentar</span>
+                </div>
+              </div>
+            );
+          })
+        : null}
     </>
   );
 }

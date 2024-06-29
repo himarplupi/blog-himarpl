@@ -239,38 +239,64 @@ export const postRouter = createTRPCRouter({
       });
     }),
 
-  all: publicProcedure
+  infiniteByTag: publicProcedure
     .input(
       z.object({
-        topic: z.string().optional().nullable(),
-        cursor: z.number().default(1),
+        tag: z.string().nullish(),
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.string().nullish(),
       }),
     )
-    .query(async ({ ctx }) => {
-      return ctx.db.post.findMany({
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 50;
+      const { cursor } = input;
+
+      const items = await ctx.db.post.findMany({
+        take: limit + 1, // get an extra item at the end which we'll use as next cursor
+        where: {
+          publishedAt: {
+            not: null,
+          },
+          tags: input.tag
+            ? {
+                some: {
+                  title: input.tag,
+                },
+              }
+            : undefined,
+        },
         include: {
           tags: {
             select: {
+              id: true,
               title: true,
               slug: true,
             },
           },
           author: {
             select: {
-              username: true,
               name: true,
+              username: true,
               image: true,
             },
           },
         },
-        where: {
-          publishedAt: {
-            not: null,
-          },
-        },
+        cursor: cursor ? { id: cursor } : undefined,
         orderBy: {
           publishedAt: "desc",
         },
       });
+
+      let nextCursor: typeof cursor | undefined = undefined;
+
+      if (items.length > limit) {
+        const nextItem = items.pop();
+        nextCursor = nextItem!.id;
+      }
+
+      return {
+        items,
+        nextCursor,
+      };
     }),
 });

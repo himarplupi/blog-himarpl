@@ -1,5 +1,5 @@
 import { Navbar } from "@/components/common/navbar";
-import { Articles } from "@/components/home/Articles";
+import { Articles } from "@/components/home/articles";
 import Sidebar from "@/components/home/sidebar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { getServerAuthSession } from "@/server/auth";
