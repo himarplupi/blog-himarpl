@@ -57,49 +57,61 @@ export function Navbar({ session }: { session: Session | null }) {
               </Link>
             </div>
           </div>
+          {session && (
+            <div className="ml-auto flex items-center gap-x-4">
+              <Link
+                href="/new"
+                className={cn(
+                  buttonVariants({ size: "sm", variant: "outline" }),
+                )}
+              >
+                <Pen className="mr-2 h-4 w-4" /> Buat
+              </Link>
 
-          <div className="ml-auto flex items-center gap-x-4">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Avatar className="cursor-pointer">
+                    <AvatarImage src={session?.user.image ?? ""} />
+                    <AvatarFallback>
+                      {abbreviation(session?.user.name)}
+                    </AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>{session?.user.name}</DropdownMenuLabel>
+                  <Link href={`@${session?.user.username}`}>
+                    <DropdownMenuItem className="cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      Profilku
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/me/posts/drafts">
+                    <DropdownMenuItem className="cursor-pointer">
+                      <Book className="mr-2 h-4 w-4" />
+                      Postinganku
+                    </DropdownMenuItem>
+                  </Link>
+
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={() => signOut()}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
+
+          {!session && (
             <Link
-              href="/new"
+              href="/login"
               className={cn(buttonVariants({ size: "sm", variant: "outline" }))}
             >
-              <Pen className="mr-2 h-4 w-4" /> Buat
+              Login
             </Link>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Avatar className="cursor-pointer">
-                  <AvatarImage src={session?.user.image ?? ""} />
-                  <AvatarFallback>
-                    {abbreviation(session?.user.name)}
-                  </AvatarFallback>
-                </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>{session?.user.name}</DropdownMenuLabel>
-                <Link href={`@${session?.user.username}`}>
-                  <DropdownMenuItem className="cursor-pointer">
-                    <User className="mr-2 h-4 w-4" />
-                    Profilku
-                  </DropdownMenuItem>
-                </Link>
-                <Link href="/me/posts/drafts">
-                  <DropdownMenuItem className="cursor-pointer">
-                    <Book className="mr-2 h-4 w-4" />
-                    Postinganku
-                  </DropdownMenuItem>
-                </Link>
-
-                <DropdownMenuItem
-                  className="cursor-pointer"
-                  onClick={() => signOut()}
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          )}
         </div>
       </nav>
     )
