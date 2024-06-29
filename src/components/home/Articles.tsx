@@ -24,6 +24,8 @@ export function Articles({ user }: { user: string | null }) {
     },
   );
 
+  console.log(tagQuery);
+
   useLenis(
     (lenis) => {
       if (
@@ -69,8 +71,8 @@ export function Articles({ user }: { user: string | null }) {
           {popularTagQuery.data?.map((tag) => (
             <Button
               className="rounded-full capitalize"
-              onClick={() => setTagQuery(tag.slug)}
-              variant={tagQuery == tag.slug ? "default" : "outline"}
+              onClick={() => setTagQuery(tag.title)}
+              variant={tagQuery == tag.title ? "default" : "outline"}
               key={tag.id}
               size="sm"
             >
