@@ -58,7 +58,7 @@ model Post {
 model Department {
   id          String         @id @default(cuid())
   name        String
-  acronym     String         @unique
+  acronym     String
   image       String?
   description String?
   programs    String[]
@@ -66,6 +66,8 @@ model Department {
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @default(now()) @updatedAt
   users       User[]
+
+  @@unique([type, acronym])
 }
 
 model SocialMedia {
@@ -87,6 +89,7 @@ model User {
   username      String?       @unique
   bio           String?
   position      String?
+  periods       String[]
   role          Role          @default(member)
   lastLoginAt   DateTime?
   createdAt     DateTime      @default(now())

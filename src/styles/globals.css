@@ -18,8 +18,8 @@
     --muted-foreground: 226 5% 35%;
     --accent: 188 18% 80%;
     --accent-foreground: 226 5% 15%;
-    --destructive: 0 50% 30%;
-    --destructive-foreground: 226 5% 90%;
+    --destructive: 341 87% 50%;
+    --destructive-foreground: 348 100% 97%;
     --border: 226 20% 50%;
     --input: 226 20% 28%;
     --ring: 226 100% 58%;
@@ -41,8 +41,8 @@
     --muted-foreground: 226 5% 60%;
     --accent: 188 18% 25%;
     --accent-foreground: 226 5% 90%;
-    --destructive: 0 50% 30%;
-    --destructive-foreground: 226 5% 90%;
+    --destructive: 341 87% 50%;
+    --destructive-foreground: 348 100% 97%;
     --border: 226 20% 28%;
     --input: 226 20% 28%;
     --ring: 226 100% 58%;
@@ -53,6 +53,7 @@
     @apply border-border;
     color-scheme: dark;
   }
+
   body {
     @apply bg-background text-foreground;
   }
