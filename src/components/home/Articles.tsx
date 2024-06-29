@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useLenis } from "lenis/react";
 import { LoaderCircle } from "lucide-react";
 import { useQueryState } from "nuqs";
 
@@ -12,15 +13,29 @@ import { Article } from "../common/article";
 export function Articles({ user }: { user: string | null }) {
   const [tagQuery, setTagQuery] = useQueryState("tag");
   const popularTagQuery = api.postTag.popular.useQuery();
-
   const infiniteQuery = api.post.infiniteByTag.useInfiniteQuery(
     {
       tag: tagQuery,
       limit: 10,
     },
     {
+      queryKey: ["post.infiniteByTag", { tag: tagQuery, limit: 10 }],
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     },
+  );
+
+  useLenis(
+    (lenis) => {
+      if (
+        lenis.progress > 0.9 &&
+        infiniteQuery.hasNextPage &&
+        !infiniteQuery.isFetchingNextPage
+      ) {
+        // eslint-disable-next-line
+        infiniteQuery.fetchNextPage();
+      }
+    },
+    [infiniteQuery.hasNextPage, infiniteQuery.isFetchingNextPage],
   );
 
   if (user != null) {
@@ -66,9 +81,9 @@ export function Articles({ user }: { user: string | null }) {
       )}
 
       {infiniteQuery.data
-        ? infiniteQuery.data.pages.map(({ items, nextCursor }) => {
+        ? infiniteQuery.data.pages.map(({ items, nextCursor }, i) => {
             return (
-              <div key={nextCursor}>
+              <div key={`${nextCursor}_${i}`}>
                 {items.map((post) => (
                   <Article
                     key={post.id}
@@ -99,15 +114,17 @@ export function Articles({ user }: { user: string | null }) {
                     {/* End loop PostTag */}
                   </Article>
                 ))}
-
-                <div className="flex justify-center gap-2 md:gap-3 xl:gap-4">
-                  <LoaderCircle className="animate-spin" />
-                  <span>Tunggu sebentar</span>
-                </div>
               </div>
             );
           })
         : null}
+
+      {infiniteQuery.isFetchingNextPage && (
+        <div className="flex justify-center gap-2 md:gap-3 xl:gap-4">
+          <LoaderCircle className="animate-spin" />
+          <span>Tunggu sebentar</span>
+        </div>
+      )}
     </>
   );
 }

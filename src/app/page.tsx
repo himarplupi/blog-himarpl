@@ -41,7 +41,7 @@ export default async function Home() {
         </div>
 
         <div className="xxl:gap-8 grid grid-cols-1 lg:grid-cols-3 lg:gap-4 xl:gap-6">
-          <div className="col-span-1 flex flex-col gap-y-4 lg:col-span-2 lg:gap-y-6">
+          <div className="col-span-1 flex flex-col gap-y-4 pb-6 lg:col-span-2 lg:gap-y-6">
             <Articles user={""} />
           </div>
           <div className="hidden lg:col-span-1 lg:block">

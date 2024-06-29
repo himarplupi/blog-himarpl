@@ -1,7 +1,7 @@
 import { Montserrat as FontSans } from "next/font/google";
 import localFont from "next/font/local";
 
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ReactLenis } from "@/components/common/lenis";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 import { TRPCReactProvider } from "@/trpc/react";
@@ -103,10 +103,10 @@ export default async function RootLayout({
           fontSerif.variable,
         )}
       >
-        <ScrollArea className="h-screen">
-          <TRPCReactProvider>{children}</TRPCReactProvider>
-          <Toaster />
-        </ScrollArea>
+        <TRPCReactProvider>
+          <ReactLenis>{children}</ReactLenis>
+        </TRPCReactProvider>
+        <Toaster />
       </body>
 
       <GoogleAnalytics gaId="G-BNJKV201XL" />
