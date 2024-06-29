@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Navbar } from "@/components/common/navbar";
-import Articles from "@/components/home/articles";
+import { Articles } from "@/components/home/articles";
 import { Button } from "@/components/ui/button";
 import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
@@ -63,7 +63,7 @@ export default async function UserPage({
             <h2 className="font-serif text-2xl font-semibold uppercase tracking-wide first:mt-0">
               Terbaru
             </h2>
-            <Articles user={null} topic={null} />
+            <Articles user={null} />
           </div>
         </div>
       </main>
