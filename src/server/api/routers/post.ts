@@ -242,7 +242,7 @@ export const postRouter = createTRPCRouter({
   infiniteByTag: publicProcedure
     .input(
       z.object({
-        tag: z.string().nullish(),
+        tagSlug: z.string().nullish(),
         limit: z.number().min(1).max(100).nullish(),
         cursor: z.string().nullish(),
       }),
@@ -257,10 +257,10 @@ export const postRouter = createTRPCRouter({
           publishedAt: {
             not: null,
           },
-          tags: input.tag
+          tags: input.tagSlug
             ? {
                 some: {
-                  title: input.tag,
+                  slug: input.tagSlug,
                 },
               }
             : undefined,

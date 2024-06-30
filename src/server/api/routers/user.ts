@@ -113,14 +113,33 @@ export const userRouter = createTRPCRouter({
       data: { lastLoginAt: new Date() },
     });
   }),
-  newArticle: publicProcedure.query(async ({ ctx }) => {
+  byNewestArticle: publicProcedure.query(async ({ ctx }) => {
+    const thisMonth = new Date();
+    thisMonth.setMonth(thisMonth.getMonth() - 1);
+
     return await ctx.db.user.findMany({
-      include: {
+      where: {
         posts: {
-          orderBy: { publishedAt: "desc" },
-          take: 1,
+          some: {
+            publishedAt: {
+              gte: thisMonth,
+            },
+          },
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        image: true,
+        username: true,
+        posts: {
+          where: {
+            publishedAt: {
+              gte: thisMonth,
+            },
+          },
           select: {
-            publishedAt: true,
+            _count: true,
           },
         },
       },

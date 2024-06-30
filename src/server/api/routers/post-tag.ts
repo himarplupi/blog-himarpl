@@ -84,4 +84,46 @@ export const postTagRouter = createTRPCRouter({
       take: 15,
     });
   }),
+  related: publicProcedure
+    .input(
+      z.object({
+        tagSlug: z.string().nullish(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const popularTags = await ctx.db.postTag.findMany({
+        include: {
+          _count: {
+            select: { posts: true },
+          },
+        },
+        orderBy: {
+          posts: {
+            _count: "desc",
+          },
+        },
+        take: 10,
+      });
+
+      if (input.tagSlug === null) {
+        return popularTags;
+      }
+
+      const relatedTags = await ctx.db.postTag.findMany({
+        where: {
+          OR: [
+            { parent: { slug: input.tagSlug } },
+            {
+              children: {
+                some: {
+                  slug: input.tagSlug,
+                },
+              },
+            },
+          ],
+        },
+      });
+
+      return relatedTags.length === 0 ? popularTags : relatedTags;
+    }),
 });
