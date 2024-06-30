@@ -63,15 +63,19 @@ export default function PublicPostPage() {
           </Link>
           <div className="mt-2 flex items-center gap-x-2">
             <div className="flex max-w-64 flex-wrap gap-x-1 gap-y-2">
-              {post.tags?.map((tag) => (
-                <Badge
-                  key={tag.slug}
-                  variant="secondary"
-                  className="truncate font-normal"
-                >
-                  {tag.title}
-                </Badge>
-              ))}
+              {post.tags.length > 0 && (
+                <div className="flex max-w-64 flex-wrap gap-x-1 gap-y-2">
+                  {post.tags?.map((tag) => (
+                    <Badge
+                      key={tag.slug}
+                      variant="secondary"
+                      className="truncate font-normal"
+                    >
+                      {tag.title}
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </div>
             <span className="truncate text-nowrap text-sm text-muted-foreground">
               {`Dipublikasikan ${momentId(post.updatedAt).fromNow()}`}
