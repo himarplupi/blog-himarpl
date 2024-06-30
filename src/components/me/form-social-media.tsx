@@ -37,7 +37,9 @@ const socialMediaSchema = z.object({
 export function FormSocialMedia() {
   const me = useMe();
 
-  const mutation = api.user.updateSelf.useMutation();
+  console.log(me);
+
+  const mutation = api.user.updateSelfSocialMedia.useMutation();
 
   const form = useForm<z.infer<typeof socialMediaSchema>>({
     resolver: zodResolver(socialMediaSchema),
@@ -86,7 +88,7 @@ export function FormSocialMedia() {
       });
     }
 
-    mutation.mutate({ socialMedia });
+    mutation.mutate(socialMedia);
   };
 
   return (

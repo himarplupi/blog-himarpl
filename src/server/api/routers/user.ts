@@ -69,20 +69,74 @@ export const userRouter = createTRPCRouter({
       },
     });
   }),
-  updateSelf: protectedProcedure
+  updateSelfSocialMedia: protectedProcedure
+    .input(
+      z.array(
+        z.object({
+          name: z.string(),
+          username: z.string(),
+          url: z.string(),
+        }),
+      ),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const inputSocialMedias = input;
+      const userId = ctx.session.user.id;
+
+      const currentSosialMedias = await ctx.db.socialMedia.findMany({
+        where: { userId },
+      });
+
+      // get current social media that exist in input
+      const filterredSocialMedias = currentSosialMedias.filter((current) => {
+        const inputSocialMedia = inputSocialMedias.find(
+          (input) => input.name === current.name,
+        );
+
+        return inputSocialMedia;
+      });
+
+      // Add new social media if not exist
+      if (filterredSocialMedias.length === 0) {
+        await ctx.db.socialMedia.createMany({
+          data: inputSocialMedias.map((input) => ({
+            ...input,
+            userId,
+          })),
+        });
+
+        return inputSocialMedias;
+      }
+
+      // Update social media
+      for (const current of filterredSocialMedias) {
+        const inputSocialMedia = inputSocialMedias.find(
+          (input) => input.name === current.name,
+        );
+
+        if (!inputSocialMedia) {
+          continue;
+        }
+
+        await ctx.db.socialMedia.update({
+          where: {
+            userId_name_username: {
+              userId,
+              name: current.name,
+              username: current.username,
+            },
+          },
+          data: inputSocialMedia,
+        });
+      }
+
+      return inputSocialMedias;
+    }),
+  updateSelfProfile: protectedProcedure
     .input(
       z.object({
         username: z.string().optional(),
         bio: z.string().optional(),
-        socialMedia: z
-          .array(
-            z.object({
-              name: z.string(),
-              username: z.string(),
-              url: z.string(),
-            }),
-          )
-          .optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -91,19 +145,6 @@ export const userRouter = createTRPCRouter({
         data: {
           username: input.username,
           bio: input.bio,
-          socialMedia: {
-            upsert: input.socialMedia?.map((socialMedia) => ({
-              where: {
-                userId_name_username: {
-                  name: socialMedia.name,
-                  username: socialMedia.username,
-                  userId: ctx.session.user.id,
-                },
-              },
-              create: socialMedia,
-              update: socialMedia,
-            })),
-          },
         },
       });
     }),
