@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { useLenis } from "lenis/react";
 import { LoaderCircle } from "lucide-react";
@@ -15,16 +16,27 @@ export function Articles({ user }: { user: string | null }) {
   const popularTagQuery = api.postTag.popular.useQuery();
   const infiniteQuery = api.post.infiniteByTag.useInfiniteQuery(
     {
-      tag: tagQuery,
+      tagSlug: tagQuery,
       limit: 10,
     },
     {
-      queryKey: ["post.infiniteByTag", { tag: tagQuery, limit: 10 }],
+      queryKey: ["post.infiniteByTag", { tagSlug: tagQuery, limit: 10 }],
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     },
   );
 
-  console.log(tagQuery);
+  useEffect(() => {
+    if (!tagQuery) return;
+    if (!popularTagQuery.data) return;
+    const tagSlugs = popularTagQuery.data.map((tag) => tag.slug);
+
+    if (!tagSlugs.includes(tagQuery)) {
+      // eslint-disable-next-line
+      setTagQuery(null);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tagQuery, popularTagQuery.data]);
 
   useLenis(
     (lenis) => {
@@ -71,8 +83,8 @@ export function Articles({ user }: { user: string | null }) {
           {popularTagQuery.data?.map((tag) => (
             <Button
               className="rounded-full capitalize"
-              onClick={() => setTagQuery(tag.title)}
-              variant={tagQuery == tag.title ? "default" : "outline"}
+              onClick={() => setTagQuery(tag.slug)}
+              variant={tagQuery == tag.slug ? "default" : "outline"}
               key={tag.id}
               size="sm"
             >
