@@ -8,10 +8,12 @@ import { useQueryState } from "nuqs";
 
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { Article } from "../common/article";
 
 export function Articles({ user }: { user: string | null }) {
+  const [parentAutoAnimate] = useAutoAnimate();
   const [tagQuery, setTagQuery] = useQueryState("tag");
   const popularTagQuery = api.postTag.popular.useQuery();
   const infiniteQuery = api.post.infiniteByTag.useInfiniteQuery(
@@ -94,51 +96,53 @@ export function Articles({ user }: { user: string | null }) {
         </div>
       )}
 
-      {infiniteQuery.data
-        ? infiniteQuery.data.pages.map(({ items, nextCursor }, i) => {
-            return (
-              <div key={`${nextCursor}_${i}`}>
-                {items.map((post) => (
-                  <Article
-                    key={post.id}
-                    userUrl={post.author.username ?? ""}
-                    userImage={post.author.image ?? ""}
-                    userName={post.author.name ?? ""}
-                    published={post.publishedAt ?? ""}
-                    articleUrl={post.slug}
-                    title={post.title}
-                    teaser={post.content}
-                    articleImage={
-                      post.image ??
-                      "https://placehold.co/400x200/EEE/31343C/png?font=montserrat&text=No+Image"
-                    }
-                  >
-                    {/* Loop PostTag */}
-                    {post.tags.map((tag) => (
-                      <Link key={tag.id} href={`/tag/${tag.slug}`}>
-                        <Button
-                          size="sm"
-                          className="rounded-full"
-                          variant="secondary"
-                        >
-                          {tag.title}
-                        </Button>
-                      </Link>
-                    ))}
-                    {/* End loop PostTag */}
-                  </Article>
-                ))}
-              </div>
-            );
-          })
-        : null}
+      <div ref={parentAutoAnimate}>
+        {infiniteQuery.data
+          ? infiniteQuery.data.pages.map(({ items, nextCursor }, i) => {
+              return (
+                <div key={`${nextCursor}_${i}`}>
+                  {items.map((post) => (
+                    <Article
+                      key={post.id}
+                      userUrl={post.author.username ?? ""}
+                      userImage={post.author.image ?? ""}
+                      userName={post.author.name ?? ""}
+                      published={post.publishedAt ?? ""}
+                      articleUrl={post.slug}
+                      title={post.title}
+                      teaser={post.content}
+                      articleImage={
+                        post.image ??
+                        "https://placehold.co/400x200/EEE/31343C/png?font=montserrat&text=No+Image"
+                      }
+                    >
+                      {/* Loop PostTag */}
+                      {post.tags.map((tag) => (
+                        <Link key={tag.id} href={`/tag/${tag.slug}`}>
+                          <Button
+                            size="sm"
+                            className="rounded-full"
+                            variant="secondary"
+                          >
+                            {tag.title}
+                          </Button>
+                        </Link>
+                      ))}
+                      {/* End loop PostTag */}
+                    </Article>
+                  ))}
+                </div>
+              );
+            })
+          : null}
 
-      {infiniteQuery.isFetchingNextPage && (
-        <div className="flex justify-center gap-2 md:gap-3 xl:gap-4">
-          <LoaderCircle className="animate-spin" />
-          <span>Tunggu sebentar</span>
-        </div>
-      )}
+        {infiniteQuery.isFetchingNextPage && (
+          <div className="flex justify-center gap-2 md:gap-3 xl:gap-4">
+            <LoaderCircle className="animate-spin" />
+            <span>Tunggu sebentar</span>
+          </div>
+        )}
+      </div>
     </>
   );
 }
