@@ -62,22 +62,24 @@ export default function PublicPostPage() {
             </div>
           </Link>
           <div className="mt-2 flex items-center gap-x-2">
-            {post.tags?.map((tag) => (
-              <Badge
-                key={tag.slug}
-                variant="secondary"
-                className="truncate font-normal"
-              >
-                {tag.title}
-              </Badge>
-            ))}
-            <span className="text-nowrap text-sm text-muted-foreground">
-              {`Dipublikasikan pada hari ${momentId(post.updatedAt).format("LLLL")}`}
+            <div className="flex max-w-64 flex-wrap gap-x-1 gap-y-2">
+              {post.tags?.map((tag) => (
+                <Badge
+                  key={tag.slug}
+                  variant="secondary"
+                  className="truncate font-normal"
+                >
+                  {tag.title}
+                </Badge>
+              ))}
+            </div>
+            <span className="truncate text-nowrap text-sm text-muted-foreground">
+              {`Dipublikasikan ${momentId(post.updatedAt).fromNow()}`}
             </span>
             <span>
               <Circle fill="hsl(var(--muted-foreground))" className="h-1 w-1" />
             </span>
-            <span className="text-nowrap text-sm text-muted-foreground">
+            <span className="truncate text-nowrap text-sm text-muted-foreground">
               {`${calculateReadTime(post.content)} menit baca`}
             </span>
             <div>
