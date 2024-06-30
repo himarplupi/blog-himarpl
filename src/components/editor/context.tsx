@@ -3,16 +3,11 @@
 import { createContext } from "react";
 
 import { PublishProgress } from "@/components/editor/publish-progress";
-import {
-  type Editor,
-  type PostExpanded,
-  useEditorConfig,
-} from "@/hooks/useEditorConfig";
+import { type Editor, useEditorConfig } from "@/hooks/useEditorConfig";
 import { usePublishPost } from "@/hooks/usePublishPost";
 import { type api } from "@/trpc/react";
 
 type EditorProviderProps = {
-  post: PostExpanded;
   children: React.ReactNode;
 };
 
@@ -28,8 +23,8 @@ export const EditorContext = createContext<EditorContextValue>({
   isSaving: false,
 });
 
-export function EditorProvider({ post, children }: EditorProviderProps) {
-  const { editor, isSaving, savePost } = useEditorConfig(post);
+export function EditorProvider({ children }: EditorProviderProps) {
+  const { editor, isSaving, savePost } = useEditorConfig();
   const { isPublishing } = usePublishPost();
 
   return (

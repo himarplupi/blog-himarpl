@@ -42,7 +42,7 @@ export default async function PostEditPage({ params }: PostEditPageProps) {
   }
 
   return (
-    <EditorProvider post={post}>
+    <EditorProvider>
       <EditorNavbar session={session} />
       <EditorMenu />
       <main className="mt-14 min-h-screen space-y-8 pb-20 pt-8 md:container md:mt-24 md:pt-8">
