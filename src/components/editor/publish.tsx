@@ -27,6 +27,7 @@ import {
   useDebounceTagOptions,
 } from "@/hooks/useDebounceTagOptions";
 import { useDebounceTagSave } from "@/hooks/useDebounceTagSave";
+import { useEditor } from "@/hooks/useEditor";
 import { usePublishPost } from "@/hooks/usePublishPost";
 import { isWordInSentenceMoreThan, isWordMoreThan } from "@/lib/utils";
 
@@ -43,6 +44,7 @@ export function Publish({ session }: { session: Session | null }) {
     title: null,
   });
   const [input, setInput] = React.useState("");
+  const { isPublishable } = useEditor();
   const [tags, setTags] = React.useState<TagOption[]>([]);
   const { savePost } = useDebounceTagSave({ tags, delay: 1000 });
   const { tagOptions, handleCreateTag, isLoading } = useDebounceTagOptions({
@@ -111,14 +113,7 @@ export function Publish({ session }: { session: Session | null }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          variant="success"
-          size="sm"
-          disabled={
-            savePost?.data?.content.length === 0 ||
-            savePost?.data?.title.length === 0
-          }
-        >
+        <Button variant="success" size="sm" disabled={!isPublishable}>
           Publish
         </Button>
       </DialogTrigger>
