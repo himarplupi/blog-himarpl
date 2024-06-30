@@ -3,7 +3,7 @@
 import { useContext } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronDown, Circle } from "lucide-react";
+import { ChevronDown, Circle, LoaderCircle } from "lucide-react";
 
 import { MePostContext } from "@/components/me/me-post-context";
 import {
@@ -20,26 +20,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { calculateReadTime, getContent, momentId } from "@/lib/utils";
+import { api } from "@/trpc/react";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
-export default function DraftsPage() {
-  const {
-    draftPosts: posts,
-    setDraftPosts: setPosts,
-    session,
-  } = useContext(MePostContext);
+export default function DraftsPostPage() {
+  const { session } = useContext(MePostContext);
   const user = session?.user;
-
-  const onDelete = (item: { slug: string; authorId: string }) => {
-    if (!setPosts) return;
-
-    setPosts((prevPosts) =>
-      prevPosts.filter((post) => post.slug !== item.slug),
-    );
-  };
+  const draftPostsQuery = api.post.selectSelfDrafts.useQuery();
+  const [parentAutoAnimate] = useAutoAnimate(/* optional config */);
 
   return (
-    <main className="container min-h-screen">
-      {posts.map((post) => (
+    <main className="container min-h-screen" ref={parentAutoAnimate}>
+      {draftPostsQuery.isLoading && (
+        <div className="flex h-64 items-center justify-center">
+          <LoaderCircle className="h-12 w-12 animate-spin text-primary" />
+        </div>
+      )}
+
+      {draftPostsQuery?.data?.map((post) => (
         <div key={post.id} className="flex flex-col gap-y-2 rounded py-4">
           <Link href={`/@${user?.username}/${post.slug}/edit`}>
             <div className="flex-grow justify-between gap-x-4 sm:flex">
@@ -104,7 +102,6 @@ export default function DraftsPage() {
                 <DeleteAlertContent
                   authorId={user?.id ?? ""}
                   slug={post.slug}
-                  onDelete={onDelete}
                 />
               </DeleteAlertWrapper>
             </div>
@@ -112,7 +109,7 @@ export default function DraftsPage() {
         </div>
       ))}
 
-      {posts.length === 0 && (
+      {draftPostsQuery?.data?.length === 0 && (
         <div className="flex h-64 items-center justify-center">
           <p className="text-pretty text-lg">Tidak ada postingan draft</p>
         </div>
