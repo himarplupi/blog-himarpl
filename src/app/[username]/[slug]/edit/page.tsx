@@ -2,6 +2,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import { notFound, redirect } from "next/navigation";
 
 import {
+  CharacterCount,
   EditorContent,
   EditorMenu,
   EditorNavbar,
@@ -47,6 +48,7 @@ export default async function PostEditPage({ params }: PostEditPageProps) {
       <EditorMenu />
       <main className="mt-14 min-h-screen space-y-8 pb-20 pt-8 md:container md:mt-24 md:pt-8">
         <EditorContent />
+        <CharacterCount />
       </main>
     </EditorProvider>
   );
