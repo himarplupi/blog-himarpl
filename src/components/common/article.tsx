@@ -28,7 +28,7 @@ export function Article({
   children?: React.ReactNode;
 }) {
   return (
-    <div>
+    <div className="mb-6 sm:mb-4">
       <div className="mb-2 flex items-center gap-1 md:gap-2">
         <Link
           href={`/@${userUrl}`}
@@ -54,7 +54,7 @@ export function Article({
         <div className="col-span-2">
           <Link
             href={`/@${userUrl}/${articleUrl}`}
-            className="font-semibold capitalize underline-offset-4 hover:underline"
+            className="font-semibold capitalize underline-offset-4 hover:underline font-serif text-xl sm:text-2xl"
           >
             {title}
           </Link>

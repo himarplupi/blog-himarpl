@@ -7,10 +7,17 @@ import { LoaderCircle } from "lucide-react";
 import { useQueryState } from "nuqs";
 
 import { Button } from "@/components/ui/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel"
 import { api } from "@/trpc/react";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { Article } from "../common/article";
+import { Badge } from "../ui/badge";
+
 
 export function Articles({ user }: { user: string | null }) {
   const [parentAutoAnimate] = useAutoAnimate();
@@ -61,7 +68,7 @@ export function Articles({ user }: { user: string | null }) {
   return (
     <>
       {user != null && (
-        <div className="mb-2 flex gap-2 overflow-x-scroll pb-2">
+        <div className="mb-2 overflow-x-hidden pb-2">
           {popularTagQuery.isLoading ? (
             <Button
               disabled
@@ -72,68 +79,79 @@ export function Articles({ user }: { user: string | null }) {
               <LoaderCircle className="animate-spin" />
             </Button>
           ) : (
-            <Button
-              className="rounded-full capitalize"
-              variant={tagQuery == null ? "default" : "outline"}
-              onClick={() => setTagQuery(null)}
-              size="sm"
-            >
-              Terbaru
-            </Button>
+            <></>
           )}
 
-          {popularTagQuery.data?.map((tag) => (
-            <Button
-              className="rounded-full capitalize"
-              onClick={() => setTagQuery(tag.slug)}
-              variant={tagQuery == tag.slug ? "default" : "outline"}
-              key={tag.id}
-              size="sm"
-            >
-              {tag.title}
-            </Button>
-          ))}
+          <Carousel>
+            <CarouselContent className="-ml-2">
+              <CarouselItem className="basis-1/7 pl-2">
+                <Button
+                  className="rounded-full capitalize"
+                  variant={tagQuery == null ? "default" : "outline"}
+                  onClick={() => setTagQuery(null)}
+                  size="sm"
+                >
+                  Terbaru
+                </Button>
+              </CarouselItem>
+              {popularTagQuery.data?.map((tag) => (
+                <CarouselItem key={tag.id} className="basis-1/7 pl-2">
+
+                  <Button
+                    className="rounded-full capitalize"
+                    onClick={() => setTagQuery(tag.slug)}
+                    variant={tagQuery == tag.slug ? "default" : "outline"}
+
+                    size="sm"
+                  >
+                    {tag.title}
+                  </Button>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+
+
+
         </div>
       )}
 
       <div ref={parentAutoAnimate}>
         {infiniteQuery.data
           ? infiniteQuery.data.pages.map(({ items, nextCursor }, i) => {
-              return (
-                <div key={`${nextCursor}_${i}`}>
-                  {items.map((post) => (
-                    <Article
-                      key={post.id}
-                      userUrl={post.author.username ?? ""}
-                      userImage={post.author.image ?? ""}
-                      userName={post.author.name ?? ""}
-                      published={post.publishedAt ?? ""}
-                      articleUrl={post.slug}
-                      title={post.title}
-                      teaser={post.content}
-                      articleImage={
-                        post.image ??
-                        "https://placehold.co/400x200/EEE/31343C/png?font=montserrat&text=No+Image"
-                      }
-                    >
-                      {/* Loop PostTag */}
-                      {post.tags.map((tag) => (
-                        <Link key={tag.id} href={`/tag/${tag.slug}`}>
-                          <Button
-                            size="sm"
-                            className="rounded-full"
-                            variant="secondary"
-                          >
-                            {tag.title}
-                          </Button>
-                        </Link>
-                      ))}
-                      {/* End loop PostTag */}
-                    </Article>
-                  ))}
-                </div>
-              );
-            })
+            return (
+              <div key={`${nextCursor}_${i}`}>
+                {items.map((post) => (
+                  <Article
+                    key={post.id}
+                    userUrl={post.author.username ?? ""}
+                    userImage={post.author.image ?? ""}
+                    userName={post.author.name ?? ""}
+                    published={post.publishedAt ?? ""}
+                    articleUrl={post.slug}
+                    title={post.title}
+                    teaser={post.content}
+                    articleImage={
+                      post.image ??
+                      "https://placehold.co/400x200/EEE/31343C/png?font=montserrat&text=No+Image"
+                    }
+                  >
+                    {/* Loop PostTag */}
+                    {post.tags.map((tag) => (
+                      <Link key={tag.id} href={`/tag/${tag.slug}`}>
+                        <Badge
+                          variant="secondary" className="truncate font-normal"
+                        >
+                          {tag.title}
+                        </Badge>
+                      </Link>
+                    ))}
+                    {/* End loop PostTag */}
+                  </Article>
+                ))}
+              </div>
+            );
+          })
           : null}
 
         {infiniteQuery.isFetchingNextPage && (
