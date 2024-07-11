@@ -20,17 +20,15 @@ export function DeleteAlertDialog({
   slug,
   authorId,
   children,
-  onDelete,
 }: {
   slug: string;
   authorId: string;
   children: ReactNode;
-  onDelete?: (item: { slug: string; authorId: string }) => void;
 }) {
   return (
     <AlertDialog>
       <DeleteAlertTrigger>{children}</DeleteAlertTrigger>
-      <DeleteAlertContent authorId={authorId} slug={slug} onDelete={onDelete} />
+      <DeleteAlertContent authorId={authorId} slug={slug} />
     </AlertDialog>
   );
 }
@@ -42,13 +40,12 @@ export function DeleteAlertTrigger({ children }: { children: ReactNode }) {
 export function DeleteAlertContent({
   slug,
   authorId,
-  onDelete,
 }: {
   slug: string;
   authorId: string;
-  onDelete?: (item: { slug: string; authorId: string }) => void;
 }) {
   const deleteMutation = api.post.delete.useMutation();
+  const utils = api.useUtils();
 
   const handleDelete = async () => {
     const deletePromise = deleteMutation.mutateAsync({ authorId, slug });
@@ -60,10 +57,8 @@ export function DeleteAlertContent({
       duration: 3000,
     });
 
-    if (onDelete) {
-      await deletePromise;
-      onDelete({ slug, authorId });
-    }
+    await deletePromise;
+    await utils.post.invalidate();
   };
 
   return (

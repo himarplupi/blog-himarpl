@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useDebounce } from "use-debounce";
 
 import { editorConfig } from "@/lib/editor-config";
 import { getFirstImageSrc } from "@/lib/utils";
 import { api } from "@/trpc/react";
-import type { Post } from "@prisma/client";
-import { type User } from "@prisma/client";
 import {
   type Editor as TipTapEditor,
   useEditor as useTipTapEditor,
@@ -15,36 +14,43 @@ import {
 
 export type Editor = TipTapEditor;
 
-export type PostExpanded = Post & {
-  tags: {
-    title: string;
-    slug: string;
-  }[];
-};
+export const useEditorConfig = () => {
+  const pathname = usePathname();
+  const postId = pathname.split("/")[2] ?? "";
+  const postQuery = api.post.byId.useQuery({ id: postId });
 
-export type Author = User & { posts: PostExpanded[] };
-
-export const useEditorConfig = (post: PostExpanded) => {
-  const editor = useTipTapEditor({
-    ...editorConfig,
-    content: post.title + post.rawHtml,
-  });
+  const editor = useTipTapEditor(
+    {
+      ...editorConfig,
+      content: postQuery?.data
+        ? postQuery?.data.title + postQuery?.data.rawHtml
+        : "Loading...",
+      editable: !postQuery.isLoading,
+    },
+    [postQuery.data],
+  );
   const [isSaving, setIsSaving] = useState(false);
-  const [title, setTitle] = useState(post.title);
-  const [rawHtml, setRawHtml] = useState(post.rawHtml);
-  const savePost = api.post.save.useMutation();
-  const [debouncedEditor] = useDebounce(editor?.state.doc.content, 1000);
+  const [title, setTitle] = useState("Loading...");
+  const [rawHtml, setRawHtml] = useState("Loading...");
+  const [debouncedEditor] = useDebounce(editor?.state.doc.content, 2000);
+
+  const utils = api.useUtils();
+  const savePost = api.post.save.useMutation({
+    onSuccess: () => utils.post.byParamsForTagSave.invalidate(),
+  });
 
   useEffect(() => {
-    if (!editor) {
-      return;
-    }
-
+    if (postQuery.isLoading) return;
+    if (!postQuery.data) return;
+    if (!editor) return;
     if (savePost.data?.content === rawHtml && savePost.data?.title === title) {
       return;
     }
+    if (!editor.isEditable) return;
 
     if (debouncedEditor) {
+      const post = postQuery.data;
+
       savePost.mutate({
         content: editor.getText().replace(title, ""),
         rawHtml: rawHtml,
@@ -55,12 +61,10 @@ export const useEditorConfig = (post: PostExpanded) => {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedEditor, editor]);
+  }, [debouncedEditor]);
 
   useEffect(() => {
-    if (!editor) {
-      return;
-    }
+    if (!editor) return;
 
     const rawHtml = editor?.getHTML();
 
@@ -71,6 +75,8 @@ export const useEditorConfig = (post: PostExpanded) => {
 
     const titleMatch = /<h1>(.*?)<\/h1>/.exec(rawHtml);
     const title = titleMatch?.[1] ?? "";
+    // replace any tag and its content inside the title
+    const cleanTitle = title.replace(/<[^>]*>?/gm, "");
     const rawHtmlWithoutTitle = rawHtml
       .replace(titleMatch?.[0] ?? "", "")
       .trim();
@@ -83,13 +89,14 @@ export const useEditorConfig = (post: PostExpanded) => {
         .split("<h1>")
         .join("<p>")
         .trim();
+
       editor.commands.setContent(rawHtmlWithoutTitle);
       editor.commands.focus("start");
     }
 
-    setTitle(title);
+    setTitle(cleanTitle);
     setRawHtml(rawHtmlWithoutTitle);
-  }, [editor, editor?.state.doc.content, post.content, post.title]);
+  }, [editor, editor?.state.doc.content]);
 
   useEffect(() => {
     if (!editor) {
@@ -108,5 +115,12 @@ export const useEditorConfig = (post: PostExpanded) => {
     }
   }, [savePost.data]);
 
-  return { editor, isSaving, title, setTitle, rawHtml, setRawHtml, savePost };
+  return {
+    editor,
+    isSaving,
+    title,
+    setTitle,
+    rawHtml,
+    setRawHtml,
+  };
 };

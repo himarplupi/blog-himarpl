@@ -19,15 +19,15 @@ export function MeHeader() {
 
   return (
     <header className="container mt-16 py-4">
-      <div className="flex justify-between">
-        <h2 className="scroll-m-20 pb-2 font-serif text-3xl font-semibold tracking-wide">
+      <div className="flex flex-col justify-between gap-y-2 pb-4 md:flex-row md:pb-2">
+        <h2 className="scroll-m-20 font-serif text-3xl font-semibold tracking-wide">
           Postinganku
         </h2>
         <Link href="/new" className={cn(buttonVariants({ size: "sm" }))}>
           <Pen className="mr-2 h-4 w-4" /> Mulai Menulis Postingan
         </Link>
       </div>
-      <motion.div layout className="mt-2 flex gap-x-4 border-b">
+      <motion.div layout className="mt-2 flex gap-x-4 border-b border-border">
         {HeaderLinks.map(({ href, label }) => (
           <Link
             key={href}

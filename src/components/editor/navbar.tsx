@@ -14,15 +14,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useEditor } from "@/hooks/useEditor";
 import logo from "@/images/logo.png";
 import { abbreviation } from "@/lib/utils";
 
 import { Publish } from "./publish";
 
 export function EditorNavbar({ session }: { session: Session | null }) {
-  const { isSaving } = useEditor();
-
   return (
     <nav className="container fixed top-0 z-30 w-full space-y-2 bg-background py-2 drop-shadow-md backdrop-blur-md">
       <div className="z-50 flex items-center justify-between">
@@ -35,14 +32,6 @@ export function EditorNavbar({ session }: { session: Session | null }) {
             >
               <strong>Draft</strong> in @{session?.user.username}
             </Link>
-          </div>
-          <div className="flex items-center gap-x-2">
-            {isSaving && (
-              <p className="font-serif text-lg text-foreground/80">Saving...</p>
-            )}
-            {!isSaving && (
-              <p className="font-serif text-lg text-foreground/80">Saved</p>
-            )}
           </div>
         </div>
 

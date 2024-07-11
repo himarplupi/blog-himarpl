@@ -3,7 +3,11 @@ import GithubSlugger from "github-slugger";
 import { z } from "zod";
 
 import { parseMetaTitle } from "@/lib/utils";
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "@/server/api/trpc";
 import { createId } from "@paralleldrive/cuid2";
 import { TRPCError } from "@trpc/server";
 
@@ -85,7 +89,64 @@ export const postRouter = createTRPCRouter({
 
       return post;
     }),
+
+  byId: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.post.findUnique({
+        where: {
+          id: input.id,
+        },
+        include: {
+          tags: {
+            select: {
+              title: true,
+              slug: true,
+            },
+          },
+        },
+      });
+    }),
   byParams: protectedProcedure
+    .input(
+      z.object({
+        username: z.string(),
+        slug: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const author = await ctx.db.user.findUnique({
+        where: {
+          username: input.username.toLowerCase(),
+        },
+        include: {
+          posts: {
+            where: {
+              slug: input.slug,
+            },
+            include: {
+              tags: {
+                select: {
+                  title: true,
+                  slug: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return {
+        author,
+        post: author?.posts[0],
+      };
+    }),
+
+  byParamsForTagSave: protectedProcedure
     .input(
       z.object({
         username: z.string(),
@@ -233,5 +294,83 @@ export const postRouter = createTRPCRouter({
           },
         },
       });
+    }),
+  manyPublished: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.db.post.findMany({
+      include: {
+        author: {
+          select: {
+            username: true,
+          },
+        },
+      },
+      where: {
+        publishedAt: {
+          not: null,
+        },
+      },
+    });
+  }),
+  infiniteByTag: publicProcedure
+    .input(
+      z.object({
+        tagSlug: z.string().nullish(),
+        authorId: z.string().optional(),
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.string().nullish(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 50;
+      const { cursor } = input;
+
+      const items = await ctx.db.post.findMany({
+        take: limit + 1, // get an extra item at the end which we'll use as next cursor
+        where: {
+          publishedAt: {
+            not: null,
+          },
+          authorId: input.authorId,
+          tags: input.tagSlug
+            ? {
+                some: {
+                  slug: input.tagSlug,
+                },
+              }
+            : undefined,
+        },
+        include: {
+          tags: {
+            select: {
+              id: true,
+              title: true,
+              slug: true,
+            },
+          },
+          author: {
+            select: {
+              name: true,
+              username: true,
+              image: true,
+            },
+          },
+        },
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: {
+          publishedAt: "desc",
+        },
+      });
+
+      let nextCursor: typeof cursor | undefined = undefined;
+
+      if (items.length > limit) {
+        const nextItem = items.pop();
+        nextCursor = nextItem!.id;
+      }
+
+      return {
+        items,
+        nextCursor,
+      };
     }),
 });

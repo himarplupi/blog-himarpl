@@ -2,11 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 import { Mail } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
-import LogoKabinetAscendia from "@/images/logo-ascendia-landscape-dark.png";
-import LogoHIMARPL from "@/images/logo-landscape-dark.png";
+import LogoKabinetAscendiaDark from "@/images/logo-ascendia-landscape-dark.png";
+import LogoKabinetAscendiaLight from "@/images/logo-ascendia-landscape-light.png";
+import LogoLandscapeHIMARPLDark from "@/images/logo-landscape-dark.png";
+import LogoLandscapeHIMARPLLight from "@/images/logo-landscape-light.png";
 import LogoUPICibiru from "@/images/logo-upi-cibiru.png";
 import { cn } from "@/lib/utils";
 import {
@@ -15,25 +18,47 @@ import {
   SiYoutube,
 } from "@icons-pack/react-simple-icons";
 
-export function GlobalFooter() {
+export function Footer() {
+  const { resolvedTheme } = useTheme();
+
   return (
-    <footer className="container bg-secondary/25 pt-6 text-secondary-foreground">
-      <div className="flex flex-col gap-y-6 md:px-8">
-        <div className="flex flex-col items-center gap-2 sm:flex-row">
+    <footer className="py-6 text-secondary-foreground">
+      <div className="flex flex-col gap-y-6">
+        <div className="flex flex-col items-center gap-2">
           <Image
             src={LogoUPICibiru}
             alt="logo Kampus UPI di Cibiru"
             width={150}
           />
-          <Image src={LogoHIMARPL} alt="logo HIMARPL" width={200} />
-          <Image
-            src={LogoKabinetAscendia}
-            alt="logo Kabinet Ascendia"
-            width={150}
-          />
+          {resolvedTheme === "dark" ? (
+            <Image
+              src={LogoLandscapeHIMARPLDark}
+              alt="logo HIMARPL"
+              width={200}
+            />
+          ) : (
+            <Image
+              src={LogoLandscapeHIMARPLLight}
+              alt="logo HIMARPL"
+              width={200}
+            />
+          )}
+          {resolvedTheme === "dark" ? (
+            <Image
+              src={LogoKabinetAscendiaDark}
+              alt="logo Kabinet Ascendia Dark"
+              width={150}
+            />
+          ) : (
+            <Image
+              src={LogoKabinetAscendiaLight}
+              alt="logo Kabinet Ascendia Light"
+              width={150}
+            />
+          )}
         </div>
 
-        <div className="flex flex-col justify-between gap-4 sm:flex-row">
+        <div className="flex flex-col justify-between gap-4">
           <SocialMediaLinks />
 
           <Alamat />
@@ -53,7 +78,7 @@ export function GlobalFooter() {
 
 function SocialMediaLinks() {
   return (
-    <ul className="flex w-full justify-between gap-2 sm:w-fit sm:flex-col">
+    <ul className="flex w-full justify-between gap-2">
       <li>
         <Link
           target="_blank"
@@ -116,7 +141,7 @@ function Alamat() {
       <h4 className="scroll-m-20 font-serif text-lg font-semibold tracking-wide">
         Alamat
       </h4>
-      <p className="text-sm leading-4 text-muted-foreground sm:w-64 md:w-96">
+      <p className="text-sm leading-4 text-muted-foreground">
         Ruang HIMARPL Gedung Sekretariat Jalan Raya Cibiru Km. 15 Bandung 40393
       </p>
     </div>

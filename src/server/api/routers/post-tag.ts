@@ -2,7 +2,11 @@ import GithubSlugger from "github-slugger";
 import { z } from "zod";
 
 import { isWordInSentenceMoreThan, isWordMoreThan } from "@/lib/utils";
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 
 export const postTagRouter = createTRPCRouter({
@@ -65,17 +69,65 @@ export const postTagRouter = createTRPCRouter({
         },
       });
     }),
-  inPost: protectedProcedure
-    .input(z.object({ postId: z.string() }))
+  popular: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.db.postTag.findMany({
+      include: {
+        _count: {
+          select: { posts: true },
+        },
+      },
+      orderBy: {
+        posts: {
+          _count: "desc",
+        },
+      },
+      take: 15,
+    });
+  }),
+  related: publicProcedure
+    .input(
+      z.object({
+        tagSlug: z.string().nullish(),
+      }),
+    )
     .query(async ({ ctx, input }) => {
-      return await ctx.db.postTag.findMany({
-        where: {
-          posts: {
-            some: {
-              id: input.postId,
-            },
+      const popularTags = await ctx.db.postTag.findMany({
+        include: {
+          _count: {
+            select: { posts: true },
           },
         },
+        orderBy: {
+          posts: {
+            _count: "desc",
+          },
+        },
+        take: 10,
       });
+
+      if (input.tagSlug === null) {
+        return popularTags;
+      }
+
+      const relatedTags = await ctx.db.postTag.findMany({
+        where: {
+          OR: [
+            { parent: { slug: input.tagSlug } },
+            {
+              children: {
+                some: {
+                  slug: input.tagSlug,
+                },
+              },
+            },
+          ],
+        },
+      });
+
+      return relatedTags.length === 0 ? popularTags : relatedTags;
     }),
+
+  many: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.db.postTag.findMany();
+  }),
 });

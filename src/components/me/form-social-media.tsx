@@ -37,7 +37,9 @@ const socialMediaSchema = z.object({
 export function FormSocialMedia() {
   const me = useMe();
 
-  const mutation = api.user.updateSelf.useMutation();
+  console.log(me);
+
+  const mutation = api.user.updateSelfSocialMedia.useMutation();
 
   const form = useForm<z.infer<typeof socialMediaSchema>>({
     resolver: zodResolver(socialMediaSchema),
@@ -86,11 +88,11 @@ export function FormSocialMedia() {
       });
     }
 
-    mutation.mutate({ socialMedia });
+    mutation.mutate(socialMedia);
   };
 
   return (
-    <Card className="mt-4 h-fit md:basis-4/12">
+    <Card className="mt-4">
       <CardHeader>
         <CardTitle className="scroll-m-20 font-serif text-2xl font-semibold tracking-wide">
           Sosial Media

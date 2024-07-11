@@ -39,7 +39,7 @@ const profileSchema = z.object({
 export function FormProfile() {
   const me = useMe();
 
-  const mutation = api.user.updateSelf.useMutation();
+  const mutation = api.user.updateSelfProfile.useMutation();
 
   const form = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
