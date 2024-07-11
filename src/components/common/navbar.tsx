@@ -6,7 +6,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Session } from "next-auth";
 import { signOut } from "next-auth/react";
-import { Book, LogOut, Menu, NewspaperIcon, Pen, User } from "lucide-react";
+import {
+  Book,
+  ListTreeIcon,
+  LogOut,
+  Menu,
+  NewspaperIcon,
+  Pen,
+  SearchIcon,
+  User,
+} from "lucide-react";
 
 import { NavSheet } from "@/components/common/navsheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -54,6 +63,18 @@ export function Navbar({ session }: { session: Session | null }) {
                   title: "Postingan Terbaru",
                   href: "/",
                   icon: NewspaperIcon,
+                  variant: "ghost",
+                },
+                {
+                  title: "Telusuri Label",
+                  href: "/explore-tags",
+                  icon: ListTreeIcon,
+                  variant: "ghost",
+                },
+                {
+                  title: "Cari Postingan",
+                  href: "/search",
+                  icon: SearchIcon,
                   variant: "ghost",
                 },
               ]}

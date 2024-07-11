@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { NewspaperIcon } from "lucide-react";
+import { ListTreeIcon, NewspaperIcon, SearchIcon } from "lucide-react";
 
 import {
   Sheet,
@@ -28,12 +28,24 @@ export function NavSheet({ children }: { children: React.ReactNode }) {
         </SheetHeader>
 
         <Nav
-          className=""
+          className="mt-6"
           links={[
             {
               title: "Postingan Terbaru",
               href: "/",
               icon: NewspaperIcon,
+              variant: "ghost",
+            },
+            {
+              title: "Telusuri Label",
+              href: "/explore-tags",
+              icon: ListTreeIcon,
+              variant: "ghost",
+            },
+            {
+              title: "Cari Postingan",
+              href: "/search",
+              icon: SearchIcon,
               variant: "ghost",
             },
           ]}

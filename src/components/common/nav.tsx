@@ -77,7 +77,10 @@ interface NavProps {
 export function Nav({ links, className }: NavProps) {
   return (
     <div className={cn("group flex flex-col gap-4", className)}>
-      <motion.div layout className="flex flex-col gap-1 px-2 md:flex-row">
+      <motion.div
+        layout
+        className="flex flex-col gap-1 gap-y-2 px-2 md:flex-row"
+      >
         {links.map((link, index) => (
           <NavLink key={index} link={link} />
         ))}
