@@ -2,7 +2,7 @@ import { MoreHorizontalIcon } from "lucide-react";
 
 import { Navbar } from "@/components/common/navbar";
 import { Articles } from "@/components/home/articles";
-import Sidebar from "@/components/home/sidebar";
+import { Sidebar } from "@/components/home/sidebar";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { getServerAuthSession } from "@/server/auth";

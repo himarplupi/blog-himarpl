@@ -316,6 +316,7 @@ export const postRouter = createTRPCRouter({
       z.object({
         tagSlug: z.string().nullish(),
         authorId: z.string().optional(),
+        search: z.string().optional(),
         limit: z.number().min(1).max(100).nullish(),
         cursor: z.string().nullish(),
       }),
@@ -338,6 +339,83 @@ export const postRouter = createTRPCRouter({
                 },
               }
             : undefined,
+        },
+        include: {
+          tags: {
+            select: {
+              id: true,
+              title: true,
+              slug: true,
+            },
+          },
+          author: {
+            select: {
+              name: true,
+              username: true,
+              image: true,
+            },
+          },
+        },
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: {
+          publishedAt: "desc",
+        },
+      });
+
+      let nextCursor: typeof cursor | undefined = undefined;
+
+      if (items.length > limit) {
+        const nextItem = items.pop();
+        nextCursor = nextItem!.id;
+      }
+
+      return {
+        items,
+        nextCursor,
+      };
+    }),
+  infiniteSearch: publicProcedure
+    .input(
+      z.object({
+        search: z.string(),
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.string().nullish(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 50;
+      const { cursor } = input;
+
+      const searchArgs = input.search.split(" ");
+
+      const items = await ctx.db.post.findMany({
+        take: limit + 1, // get an extra item at the end which we'll use as next cursor
+        where: {
+          AND: [
+            {
+              publishedAt: {
+                not: null,
+              },
+            },
+            {
+              OR: searchArgs.map((search) => ({
+                OR: [
+                  {
+                    title: {
+                      contains: search,
+                      mode: "insensitive",
+                    },
+                  },
+                  {
+                    content: {
+                      contains: search,
+                      mode: "insensitive",
+                    },
+                  },
+                ],
+              })),
+            },
+          ],
         },
         include: {
           tags: {
