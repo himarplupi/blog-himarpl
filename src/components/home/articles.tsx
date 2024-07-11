@@ -80,14 +80,16 @@ export function Articles({ user }: { user?: string | null }) {
           <Carousel>
             <CarouselContent className="-ml-2">
               <CarouselItem className="basis-1/7 pl-2">
-                <Button
-                  className="rounded-full capitalize"
-                  variant={tagQuery == null ? "default" : "outline"}
-                  onClick={() => setTagQuery(null)}
-                  size="sm"
-                >
-                  Terbaru
-                </Button>
+                {!popularTagQuery.isLoading && (
+                  <Button
+                    className="rounded-full capitalize"
+                    variant={tagQuery == null ? "default" : "outline"}
+                    onClick={() => setTagQuery(null)}
+                    size="sm"
+                  >
+                    Terbaru
+                  </Button>
+                )}
               </CarouselItem>
               {popularTagQuery.data?.map((tag) => (
                 <CarouselItem key={tag.id} className="basis-1/7 pl-2">
@@ -142,12 +144,13 @@ export function Articles({ user }: { user?: string | null }) {
             })
           : null}
 
-        {infiniteQuery.isFetchingNextPage && (
-          <div className="flex justify-center gap-2 md:gap-3 xl:gap-4">
-            <LoaderCircle className="animate-spin" />
-            <span>Tunggu sebentar</span>
-          </div>
-        )}
+        {infiniteQuery.isFetchingNextPage ||
+          (popularTagQuery.isLoading && (
+            <div className="flex justify-center gap-2 md:gap-3 xl:gap-4">
+              <LoaderCircle className="animate-spin" />
+              <span>Tunggu sebentar</span>
+            </div>
+          ))}
       </div>
     </>
   );
