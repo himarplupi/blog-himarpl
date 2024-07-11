@@ -15,7 +15,7 @@ export const clearIndicatorStyles = "p-1 rounded-md";
 export const indicatorSeparatorStyles = "bg-border";
 export const dropdownIndicatorStyles = "p-1 rounded-md";
 export const menuStyles =
-  "p-1 mt-1 border bg-popover shadow-md rounded-md text-popover-foreground";
+  "p-1 mt-1 border border-border bg-popover shadow-md rounded-md text-popover-foreground";
 export const groupHeadingStyles =
   "py-2 px-1 text-secondary-foreground text-sm font-semibold";
 export const optionStyles = {

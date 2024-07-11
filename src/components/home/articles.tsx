@@ -18,7 +18,7 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Article } from "../common/article";
 import { Badge } from "../ui/badge";
 
-export function Articles({ user }: { user?: string | null }) {
+export function Articles({ isUserPage }: { isUserPage?: boolean }) {
   const [parentAutoAnimate] = useAutoAnimate();
   const [tagQuery, setTagQuery] = useQueryState("tag");
   const popularTagQuery = api.postTag.popular.useQuery();
@@ -62,7 +62,7 @@ export function Articles({ user }: { user?: string | null }) {
 
   return (
     <>
-      {!user && (
+      {!isUserPage && (
         <div className="mb-2 overflow-x-hidden pb-2">
           {popularTagQuery.isLoading ? (
             <Button

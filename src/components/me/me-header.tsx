@@ -27,7 +27,7 @@ export function MeHeader() {
           <Pen className="mr-2 h-4 w-4" /> Mulai Menulis Postingan
         </Link>
       </div>
-      <motion.div layout className="mt-2 flex gap-x-4 border-b">
+      <motion.div layout className="mt-2 flex gap-x-4 border-b border-border">
         {HeaderLinks.map(({ href, label }) => (
           <Link
             key={href}

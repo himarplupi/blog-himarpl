@@ -54,16 +54,16 @@ export default async function UserPage({
 
             {/* Kondisional berdasar session */}
             {session?.user?.id === user?.id && (
-              <Link href={""} className="mt-8">
+              <Link href={"/me"} className="mt-8">
                 <Button variant={"secondary"}>Edit Profile</Button>
               </Link>
             )}
           </div>
           <div className="col-span-1 flex flex-col gap-y-4 lg:col-span-2 lg:gap-y-6">
-            <h2 className="font-serif text-2xl font-semibold uppercase tracking-wide first:mt-0">
-              Terbaru
+            <h2 className="font-serif text-3xl font-bold italic tracking-wide first:mt-0">
+              Postingan Terbaru
             </h2>
-            <Articles user={null} />
+            <Articles isUserPage />
           </div>
         </div>
       </main>
