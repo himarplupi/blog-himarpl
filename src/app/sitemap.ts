@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
 
 import { env } from "@/env";
-import { api } from "@/trpc/server";
 
 // This is the combination of the Application Base URL and Base PATH
 const baseUrlAndPath = `${env.BASE_URL}${env.BASE_PATH}`;
@@ -24,26 +23,6 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
   ];
 
   paths.push(`${baseUrlAndPath}`);
-
-  const tags = await api.postTag.many.query();
-
-  tags.forEach((tag) => {
-    paths.push(`${baseUrlAndPath}/tag/${tag.slug}`);
-  });
-
-  const users = await api.user.many.query();
-
-  users.forEach((user) => {
-    if (user.username) {
-      paths.push(`${baseUrlAndPath}/@${user.username}`);
-    }
-  });
-
-  const posts = await api.post.manyPublished.query();
-
-  posts.forEach((post) => {
-    paths.push(`${baseUrlAndPath}/@${post.author.username}/${post.slug}`);
-  });
 
   const currentDate = new Date().toISOString();
 
