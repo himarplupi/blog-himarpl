@@ -1,9 +1,14 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import * as React from "react";
 import Image from "next/image";
 import { type Session } from "next-auth";
-import { AlertCircle, TagsIcon, UsersRoundIcon } from "lucide-react";
+import {
+  AlertCircle,
+  Loader2Icon,
+  TagsIcon,
+  UsersRoundIcon,
+} from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
@@ -33,20 +38,9 @@ import { isWordInSentenceMoreThan, isWordMoreThan } from "@/lib/utils";
 
 import { CharacterCount } from "./character-count";
 
-type InitialState = {
-  tags: TagOption[] | null;
-  image: string | null;
-  title: string | null;
-};
-
 export function Publish({ session }: { session: Session | null }) {
-  const [initialState, setInitialState] = React.useState<InitialState>({
-    tags: null,
-    image: null,
-    title: null,
-  });
   const [input, setInput] = React.useState("");
-  const { isPublishable } = useEditor();
+  const { isPublishable, isSaving } = useEditor();
   const [tags, setTags] = React.useState<TagOption[]>([]);
   const { postQuery } = useDebounceTagSave({ tags, delay: 1000 });
   const { tagOptions, handleCreateTag, isLoading } = useDebounceTagOptions({
@@ -55,52 +49,14 @@ export function Publish({ session }: { session: Session | null }) {
     delay: 1000,
   });
   const { publish } = usePublishPost();
-  const hasRun = useRef(false);
 
-  // Set initial tags
-  useEffect(() => {
-    if (!postQuery.data) return;
-    if (!postQuery.data.post?.tags) return;
-
-    const { post } = postQuery.data;
-
-    if (!hasRun.current && tags !== initialState.tags) {
-      hasRun.current = true;
-      const tags = post.tags.map((tag) => ({
+  React.useEffect(() => {
+    setTags(
+      postQuery.data?.post?.tags?.map((tag) => ({
         label: tag.title,
         value: tag.title,
-      }));
-
-      setTags(tags);
-      setInitialState({
-        tags,
-        title: post.title,
-        image: post.image,
-      });
-    }
-
-    if (initialState.title !== post.title) {
-      setInitialState({
-        ...initialState,
-        title: post.title,
-      });
-    }
-
-    if (initialState.image !== post.image) {
-      setInitialState({
-        ...initialState,
-        image: post.image,
-      });
-    }
-
-    if (initialState.tags !== tags) {
-      setInitialState({
-        ...initialState,
-        tags,
-      });
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      })) ?? [],
+    );
   }, [postQuery.data]);
 
   const handleSubmit = () => {
@@ -116,8 +72,14 @@ export function Publish({ session }: { session: Session | null }) {
     return (
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="success" size="sm">
-            Publish
+          <Button variant="success" size="sm" disabled={isSaving}>
+            {isSaving && (
+              <>
+                <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+                Saving...
+              </>
+            )}
+            {!isSaving && "Publish"}
           </Button>
         </DialogTrigger>
 
@@ -157,8 +119,18 @@ export function Publish({ session }: { session: Session | null }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="success" size="sm" disabled={!isPublishable}>
-          Publish
+        <Button
+          variant="success"
+          size="sm"
+          disabled={!isPublishable || isSaving}
+        >
+          {isSaving && (
+            <>
+              <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+              Saving...
+            </>
+          )}
+          {!isSaving && "Publish"}
         </Button>
       </DialogTrigger>
 
@@ -177,12 +149,12 @@ export function Publish({ session }: { session: Session | null }) {
             <div className="my-6 space-y-8">
               <div className="grid-cols-4 md:grid">
                 <div className="md:col-span-3 md:mr-32">
-                  {initialState.title && (
+                  {!postQuery.isLoading && (
                     <h4 className="scroll-m-20 truncate font-serif text-2xl font-semibold tracking-tight duration-300 animate-in fade-in">
-                      {initialState.title}
+                      {postQuery.data?.post?.title}
                     </h4>
                   )}
-                  {!initialState.title && (
+                  {postQuery.isLoading && (
                     <Skeleton className="h-8 w-full md:w-1/2" />
                   )}
 
@@ -195,7 +167,7 @@ export function Publish({ session }: { session: Session | null }) {
                     >
                       Label
                     </Label>
-                    {initialState.tags && (
+                    {!postQuery.isLoading && (
                       <CreateableSelect
                         isMulti
                         maxMenuHeight={128}
@@ -214,22 +186,22 @@ export function Publish({ session }: { session: Session | null }) {
                         options={tagOptions.data?.map(mapTags) ?? []}
                       />
                     )}
-                    {!initialState.tags && <Skeleton className="h-9 w-full" />}
+                    {postQuery.isLoading && <Skeleton className="h-9 w-full" />}
                   </div>
                 </div>
                 <div className="my-10 self-end md:m-0">
                   <AspectRatio ratio={16 / 9} className="bg-muted">
-                    {!initialState.image && (
+                    {!postQuery.data?.post?.image && (
                       <div className="flex h-full items-center justify-center text-muted-foreground">
                         <span className="text-center text-sm lowercase">
                           Sisipkan satu gambar untuk dijadikan thumbnail
                         </span>
                       </div>
                     )}
-                    {initialState.image && (
+                    {postQuery.data?.post?.image && (
                       <Image
-                        src={initialState.image ?? ""}
-                        alt={initialState.title + " cover"}
+                        src={postQuery.data?.post?.image ?? ""}
+                        alt={postQuery.data?.post?.title + " cover"}
                         fill
                         className="rounded-md object-cover"
                       />

@@ -34,8 +34,10 @@ export const useEditorConfig = () => {
   const [rawHtml, setRawHtml] = useState("Loading...");
   const [debouncedEditor] = useDebounce(editor?.state.doc.content, 2000);
 
-  const savePost = api.post.save.useMutation();
   const utils = api.useUtils();
+  const savePost = api.post.save.useMutation({
+    onSuccess: () => utils.post.byParamsForTagSave.invalidate(),
+  });
 
   useEffect(() => {
     if (postQuery.isLoading) return;
@@ -57,9 +59,6 @@ export const useEditorConfig = () => {
         image: getFirstImageSrc(rawHtml) ?? "",
         tagTitles: post.tags.map((tag) => tag.title),
       });
-
-      // eslint-disable-next-line
-      utils.post.byParamsForTagSave.invalidate();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedEditor]);

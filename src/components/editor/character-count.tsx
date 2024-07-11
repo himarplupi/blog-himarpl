@@ -6,7 +6,7 @@ export function CharacterCount() {
   const { isPublishable, editor } = useEditor();
 
   return (
-    <div className="text-sm text-muted-foreground">
+    <div className="px-4 text-sm text-muted-foreground md:px-0">
       <p>
         <span
           className={
