@@ -8,16 +8,14 @@ import type { Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import {
   Book,
-  ListTreeIcon,
+  CompassIcon,
   LogOut,
-  Menu,
-  NewspaperIcon,
   Pen,
   SearchIcon,
   User,
+  XIcon,
 } from "lucide-react";
 
-import { NavSheet } from "@/components/common/navsheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -27,12 +25,71 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useSearchHistory } from "@/hooks/useSearchHistory";
 import logo from "@/images/logo.png";
 import { abbreviation, cn } from "@/lib/utils";
+import { Label } from "@radix-ui/react-label";
 
-import { Nav } from "./nav";
+import { Input } from "../ui/input";
 
 const hideNavbarOnRoutes = ["/login"];
+
+function NavSearchInput() {
+  const { searchHistory } = useSearchHistory();
+  const [search, setSearch] = React.useState("");
+
+  return (
+    <div className="group relative hidden md:flex">
+      <Label
+        htmlFor="search-input"
+        className={cn(
+          "absolute left-0 top-0 flex h-full w-10 items-center justify-center bg-transparent",
+        )}
+      >
+        <SearchIcon className="h-5 w-5" />
+      </Label>
+      <Input
+        type="search"
+        className="pl-10 md:min-w-80"
+        id="search-input"
+        placeholder="Cari"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+
+      <ul className="absolute left-0 right-0 top-full z-50 mt-2 hidden overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md duration-300 animate-in fade-in slide-in-from-top-5 group-focus-within:block">
+        {searchHistory.length > 0 && (
+          <div>
+            <p className="px-2 py-1.5 text-sm font-medium">Pencarian Terbaru</p>
+            {searchHistory.map((history) => (
+              <div className="flex items-center" key={history.slug}>
+                <Link
+                  href={`/search?q=${history.slug}`}
+                  className="flex h-10 basis-full items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                >
+                  <SearchIcon className="mr-2 h-5 w-5" />
+                  {history.title}
+                </Link>
+                <Button size="icon" variant="ghost" className="basis-auto">
+                  <XIcon className="h-5 w-5" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
+        <div className="flex items-center">
+          <Link
+            href={"/explore-tags"}
+            className="flex h-10 basis-full items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+          >
+            <CompassIcon className="mr-2 h-5 w-5" />
+            Telusuri Label
+          </Link>
+        </div>
+      </ul>
+    </div>
+  );
+}
 
 export function Navbar({ session }: { session: Session | null }) {
   const pathname = usePathname();
@@ -40,57 +97,36 @@ export function Navbar({ session }: { session: Session | null }) {
   return (
     !hideNavbarOnRoutes.includes(pathname) && (
       <nav className="fixed top-0 z-10 w-full drop-shadow-md">
-        <div className="container flex items-center gap-x-4 bg-background py-2 backdrop-blur-md sm:justify-between">
+        <div className="container flex items-center justify-between gap-x-4 bg-background py-2 backdrop-blur-md">
           <div className="flex items-center gap-x-5">
             <div className="flex items-center gap-x-2">
-              <NavSheet>
-                <Button size="icon" variant="outline">
-                  <Menu className="h-6 w-6" />
-                </Button>
-              </NavSheet>
-
-              <Image
-                src={logo}
-                alt="HIMARPL Logo"
-                className="hidden w-12 md:block"
-              />
+              <Image src={logo} alt="HIMARPL Logo" className="w-12" />
             </div>
 
-            <Nav
-              className="hidden md:flex"
-              links={[
-                {
-                  title: "Postingan Terbaru",
-                  href: "/",
-                  icon: NewspaperIcon,
-                  variant: "ghost",
-                },
-                {
-                  title: "Telusuri Label",
-                  href: "/explore-tags",
-                  icon: ListTreeIcon,
-                  variant: "ghost",
-                },
-                {
-                  title: "Cari Postingan",
-                  href: "/search",
-                  icon: SearchIcon,
-                  variant: "ghost",
-                },
-              ]}
-            />
+            <NavSearchInput />
           </div>
 
           {session && (
-            <div className="flex w-full items-center gap-x-4 sm:ml-auto sm:w-fit">
+            <div className="flex items-center gap-x-4">
+              <Link
+                href="/search"
+                className={cn(
+                  buttonVariants({ variant: "outline", size: "icon" }),
+                  "w-10 md:hidden",
+                )}
+              >
+                <SearchIcon className="h-5 w-5" />
+              </Link>
+
               <Link
                 href="/new"
                 className={cn(
-                  buttonVariants({ variant: "outline" }),
-                  "w-full md:min-w-20",
+                  buttonVariants({ variant: "outline", size: "icon" }),
+                  "h-10 w-10 md:min-w-20",
                 )}
               >
-                <Pen className="mr-2 h-4 w-4" /> Buat
+                <Pen className="h-4 w-4 md:mr-2" />
+                <span className="hidden md:inline"> Buat</span>
               </Link>
 
               <DropdownMenu>
