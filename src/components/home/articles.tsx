@@ -11,15 +11,14 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-} from "@/components/ui/carousel"
+} from "@/components/ui/carousel";
 import { api } from "@/trpc/react";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { Article } from "../common/article";
 import { Badge } from "../ui/badge";
 
-
-export function Articles({ user }: { user: string | null }) {
+export function Articles({ user }: { user?: string | null }) {
   const [parentAutoAnimate] = useAutoAnimate();
   const [tagQuery, setTagQuery] = useQueryState("tag");
   const popularTagQuery = api.postTag.popular.useQuery();
@@ -96,12 +95,10 @@ export function Articles({ user }: { user: string | null }) {
               </CarouselItem>
               {popularTagQuery.data?.map((tag) => (
                 <CarouselItem key={tag.id} className="basis-1/7 pl-2">
-
                   <Button
                     className="rounded-full capitalize"
                     onClick={() => setTagQuery(tag.slug)}
                     variant={tagQuery == tag.slug ? "default" : "outline"}
-
                     size="sm"
                   >
                     {tag.title}
@@ -110,48 +107,46 @@ export function Articles({ user }: { user: string | null }) {
               ))}
             </CarouselContent>
           </Carousel>
-
-
-
         </div>
       )}
 
       <div ref={parentAutoAnimate}>
         {infiniteQuery.data
           ? infiniteQuery.data.pages.map(({ items, nextCursor }, i) => {
-            return (
-              <div key={`${nextCursor}_${i}`}>
-                {items.map((post) => (
-                  <Article
-                    key={post.id}
-                    userUrl={post.author.username ?? ""}
-                    userImage={post.author.image ?? ""}
-                    userName={post.author.name ?? ""}
-                    published={post.publishedAt ?? ""}
-                    articleUrl={post.slug}
-                    title={post.title}
-                    teaser={post.content}
-                    articleImage={
-                      post.image ??
-                      "https://placehold.co/400x200/EEE/31343C/png?font=montserrat&text=No+Image"
-                    }
-                  >
-                    {/* Loop PostTag */}
-                    {post.tags.map((tag) => (
-                      <Link key={tag.id} href={`/tag/${tag.slug}`}>
-                        <Badge
-                          variant="secondary" className="truncate font-normal"
-                        >
-                          {tag.title}
-                        </Badge>
-                      </Link>
-                    ))}
-                    {/* End loop PostTag */}
-                  </Article>
-                ))}
-              </div>
-            );
-          })
+              return (
+                <div key={`${nextCursor}_${i}`}>
+                  {items.map((post) => (
+                    <Article
+                      key={post.id}
+                      userUrl={post.author.username ?? ""}
+                      userImage={post.author.image ?? ""}
+                      userName={post.author.name ?? ""}
+                      published={post.publishedAt ?? ""}
+                      articleUrl={post.slug}
+                      title={post.title}
+                      teaser={post.content}
+                      articleImage={
+                        post.image ??
+                        "https://placehold.co/400x200/EEE/31343C/png?font=montserrat&text=No+Image"
+                      }
+                    >
+                      {/* Loop PostTag */}
+                      {post.tags.map((tag) => (
+                        <Link key={tag.id} href={`/tag/${tag.slug}`}>
+                          <Badge
+                            variant="secondary"
+                            className="truncate font-normal"
+                          >
+                            {tag.title}
+                          </Badge>
+                        </Link>
+                      ))}
+                      {/* End loop PostTag */}
+                    </Article>
+                  ))}
+                </div>
+              );
+            })
           : null}
 
         {infiniteQuery.isFetchingNextPage && (
