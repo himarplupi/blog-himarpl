@@ -30,7 +30,7 @@ export function Article({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="mb-6 sm:mb-4">
+    <div className="mb-8">
       <div className="mb-2 flex items-center gap-1 md:gap-2">
         <Link
           href={`/@${userUrl}`}
@@ -60,7 +60,7 @@ export function Article({
           >
             {title}
           </Link>
-          <p className="mt-2 hidden lg:line-clamp-3">{teaser}</p>
+          <p className="mt-2 line-clamp-3 text-sm lg:text-base">{teaser}</p>
           <div className="mt-2 flex flex-wrap gap-2 md:mt-4">{children}</div>
         </div>
         {articleImage && (
