@@ -33,24 +33,8 @@ export const useEditorConfig = () => {
   const [title, setTitle] = useState("Loading...");
   const [rawHtml, setRawHtml] = useState("Loading...");
   const [debouncedEditor] = useDebounce(editor?.state.doc.content, 2000);
-  const [isPublishable, setIsPublishable] = useState(false);
 
   const savePost = api.post.save.useMutation();
-
-  useEffect(() => {
-    if (!editor) return;
-
-    if (
-      // eslint-disable-next-line
-      editor.storage.characterCount.characters() >= 100 &&
-      // eslint-disable-next-line
-      editor.storage.characterCount.words() >= 20
-    ) {
-      setIsPublishable(true);
-    } else {
-      setIsPublishable(false);
-    }
-  }, [editor]);
 
   useEffect(() => {
     if (postQuery.isLoading) return;
@@ -131,11 +115,9 @@ export const useEditorConfig = () => {
   return {
     editor,
     isSaving,
-    isPublishable,
     title,
     setTitle,
     rawHtml,
     setRawHtml,
-    savePost,
   };
 };
