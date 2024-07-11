@@ -7,7 +7,7 @@ import {
 } from "@/server/api/trpc";
 
 export const userRouter = createTRPCRouter({
-  getMany: protectedProcedure.query(({ ctx }) => {
+  many: protectedProcedure.query(({ ctx }) => {
     return ctx.db.user.findMany();
   }),
   getManyInclude: protectedProcedure

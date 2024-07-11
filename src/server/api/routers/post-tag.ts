@@ -126,4 +126,8 @@ export const postTagRouter = createTRPCRouter({
 
       return relatedTags.length === 0 ? popularTags : relatedTags;
     }),
+
+  many: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.db.postTag.findMany();
+  }),
 });

@@ -295,7 +295,22 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
-
+  manyPublished: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.db.post.findMany({
+      include: {
+        author: {
+          select: {
+            username: true,
+          },
+        },
+      },
+      where: {
+        publishedAt: {
+          not: null,
+        },
+      },
+    });
+  }),
   infiniteByTag: publicProcedure
     .input(
       z.object({

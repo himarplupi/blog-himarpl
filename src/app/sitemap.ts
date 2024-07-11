@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { env } from "@/env";
+import { api } from "@/trpc/server";
 
 // This is the combination of the Application Base URL and Base PATH
 const baseUrlAndPath = `${env.BASE_URL}${env.BASE_PATH}`;
@@ -16,17 +17,33 @@ const EXTERNAL_LINKS_SITEMAP = [
 // Next.js Sitemap Generation doesn't support `alternate` refs yet
 // @see https://github.com/vercel/next.js/discussions/55646
 const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
-  const paths: Array<string> = [];
-
-  // for (const locale of availableLocaleCodes) {
-  //   const routes = await dynamicRouter.getRoutesByLanguage(locale);
-
-  //   paths.push(
-  //     ...routes.map((route) => `${baseUrlAndPath}/${locale}/${route}`),
-  //   );
-  // }
+  const paths: Array<string> = [
+    `${baseUrlAndPath}/explore-tags`,
+    `${baseUrlAndPath}/search`,
+    `${baseUrlAndPath}/me`,
+  ];
 
   paths.push(`${baseUrlAndPath}`);
+
+  const tags = await api.postTag.many.query();
+
+  tags.forEach((tag) => {
+    paths.push(`${baseUrlAndPath}/tag/${tag.slug}`);
+  });
+
+  const users = await api.user.many.query();
+
+  users.forEach((user) => {
+    if (user.username) {
+      paths.push(`${baseUrlAndPath}/@${user.username}`);
+    }
+  });
+
+  const posts = await api.post.manyPublished.query();
+
+  posts.forEach((post) => {
+    paths.push(`${baseUrlAndPath}/@${post.author.username}/${post.slug}`);
+  });
 
   const currentDate = new Date().toISOString();
 
