@@ -21,7 +21,7 @@ export const useDebounceTagSave = ({ tags, delay }: Props) => {
     throw new Error("Invalid pathname");
   }
 
-  const postQuery = api.post.byParams.useQuery({
+  const postQuery = api.post.byParamsForTagSave.useQuery({
     username: username,
     slug: slug,
   });

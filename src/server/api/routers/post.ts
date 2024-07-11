@@ -145,6 +145,41 @@ export const postRouter = createTRPCRouter({
         post: author?.posts[0],
       };
     }),
+
+  byParamsForTagSave: protectedProcedure
+    .input(
+      z.object({
+        username: z.string(),
+        slug: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const author = await ctx.db.user.findUnique({
+        where: {
+          username: input.username.toLowerCase(),
+        },
+        include: {
+          posts: {
+            where: {
+              slug: input.slug,
+            },
+            include: {
+              tags: {
+                select: {
+                  title: true,
+                  slug: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return {
+        author,
+        post: author?.posts[0],
+      };
+    }),
   save: protectedProcedure
     .input(
       z.object({
