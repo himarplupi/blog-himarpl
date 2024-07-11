@@ -66,7 +66,8 @@ export function SearchResult() {
     <div className="container">
       <div className="mb-8 flex scroll-m-20 items-center justify-between pb-2">
         <h2 className="font-serif text-3xl font-bold italic tracking-wide first:mt-0">
-          Hasil Pencarian Untuk {searchQuery}
+          <span className="text-muted-foreground">Hasil Pencarian:</span>{" "}
+          {searchQuery}
         </h2>
         <div className="lg:hidden">
           <Sheet>
