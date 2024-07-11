@@ -38,6 +38,7 @@ function NavSearchInput() {
   const { searchHistory, removeFromSearchHistory } = useSearchHistory();
   const [search, setSearch] = React.useState("");
   const router = useRouter();
+  const shortedSearchHistory = searchHistory.slice(0, 3);
 
   return (
     <div className="group relative hidden md:flex">
@@ -65,16 +66,15 @@ function NavSearchInput() {
       />
 
       <ul className="absolute left-0 right-0 top-full z-50 mt-2 hidden overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md duration-300 animate-in fade-in slide-in-from-top-5 group-focus-within:block">
-        {searchHistory.length > 0 && (
+        {shortedSearchHistory.length > 0 && (
           <div>
             <p className="px-2 py-1.5 text-sm font-medium">Pencarian Terbaru</p>
-            {searchHistory.map((history) => (
+            {shortedSearchHistory.map((history) => (
               <div className="flex items-center" key={history}>
                 <Link
                   href={`/search?q=${history}`}
                   onClick={() => {
                     setSearch(history);
-                    document.body.focus();
                   }}
                   className="flex h-10 basis-full items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                 >
