@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useDebounce } from "use-debounce";
 
 import { type TagOption } from "@/hooks/useDebounceTagOptions";
-import { useEditor } from "@/hooks/useEditor";
+import { api } from "@/trpc/react";
 
 export type Props = {
   tags: TagOption[];
@@ -12,23 +13,35 @@ export type Props = {
 };
 
 export const useDebounceTagSave = ({ tags, delay }: Props) => {
-  const { savePost } = useEditor();
+  const pathname = usePathname();
+  const username = pathname.split("/")[1]?.slice(1);
+  const slug = pathname.split("/")[2];
+
+  if (!username || !slug) {
+    throw new Error("Invalid pathname");
+  }
+
+  const postQuery = api.post.byParams.useQuery({
+    username: username,
+    slug: slug,
+  });
+  const savePostMutation = api.post.save.useMutation();
+
   const [debouncedTag] = useDebounce(tags, delay);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (debouncedTag) {
-      if (!savePost) return;
-      if (!savePost.data) return;
+      if (!postQuery.data) return;
 
-      const prevData = savePost.data;
+      const { post } = postQuery.data;
 
-      savePost.mutate({
-        content: prevData?.content ?? "",
-        rawHtml: prevData?.rawHtml ?? "",
-        slug: prevData?.slug ?? "",
-        title: prevData?.title ?? "",
-        image: prevData?.image ?? "",
+      savePostMutation.mutate({
+        title: post?.title ?? "",
+        slug: post?.slug ?? "",
+        content: post?.content ?? "",
+        rawHtml: post?.rawHtml ?? "",
+        image: post?.image ?? "",
         tagTitles: debouncedTag.map((tag) => tag.value),
       });
     }
@@ -44,5 +57,5 @@ export const useDebounceTagSave = ({ tags, delay }: Props) => {
     }
   }, [tags, debouncedTag]);
 
-  return { savePost, isLoading };
+  return { postQuery, isLoading };
 };

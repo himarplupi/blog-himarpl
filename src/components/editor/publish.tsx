@@ -31,6 +31,8 @@ import { useEditor } from "@/hooks/useEditor";
 import { usePublishPost } from "@/hooks/usePublishPost";
 import { isWordInSentenceMoreThan, isWordMoreThan } from "@/lib/utils";
 
+import { CharacterCount } from "./character-count";
+
 type InitialState = {
   tags: TagOption[] | null;
   image: string | null;
@@ -46,7 +48,7 @@ export function Publish({ session }: { session: Session | null }) {
   const [input, setInput] = React.useState("");
   const { isPublishable } = useEditor();
   const [tags, setTags] = React.useState<TagOption[]>([]);
-  const { savePost } = useDebounceTagSave({ tags, delay: 1000 });
+  const { postQuery } = useDebounceTagSave({ tags, delay: 1000 });
   const { tagOptions, handleCreateTag, isLoading } = useDebounceTagOptions({
     input,
     setTags,
@@ -57,13 +59,14 @@ export function Publish({ session }: { session: Session | null }) {
 
   // Set initial tags
   useEffect(() => {
-    if (!savePost) return;
-    if (!savePost.data) return;
-    if (!savePost.data.tags) return;
+    if (!postQuery.data) return;
+    if (!postQuery.data.post?.tags) return;
+
+    const { post } = postQuery.data;
 
     if (!hasRun.current && tags !== initialState.tags) {
       hasRun.current = true;
-      const tags = savePost.data.tags.map((tag) => ({
+      const tags = post.tags.map((tag) => ({
         label: tag.title,
         value: tag.title,
       }));
@@ -71,22 +74,22 @@ export function Publish({ session }: { session: Session | null }) {
       setTags(tags);
       setInitialState({
         tags,
-        title: savePost.data.title,
-        image: savePost.data.image,
+        title: post.title,
+        image: post.image,
       });
     }
 
-    if (initialState.title !== savePost.data.title) {
+    if (initialState.title !== post.title) {
       setInitialState({
         ...initialState,
-        title: savePost.data.title,
+        title: post.title,
       });
     }
 
-    if (initialState.image !== savePost.data.image) {
+    if (initialState.image !== post.image) {
       setInitialState({
         ...initialState,
-        image: savePost.data.image,
+        image: post.image,
       });
     }
 
@@ -98,17 +101,58 @@ export function Publish({ session }: { session: Session | null }) {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [savePost]);
+  }, [postQuery.data]);
 
   const handleSubmit = () => {
     if (!session) throw new Error("Session is required");
-    if (!savePost) throw new Error("Post not found");
-    if (!savePost.data) throw new Error("Post data not found");
-    if (!savePost.data.title) throw new Error("Post title not found");
-    const { id, title } = savePost.data;
+    if (!postQuery.data?.post) throw new Error("Post not found");
 
-    publish(id, title);
+    const { post } = postQuery.data;
+
+    publish(post.id, post.title);
   };
+
+  if (!isPublishable) {
+    return (
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="success" size="sm">
+            Publish
+          </Button>
+        </DialogTrigger>
+
+        <DialogContent className="max-h-screen p-0 md:max-w-[512px]">
+          <ScrollArea className="max-h-screen">
+            <div className="p-6">
+              <DialogHeader>
+                <DialogTitle className="font-serif text-3xl tracking-tight">
+                  Publish Postingan
+                </DialogTitle>
+                <DialogDescription>
+                  {`Postingan yang telah dipublikasi tidak akan dapat diubah
+                    kembali. Pastikan postingan telah sesuai.`}
+                </DialogDescription>
+              </DialogHeader>
+              <div className="my-6 space-y-8">
+                <p className="leading-5">
+                  Untuk dapat mempublish postingan, pastikan postingan telah
+                  selesai dan dapat dipublish dengan kriteria minimal 100
+                  karakter dan 20 kata.
+                </p>
+
+                <CharacterCount />
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="secondary">Okay</Button>
+                </DialogClose>
+              </DialogFooter>
+            </div>
+          </ScrollArea>
+        </DialogContent>
+      </Dialog>
+    );
+  }
 
   return (
     <Dialog>
@@ -185,7 +229,7 @@ export function Publish({ session }: { session: Session | null }) {
                     {initialState.image && (
                       <Image
                         src={initialState.image ?? ""}
-                        alt={savePost?.data?.title + " cover"}
+                        alt={initialState.title + " cover"}
                         fill
                         className="rounded-md object-cover"
                       />
@@ -272,12 +316,7 @@ export function Publish({ session }: { session: Session | null }) {
                 <Button
                   variant="success"
                   onClick={handleSubmit}
-                  disabled={
-                    tags.length === 0 ||
-                    isLoading ||
-                    savePost?.data?.content.length === 0 ||
-                    savePost?.data?.title.length === 0
-                  }
+                  disabled={tags.length === 0 || isLoading}
                 >
                   Publish
                 </Button>
