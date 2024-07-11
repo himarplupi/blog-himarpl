@@ -4,7 +4,6 @@ import Document from "@tiptap/extension-document";
 import Heading from "@tiptap/extension-heading";
 import Highlight from "@tiptap/extension-highlight";
 import Image from "@tiptap/extension-image";
-import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
@@ -14,6 +13,8 @@ import Youtube from "@tiptap/extension-youtube";
 import { type EditorOptions } from "@tiptap/react";
 import { textblockTypeInputRule } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+
+import { ControlClickLink } from "./control-click-link";
 
 const DocumentWithTitle = Document.extend({
   content: "heading block+",
@@ -69,9 +70,7 @@ export const editorConfig: Partial<EditorOptions> = {
     }),
     DocumentWithTitle,
     CustomHeading,
-    Link.configure({
-      openOnClick: false,
-    }),
+    ControlClickLink,
     TextAlign,
     Highlight,
     CharacterCount,
