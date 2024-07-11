@@ -3,7 +3,8 @@ import Link from "next/link";
 
 import { Navbar } from "@/components/common/navbar";
 import { Articles } from "@/components/home/articles";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
 
@@ -21,8 +22,8 @@ export default async function UserPage({
     <>
       <Navbar session={session} />
       <main className="container mx-auto mt-16 min-h-screen py-8">
-        <div className="xxl:gap-8 grid grid-cols-1 gap-8 lg:grid-cols-3 lg:gap-4 xl:gap-6">
-          <div className="static flex flex-col border-b pb-8 lg:sticky lg:top-20 lg:overflow-y-scroll lg:px-6 lg:py-4 xl:border-0">
+        <div className="xxl:gap-8 grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-4 xl:gap-6">
+          <div className="static flex flex-col pb-8 md:sticky md:top-20 md:overflow-y-scroll md:px-6 md:py-4 xl:border-0">
             <div className="mb-8 h-32 w-32 overflow-hidden rounded-full bg-secondary">
               <Image
                 width={128}
@@ -54,16 +55,16 @@ export default async function UserPage({
 
             {/* Kondisional berdasar session */}
             {session?.user?.id === user?.id && (
-              <Link href={"/me"} className="mt-8">
-                <Button variant={"secondary"}>Edit Profile</Button>
+              <Link href={"/me"} className={cn(buttonVariants(), "mt-8")}>
+                Edit Profile
               </Link>
             )}
           </div>
-          <div className="col-span-1 flex flex-col gap-y-4 lg:col-span-2 lg:gap-y-6">
+          <div className="col-span-1 flex flex-col gap-y-4 md:col-span-2 md:gap-y-6">
             <h2 className="font-serif text-3xl font-bold italic tracking-wide first:mt-0">
               Postingan Terbaru
             </h2>
-            <Articles isUserPage />
+            <Articles authorId={user?.id} />
           </div>
         </div>
       </main>

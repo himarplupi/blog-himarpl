@@ -300,6 +300,7 @@ export const postRouter = createTRPCRouter({
     .input(
       z.object({
         tagSlug: z.string().nullish(),
+        authorId: z.string().optional(),
         limit: z.number().min(1).max(100).nullish(),
         cursor: z.string().nullish(),
       }),
@@ -314,6 +315,7 @@ export const postRouter = createTRPCRouter({
           publishedAt: {
             not: null,
           },
+          authorId: input.authorId,
           tags: input.tagSlug
             ? {
                 some: {

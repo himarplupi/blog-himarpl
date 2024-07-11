@@ -18,13 +18,14 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Article } from "../common/article";
 import { Badge } from "../ui/badge";
 
-export function Articles({ isUserPage }: { isUserPage?: boolean }) {
+export function Articles({ authorId }: { authorId?: string }) {
   const [parentAutoAnimate] = useAutoAnimate();
   const [tagQuery, setTagQuery] = useQueryState("tag");
   const popularTagQuery = api.postTag.popular.useQuery();
   const infiniteQuery = api.post.infiniteByTag.useInfiniteQuery(
     {
       tagSlug: tagQuery,
+      authorId: authorId,
       limit: 10,
     },
     {
@@ -62,7 +63,7 @@ export function Articles({ isUserPage }: { isUserPage?: boolean }) {
 
   return (
     <>
-      {!isUserPage && (
+      {!authorId && (
         <div className="mb-2 overflow-x-hidden pb-2">
           {popularTagQuery.isLoading ? (
             <Button
