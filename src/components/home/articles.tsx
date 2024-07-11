@@ -60,13 +60,9 @@ export function Articles({ user }: { user?: string | null }) {
     [infiniteQuery.hasNextPage, infiniteQuery.isFetchingNextPage],
   );
 
-  if (user != null) {
-    // get post by user
-  }
-
   return (
     <>
-      {user != null && (
+      {!user && (
         <div className="mb-2 overflow-x-hidden pb-2">
           {popularTagQuery.isLoading ? (
             <Button
@@ -125,10 +121,7 @@ export function Articles({ user }: { user?: string | null }) {
                       articleUrl={post.slug}
                       title={post.title}
                       teaser={post.content}
-                      articleImage={
-                        post.image ??
-                        "https://placehold.co/400x200/EEE/31343C/png?font=montserrat&text=No+Image"
-                      }
+                      articleImage={post.image}
                     >
                       {/* Loop PostTag */}
                       {post.tags.map((tag) => (

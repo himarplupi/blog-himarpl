@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import moment from "moment";
 
+import { cn } from "@/lib/utils";
+
 import { Skeleton } from "../ui/skeleton";
 
 export function Article({
@@ -24,7 +26,7 @@ export function Article({
   articleUrl: string;
   title: string;
   teaser: string;
-  articleImage: string;
+  articleImage: string | null;
   children?: React.ReactNode;
 }) {
   return (
@@ -50,29 +52,31 @@ export function Article({
           {moment(published ?? "").format("ddd, DD MMM YY")}
         </p>
       </div>
-      <div className="grid grid-cols-3 gap-x-4 ">
-        <div className="col-span-2">
+      <div className="grid grid-cols-3 gap-x-4">
+        <div className={cn(articleImage ? "col-span-2" : "col-span-3")}>
           <Link
             href={`/@${userUrl}/${articleUrl}`}
-            className="font-semibold capitalize underline-offset-4 hover:underline font-serif text-xl sm:text-2xl"
+            className="font-serif text-xl font-semibold capitalize underline-offset-4 hover:underline sm:text-2xl"
           >
             {title}
           </Link>
-          <p className="mt-2  hidden lg:line-clamp-3">{teaser}</p>
+          <p className="mt-2 hidden lg:line-clamp-3">{teaser}</p>
           <div className="mt-2 flex flex-wrap gap-2 md:mt-4">{children}</div>
         </div>
-        <Link
-          href={`/@${userUrl}/${articleUrl}`}
-          className="aspect-video overflow-hidden rounded-md"
-        >
-          <Image
-            src={articleImage}
-            width={400}
-            height={225}
-            alt=""
-            className="w-full"
-          />
-        </Link>
+        {articleImage && (
+          <Link
+            href={`/@${userUrl}/${articleUrl}`}
+            className="aspect-video overflow-hidden rounded-md"
+          >
+            <Image
+              src={articleImage}
+              width={400}
+              height={225}
+              alt=""
+              className="w-full"
+            />
+          </Link>
+        )}
       </div>
     </div>
   );
