@@ -6,20 +6,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Session } from "next-auth";
 import { signOut } from "next-auth/react";
-import {
-  Book,
-  ListTreeIcon,
-  LogOut,
-  Menu,
-  NewspaperIcon,
-  Pen,
-  SearchIcon,
-  User,
-} from "lucide-react";
+import { Book, LogOut, Pen, SearchIcon, User } from "lucide-react";
 
-import { NavSheet } from "@/components/common/navsheet";
+import { NavSearchInput } from "@/components/search/nav-search-input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,8 +21,6 @@ import {
 import logo from "@/images/logo.png";
 import { abbreviation, cn } from "@/lib/utils";
 
-import { Nav } from "./nav";
-
 const hideNavbarOnRoutes = ["/login"];
 
 export function Navbar({ session }: { session: Session | null }) {
@@ -40,57 +29,38 @@ export function Navbar({ session }: { session: Session | null }) {
   return (
     !hideNavbarOnRoutes.includes(pathname) && (
       <nav className="fixed top-0 z-10 w-full drop-shadow-md">
-        <div className="container flex items-center gap-x-4 bg-background py-2 backdrop-blur-md sm:justify-between">
+        <div className="container flex items-center justify-between gap-x-4 bg-background py-2 backdrop-blur-md">
           <div className="flex items-center gap-x-5">
             <div className="flex items-center gap-x-2">
-              <NavSheet>
-                <Button size="icon" variant="outline">
-                  <Menu className="h-6 w-6" />
-                </Button>
-              </NavSheet>
-
-              <Image
-                src={logo}
-                alt="HIMARPL Logo"
-                className="hidden w-12 md:block"
-              />
+              <Link href="/">
+                <Image src={logo} alt="HIMARPL Logo" className="w-12" />
+              </Link>
             </div>
 
-            <Nav
-              className="hidden md:flex"
-              links={[
-                {
-                  title: "Postingan Terbaru",
-                  href: "/",
-                  icon: NewspaperIcon,
-                  variant: "ghost",
-                },
-                {
-                  title: "Telusuri Label",
-                  href: "/explore-tags",
-                  icon: ListTreeIcon,
-                  variant: "ghost",
-                },
-                {
-                  title: "Cari Postingan",
-                  href: "/search",
-                  icon: SearchIcon,
-                  variant: "ghost",
-                },
-              ]}
-            />
+            <NavSearchInput />
           </div>
 
           {session && (
-            <div className="flex w-full items-center gap-x-4 sm:ml-auto sm:w-fit">
+            <div className="flex items-center gap-x-4">
+              <Link
+                href="/search"
+                className={cn(
+                  buttonVariants({ variant: "outline", size: "icon" }),
+                  "w-10 md:hidden",
+                )}
+              >
+                <SearchIcon className="h-5 w-5" />
+              </Link>
+
               <Link
                 href="/new"
                 className={cn(
-                  buttonVariants({ variant: "outline" }),
-                  "w-full md:min-w-20",
+                  buttonVariants({ variant: "outline", size: "icon" }),
+                  "h-10 w-10 md:min-w-20",
                 )}
               >
-                <Pen className="mr-2 h-4 w-4" /> Buat
+                <Pen className="h-4 w-4 md:mr-2" />
+                <span className="hidden md:inline"> Buat</span>
               </Link>
 
               <DropdownMenu>

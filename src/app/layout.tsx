@@ -2,6 +2,7 @@ import { Montserrat as FontSans } from "next/font/google";
 import localFont from "next/font/local";
 
 import { ReactLenis } from "@/components/common/lenis";
+import { SearchHistoryProvider } from "@/components/search/search-history-context";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
@@ -105,10 +106,12 @@ export default async function RootLayout({
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <TRPCReactProvider>
-            <ReactLenis>{children}</ReactLenis>
-          </TRPCReactProvider>
-          <Toaster />
+          <SearchHistoryProvider>
+            <TRPCReactProvider>
+              <ReactLenis>{children}</ReactLenis>
+            </TRPCReactProvider>
+            <Toaster />
+          </SearchHistoryProvider>
         </ThemeProvider>
       </body>
 

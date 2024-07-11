@@ -113,7 +113,13 @@ export function LinkInput() {
         ref={inputLinkRef}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
-            editor?.chain().focus().setLink({ href: currentHref }).run();
+            const isValid =
+              currentHref.startsWith("http://") ||
+              currentHref.startsWith("https://");
+
+            const href = isValid ? currentHref : `https://${currentHref}`;
+
+            editor?.chain().focus().setLink({ href: href }).run();
           }
         }}
         onChange={(e) => {

@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
 
-export default function Sidebar({ type }: { type: "mobile" | "desktop" }) {
+export function Sidebar({ type }: { type: "mobile" | "desktop" }) {
   const [tagQuery] = useQueryState("tag");
   const usersQuery = api.user.byNewestArticle.useQuery();
   const relatedTagQuery = api.postTag.related.useQuery({ tagSlug: tagQuery });
