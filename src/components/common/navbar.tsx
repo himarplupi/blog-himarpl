@@ -3,7 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import type { Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import {
@@ -35,8 +35,9 @@ import { Input } from "../ui/input";
 const hideNavbarOnRoutes = ["/login"];
 
 function NavSearchInput() {
-  const { searchHistory } = useSearchHistory();
+  const { searchHistory, removeFromSearchHistory } = useSearchHistory();
   const [search, setSearch] = React.useState("");
+  const router = useRouter();
 
   return (
     <div className="group relative hidden md:flex">
@@ -53,8 +54,14 @@ function NavSearchInput() {
         className="pl-10 md:min-w-80"
         id="search-input"
         placeholder="Cari"
+        autoComplete="off"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            router.push(`/search?q=${search}`);
+          }
+        }}
       />
 
       <ul className="absolute left-0 right-0 top-full z-50 mt-2 hidden overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md duration-300 animate-in fade-in slide-in-from-top-5 group-focus-within:block">
@@ -62,15 +69,22 @@ function NavSearchInput() {
           <div>
             <p className="px-2 py-1.5 text-sm font-medium">Pencarian Terbaru</p>
             {searchHistory.map((history) => (
-              <div className="flex items-center" key={history.slug}>
+              <div className="flex items-center" key={history}>
                 <Link
-                  href={`/search?q=${history.slug}`}
+                  href={`/search?q=${history}`}
                   className="flex h-10 basis-full items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                 >
                   <SearchIcon className="mr-2 h-5 w-5" />
-                  {history.title}
+                  {history}
                 </Link>
-                <Button size="icon" variant="ghost" className="basis-auto">
+                <Button
+                  onClick={() => {
+                    removeFromSearchHistory(history);
+                  }}
+                  size="icon"
+                  variant="ghost"
+                  className="basis-auto"
+                >
                   <XIcon className="h-5 w-5" />
                 </Button>
               </div>
@@ -100,7 +114,9 @@ export function Navbar({ session }: { session: Session | null }) {
         <div className="container flex items-center justify-between gap-x-4 bg-background py-2 backdrop-blur-md">
           <div className="flex items-center gap-x-5">
             <div className="flex items-center gap-x-2">
-              <Image src={logo} alt="HIMARPL Logo" className="w-12" />
+              <Link href="/">
+                <Image src={logo} alt="HIMARPL Logo" className="w-12" />
+              </Link>
             </div>
 
             <NavSearchInput />
