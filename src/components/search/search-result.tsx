@@ -2,21 +2,25 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { MoreHorizontalIcon, XIcon } from "lucide-react";
+import { MoreHorizontalIcon, SearchIcon, XIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 
 import { Sidebar } from "@/components/home/sidebar";
 import { useSearchHistory } from "@/hooks/useSearchHistory";
 
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 
 import { SearchResultItems } from "./search-result-items";
 
 export function SearchResult() {
-  const [searchQuery] = useQueryState("q");
+  const [searchQuery, setSearchQuery] = useQueryState("q");
   const { searchHistory, addToSearchHistory, removeFromSearchHistory } =
     useSearchHistory();
+
+  const [search, setSearch] = React.useState("");
 
   React.useEffect(() => {
     if (searchQuery && searchQuery?.length > 0) {
@@ -30,33 +34,55 @@ export function SearchResult() {
     return (
       <div className="container">
         <ul className="max-w-screen-sm">
-          {searchHistory.length > 0 && (
-            <div>
-              <h2 className="pb-2 font-serif text-3xl font-bold italic tracking-wide first:mt-0">
-                Pencarian Terbaru
-              </h2>
-              {searchHistory.map((history) => (
-                <div className="flex items-center" key={history}>
-                  <Link
-                    href={`/search?q=${history}`}
-                    className="flex h-10 basis-full items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                  >
-                    {history}
-                  </Link>
-                  <Button
-                    onClick={() => {
-                      removeFromSearchHistory(history);
-                    }}
-                    size="icon"
-                    variant="ghost"
-                    className="basis-auto"
-                  >
-                    <XIcon className="h-5 w-5" />
-                  </Button>
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="relative">
+            <Label
+              htmlFor="search"
+              className={
+                "absolute left-0 top-0 flex h-full w-10 items-center justify-center bg-transparent"
+              }
+            >
+              <SearchIcon className="h-5 w-5" />
+            </Label>
+            <Input
+              type="search"
+              className="pl-10 md:min-w-80"
+              id="search"
+              placeholder="Cari"
+              autoComplete="off"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={async (e) => {
+                if (e.key === "Enter") {
+                  await setSearchQuery(search);
+                }
+              }}
+            />
+          </div>
+          <div className="mt-6">
+            <h2 className="pb-2 font-serif text-3xl font-bold italic tracking-wide first:mt-0">
+              Pencarian Terbaru
+            </h2>
+            {searchHistory.map((history) => (
+              <div className="flex items-center" key={history}>
+                <Link
+                  href={`/search?q=${history}`}
+                  className="flex h-10 basis-full items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                >
+                  {history}
+                </Link>
+                <Button
+                  onClick={() => {
+                    removeFromSearchHistory(history);
+                  }}
+                  size="icon"
+                  variant="ghost"
+                  className="basis-auto"
+                >
+                  <XIcon className="h-5 w-5" />
+                </Button>
+              </div>
+            ))}
+          </div>
         </ul>
       </div>
     );
