@@ -2,28 +2,20 @@
 
 import * as React from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { NewspaperIcon } from "lucide-react";
 
 import {
   Sheet,
   SheetContent,
   SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import logo from "@/images/logo.png";
-import { cn } from "@/lib/utils";
+
+import { Nav } from "./nav";
 
 export function NavSheet({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
-  const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
-
-  const href = (path: string) => {
-    router.push(path);
-    setOpen(false);
-  };
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -31,28 +23,21 @@ export function NavSheet({ children }: { children: React.ReactNode }) {
         {children}
       </SheetTrigger>
       <SheetContent side="left" className="sm:w-[512px]">
-        <SheetHeader
-          className="mt-6 flex cursor-pointer flex-row items-center gap-x-2"
-          onClick={() => href("/")}
-        >
+        <SheetHeader className="mt-6 flex flex-row items-center justify-center gap-x-2">
           <Image src={logo} alt="HIMARPL Logo" width={40} />
-          <SheetTitle className="!mt-0 font-serif text-2xl font-bold tracking-wider">
-            {"Blog"}
-          </SheetTitle>
         </SheetHeader>
 
-        <div className="mt-3 grid grid-cols-1 gap-y-2">
-          <Link
-            onClick={() => setOpen(false)}
-            href="/"
-            className={cn(
-              "flex items-center text-muted-foreground transition hover:text-muted-foreground/80",
-              pathname === "/" && "text-foreground hover:text-foreground/80",
-            )}
-          >
-            Beranda
-          </Link>
-        </div>
+        <Nav
+          className=""
+          links={[
+            {
+              title: "Postingan Terbaru",
+              href: "/",
+              icon: NewspaperIcon,
+              variant: "ghost",
+            },
+          ]}
+        />
       </SheetContent>
     </Sheet>
   );

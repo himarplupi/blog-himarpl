@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Session } from "next-auth";
 import { signOut } from "next-auth/react";
-import { Book, LogOut, Menu, Pen, User } from "lucide-react";
+import { Book, LogOut, Menu, NewspaperIcon, Pen, User } from "lucide-react";
 
 import { NavSheet } from "@/components/common/navsheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -21,6 +21,8 @@ import {
 import logo from "@/images/logo.png";
 import { abbreviation, cn } from "@/lib/utils";
 
+import { Nav } from "./nav";
+
 const hideNavbarOnRoutes = ["/login"];
 
 export function Navbar({ session }: { session: Session | null }) {
@@ -29,40 +31,42 @@ export function Navbar({ session }: { session: Session | null }) {
   return (
     !hideNavbarOnRoutes.includes(pathname) && (
       <nav className="fixed top-0 z-10 w-full drop-shadow-md">
-        <div className="container flex items-center justify-between bg-background py-2 backdrop-blur-md">
+        <div className="container flex items-center gap-x-4 bg-background py-2 backdrop-blur-md sm:justify-between">
           <div className="flex items-center gap-x-5">
             <div className="flex items-center gap-x-2">
               <NavSheet>
-                <Button size="icon" variant="ghost">
+                <Button size="icon" variant="outline">
                   <Menu className="h-6 w-6" />
                 </Button>
               </NavSheet>
 
-              <Image src={logo} alt="HIMARPL Logo" width={40} className="" />
-              <Link href="/" className="font-serif text-2xl font-bold">
-                Blog
-              </Link>
+              <Image
+                src={logo}
+                alt="HIMARPL Logo"
+                className="hidden w-12 md:block"
+              />
             </div>
 
-            <div className="mt-1 hidden items-center gap-x-5 md:flex">
-              <Link
-                href="/posts"
-                className={cn(
-                  "text-muted-foreground transition hover:text-muted-foreground/80",
-                  pathname === "/" &&
-                    "text-foreground hover:text-foreground/80",
-                )}
-              >
-                Post
-              </Link>
-            </div>
+            <Nav
+              className="hidden md:flex"
+              links={[
+                {
+                  title: "Postingan Terbaru",
+                  href: "/",
+                  icon: NewspaperIcon,
+                  variant: "ghost",
+                },
+              ]}
+            />
           </div>
+
           {session && (
-            <div className="ml-auto flex items-center gap-x-4">
+            <div className="flex w-full items-center gap-x-4 sm:ml-auto sm:w-fit">
               <Link
                 href="/new"
                 className={cn(
-                  buttonVariants({ size: "sm", variant: "outline" }),
+                  buttonVariants({ variant: "outline" }),
+                  "w-full md:min-w-20",
                 )}
               >
                 <Pen className="mr-2 h-4 w-4" /> Buat

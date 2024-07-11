@@ -1,4 +1,4 @@
-import { MenuIcon } from "lucide-react";
+import { MoreHorizontalIcon } from "lucide-react";
 
 import { Navbar } from "@/components/common/navbar";
 import { Articles } from "@/components/home/articles";
@@ -14,15 +14,15 @@ export default async function Home() {
     <>
       <Navbar session={session} />
       <main className="container mx-auto mt-16 min-h-screen py-8">
-        <div className="mb-8 flex scroll-m-20 items-center justify-between border-b pb-2">
-          <h2 className="font-serif text-3xl font-semibold uppercase tracking-wide first:mt-0">
-            Beranda
+        <div className="mb-8 flex scroll-m-20 items-center justify-between pb-2">
+          <h2 className="font-serif text-3xl font-bold italic tracking-wide first:mt-0">
+            Postingan Terbaru
           </h2>
           <div className="lg:hidden">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <MenuIcon className="h-6 w-6" />
+                <Button variant="ghost" size="icon">
+                  <MoreHorizontalIcon className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
               <SheetContent className="w-full px-0">
