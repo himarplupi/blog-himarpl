@@ -21,7 +21,7 @@ import { Publish } from "./publish";
 
 export function EditorNavbar({ session }: { session: Session | null }) {
   return (
-    <nav className="container fixed top-0 z-30 w-full space-y-2 bg-background py-2 drop-shadow-md backdrop-blur-md">
+    <nav className="container fixed top-0 z-30 w-full space-y-2 bg-background py-2 backdrop-blur-md">
       <div className="z-50 flex items-center justify-between">
         <div className="flex items-center gap-x-5">
           <div className="flex items-center gap-x-2">
@@ -36,7 +36,7 @@ export function EditorNavbar({ session }: { session: Session | null }) {
         </div>
 
         <div className="ml-auto flex items-center gap-x-2 md:gap-x-4">
-          <Publish session={session} />
+          <Publish />
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

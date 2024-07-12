@@ -83,3 +83,50 @@ div[data-youtube-video] {
 div[data-youtube-video].ProseMirror-selectednode {
   background: hsl(var(--muted));
 }
+
+/* Publishing Animation */
+
+.publish-loader {
+  width: 64px;
+  aspect-ratio: 1;
+  display: grid;
+  color: #000;
+  background:
+    linear-gradient(
+        90deg,
+        hsl(var(--foreground)) 2px,
+        #0000 0 calc(100% - 2px),
+        hsl(var(--foreground)) 0
+      )
+      center/100% 14px,
+    linear-gradient(
+        0deg,
+        hsl(var(--foreground)) 2px,
+        #0000 0 calc(100% - 2px),
+        hsl(var(--foreground)) 0
+      )
+      center/14px 100%,
+    linear-gradient(hsl(var(--foreground)) 0 0) center/100% 2px,
+    linear-gradient(hsl(var(--foreground)) 0 0) center/2px 100%;
+  background-repeat: no-repeat;
+  animation: l6 4s infinite linear;
+}
+
+.publish-loader::before,
+.publish-loader::after {
+  content: "";
+  grid-area: 1/1;
+  background: inherit;
+  transform-origin: inherit;
+  animation: inherit;
+}
+
+.publish-loader::after {
+  animation-duration: 2s;
+}
+
+@keyframes l6 {
+  100% {
+    transform: rotate(1turn);
+  }
+}

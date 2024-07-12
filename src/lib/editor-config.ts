@@ -95,7 +95,7 @@ export const editorConfig: Partial<EditorOptions> = {
   editorProps: {
     attributes: {
       class: cn(
-        "p-4 prose prose-invert lg:prose-xl prose-headings:border-b prose-headings:border-border prose-headings:font-serif prose-headings:tracking-wide min-h-screen max-w-none rounded-md border border-input bg-background",
+        "p-4 prose dark:prose-invert lg:prose-xl prose-headings:border-b prose-headings:border-border prose-headings:font-serif prose-headings:font-semibold prose-headings:tracking-wide prose-h1:text-5xl prose-h2:text-4xl prose-h3:text-2xl prose-h4:text-xl prose-h5:text-lg sm:prose-h1:text-6xl sm:prose-h2:text-5xl sm:prose-h3:text-3xl sm:prose-h4:text-2xl sm:prose-h5:text-xl min-h-screen max-w-none rounded-md border border-input bg-background",
       ),
     },
   },
