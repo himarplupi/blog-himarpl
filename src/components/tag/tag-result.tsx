@@ -15,14 +15,26 @@ import { TagResultItems } from "./tag-result-items";
 
 export function TagResult() {
   const router = useRouter();
-  const { "tag-slug": tagSlug } = useParams<{
+  const { "tag-slug": rawTagSlug } = useParams<{
     "tag-slug": string;
   }>();
+  const tagSlug = React.useMemo(
+    () => rawTagSlug?.toLowerCase() ?? "",
+    [rawTagSlug],
+  );
+
+  const currentTag = api.postTag.searchUnique.useQuery({
+    slug: tagSlug,
+  });
 
   const relatedTagsQuery = api.postTag.related.useQuery({
-    tagSlug,
-    take: 200,
+    tagSlug: tagSlug,
+    take: 100,
   });
+  const relatedTags = React.useMemo(
+    () => relatedTagsQuery.data?.filter((tag) => tag.slug !== tagSlug),
+    [tagSlug, relatedTagsQuery.data],
+  );
 
   return (
     <div className="container">
@@ -52,12 +64,21 @@ export function TagResult() {
                   Telusuri Label
                 </Button>
               </CarouselItem>
-              {relatedTagsQuery.data?.map((tag) => (
+              <CarouselItem className="basis-1/7 pl-2">
+                <Button
+                  className="rounded-full capitalize"
+                  variant={currentTag.data?.title ? "default" : "destructive"}
+                  size="sm"
+                >
+                  {currentTag.data?.title ?? "Label Tidak Ditemukan"}
+                </Button>
+              </CarouselItem>
+              {relatedTags?.map((tag) => (
                 <CarouselItem key={tag.id} className="basis-1/7 pl-2">
                   <Button
                     className="rounded-full capitalize"
                     onClick={() => router.push(`/tag/${tag.slug}`)}
-                    variant={tagSlug == tag.slug ? "default" : "outline"}
+                    variant={"outline"}
                     size="sm"
                   >
                     {tag.title}
@@ -71,7 +92,7 @@ export function TagResult() {
 
       <div className="mb-2 flex scroll-m-20 items-center justify-between pb-2">
         <h2 className="font-serif text-3xl font-bold uppercase italic tracking-wide first:mt-0">
-          {relatedTagsQuery.data?.find((tag) => tag.slug === tagSlug)?.title}
+          {currentTag.data?.title}
         </h2>
 
         <div className="lg:hidden">
@@ -92,7 +113,7 @@ export function TagResult() {
         <div className="col-span-1 flex flex-col gap-y-4 pb-6 lg:col-span-2 lg:gap-y-6">
           <TagResultItems
             tagSlug={tagSlug}
-            isLoading={relatedTagsQuery.isLoading}
+            isLoading={relatedTagsQuery.isLoading || currentTag.isLoading}
           />
         </div>
         <Sidebar tagSlug={tagSlug} type="desktop" />
