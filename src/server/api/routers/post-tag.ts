@@ -158,6 +158,7 @@ export const postTagRouter = createTRPCRouter({
             },
           ],
         },
+        take: 10,
       });
 
       return relatedTags.length === 0 ? popularTags : relatedTags;
