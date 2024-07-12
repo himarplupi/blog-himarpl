@@ -6,6 +6,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   Tooltip,
   TooltipContent,
+  TooltipPortal,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
@@ -24,7 +25,7 @@ export function ListsProvider({ children }: { children: React.ReactNode }) {
       ]}
       asChild
     >
-      <TooltipProvider>{children}</TooltipProvider>
+      <TooltipProvider delayDuration={0}>{children}</TooltipProvider>
     </ToggleGroup>
   );
 }
@@ -44,7 +45,10 @@ export function OrderedList() {
           </ToggleGroupItem>
         </div>
       </TooltipTrigger>
-      <TooltipContent>{`Ordered List (Ctrl + Shift + 7)`}</TooltipContent>
+
+      <TooltipPortal>
+        <TooltipContent side="bottom">{`Ordered List (Ctrl + Shift + 7)`}</TooltipContent>
+      </TooltipPortal>
     </Tooltip>
   );
 }
@@ -64,7 +68,10 @@ export function BulletList() {
           </ToggleGroupItem>
         </div>
       </TooltipTrigger>
-      <TooltipContent>{`Bullet List (Ctrl + Shift + 8)`}</TooltipContent>
+
+      <TooltipPortal>
+        <TooltipContent side="bottom">{`Bullet List (Ctrl + Shift + 8)`}</TooltipContent>
+      </TooltipPortal>
     </Tooltip>
   );
 }

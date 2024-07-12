@@ -6,6 +6,7 @@ import { ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   Tooltip,
   TooltipContent,
+  TooltipPortal,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
@@ -15,7 +16,7 @@ export function Subscript() {
   const { editor } = useEditor();
 
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={0}>
       <Tooltip>
         <TooltipTrigger asChild>
           <div>
@@ -27,7 +28,9 @@ export function Subscript() {
             </ToggleGroupItem>
           </div>
         </TooltipTrigger>
-        <TooltipContent>{`Subscript (Ctrl + ,)`}</TooltipContent>
+        <TooltipPortal>
+          <TooltipContent side="bottom">{`Subscript (Ctrl + ,)`}</TooltipContent>
+        </TooltipPortal>
       </Tooltip>
     </TooltipProvider>
   );

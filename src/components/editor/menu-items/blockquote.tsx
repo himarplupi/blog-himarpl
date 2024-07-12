@@ -6,6 +6,7 @@ import { ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   Tooltip,
   TooltipContent,
+  TooltipPortal,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
@@ -15,7 +16,7 @@ export function Blockquote() {
   const { editor } = useEditor();
 
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={0}>
       <Tooltip>
         <TooltipTrigger asChild>
           <div>
@@ -27,7 +28,10 @@ export function Blockquote() {
             </ToggleGroupItem>
           </div>
         </TooltipTrigger>
-        <TooltipContent>{`Blockquote (Ctrl + Shift + B)`}</TooltipContent>
+
+        <TooltipPortal>
+          <TooltipContent side="bottom">{`Blockquote (Ctrl + Shift + B)`}</TooltipContent>
+        </TooltipPortal>
       </Tooltip>
     </TooltipProvider>
   );

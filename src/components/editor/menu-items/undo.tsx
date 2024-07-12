@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
+  TooltipPortal,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
@@ -15,7 +16,7 @@ export function Undo() {
   const { editor } = useEditor();
 
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={0}>
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
@@ -27,7 +28,9 @@ export function Undo() {
             <Undo2 className="h-4 w-4" />
           </Button>
         </TooltipTrigger>
-        <TooltipContent>{`Undo (Ctrl + Z)`}</TooltipContent>
+        <TooltipPortal>
+          <TooltipContent side="bottom">{`Undo (Ctrl + Z)`}</TooltipContent>
+        </TooltipPortal>
       </Tooltip>
     </TooltipProvider>
   );

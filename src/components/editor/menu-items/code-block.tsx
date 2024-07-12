@@ -6,6 +6,7 @@ import { ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   Tooltip,
   TooltipContent,
+  TooltipPortal,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
@@ -15,7 +16,7 @@ export function CodeBlock() {
   const { editor } = useEditor();
 
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={0}>
       <Tooltip>
         <TooltipTrigger asChild>
           <div>
@@ -27,7 +28,10 @@ export function CodeBlock() {
             </ToggleGroupItem>
           </div>
         </TooltipTrigger>
-        <TooltipContent>{`Code Block (Ctrl + Alt + C)`}</TooltipContent>
+
+        <TooltipPortal>
+          <TooltipContent side="bottom">{`Code Block (Ctrl + Alt + C)`}</TooltipContent>
+        </TooltipPortal>
       </Tooltip>
     </TooltipProvider>
   );
