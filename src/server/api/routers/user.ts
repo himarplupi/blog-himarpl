@@ -108,6 +108,23 @@ export const userRouter = createTRPCRouter({
         });
       }
 
+      if (filterredSocialMedias.length < inputSocialMedias.length) {
+        const newSocialMedias = inputSocialMedias.filter((input) => {
+          const currentSocialMedia = filterredSocialMedias.find(
+            (current) => current.name === input.name,
+          );
+
+          return !currentSocialMedia;
+        });
+
+        await ctx.db.socialMedia.createMany({
+          data: newSocialMedias.map((input) => ({
+            ...input,
+            userId,
+          })),
+        });
+      }
+
       return inputSocialMedias;
     }),
   updateSelfProfile: protectedProcedure
