@@ -135,6 +135,18 @@ export const postTagRouter = createTRPCRouter({
                 },
               },
             },
+            {
+              parent: {
+                children: {
+                  some: {
+                    slug: input.tagSlug,
+                  },
+                },
+              },
+            },
+            {
+              slug: input.tagSlug,
+            },
           ],
         },
       });

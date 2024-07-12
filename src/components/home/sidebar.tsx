@@ -10,10 +10,18 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
 
-export function Sidebar({ type }: { type: "mobile" | "desktop" }) {
+export function Sidebar({
+  type,
+  tagSlug,
+}: {
+  type: "mobile" | "desktop";
+  tagSlug?: string;
+}) {
   const [tagQuery] = useQueryState("tag");
   const usersQuery = api.user.byNewestArticle.useQuery();
-  const relatedTagQuery = api.postTag.related.useQuery({ tagSlug: tagQuery });
+  const relatedTagQuery = api.postTag.related.useQuery({
+    tagSlug: tagQuery ?? tagSlug,
+  });
 
   return (
     <ReactLenis
@@ -31,7 +39,11 @@ export function Sidebar({ type }: { type: "mobile" | "desktop" }) {
             <Link href={`/tag/${tag.slug}`} key={tag.id}>
               <Button
                 className="rounded-full"
-                variant={"secondary"}
+                variant={
+                  tag.slug === tagSlug || tag.slug === tagQuery
+                    ? "default"
+                    : "secondary"
+                }
                 size={"sm"}
               >
                 {tag.title}
@@ -52,7 +64,7 @@ export function Sidebar({ type }: { type: "mobile" | "desktop" }) {
           {usersQuery.data?.map((user) => (
             <div key={user.id} className="flex items-start justify-start gap-4">
               <Link
-                href={`@${user.username}`}
+                href={`/@${user.username}`}
                 className="aspect-square overflow-hidden rounded-full"
               >
                 <Image
@@ -65,7 +77,7 @@ export function Sidebar({ type }: { type: "mobile" | "desktop" }) {
               </Link>
               <div>
                 <Link
-                  href={`@${user.username}`}
+                  href={`/@${user.username}`}
                   className="font-semibold underline-offset-4 hover:underline"
                 >
                   {user.name}
