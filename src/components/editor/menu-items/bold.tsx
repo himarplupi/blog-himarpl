@@ -6,6 +6,7 @@ import { ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   Tooltip,
   TooltipContent,
+  TooltipPortal,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
@@ -15,7 +16,7 @@ export function Bold() {
   const { editor } = useEditor();
 
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={0}>
       <Tooltip>
         <TooltipTrigger asChild>
           <div>
@@ -27,7 +28,9 @@ export function Bold() {
             </ToggleGroupItem>
           </div>
         </TooltipTrigger>
-        <TooltipContent>{`Bold (Ctrl + B)`}</TooltipContent>
+        <TooltipPortal>
+          <TooltipContent side="bottom">{`Bold (Ctrl + B)`}</TooltipContent>
+        </TooltipPortal>
       </Tooltip>
     </TooltipProvider>
   );

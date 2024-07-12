@@ -33,7 +33,7 @@ export function SearchResult() {
   if (!searchQuery || searchQuery?.length === 0) {
     return (
       <div className="container">
-        <ul className="max-w-screen-sm">
+        <ul className="mx-auto max-w-screen-sm">
           <div className="relative">
             <Label
               htmlFor="search"

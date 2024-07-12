@@ -7,6 +7,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
+import { ratelimit } from "@/server/ratelimit";
 import { TRPCError } from "@trpc/server";
 
 export const postTagRouter = createTRPCRouter({
@@ -14,6 +15,14 @@ export const postTagRouter = createTRPCRouter({
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
       const title = input.toLowerCase();
+
+      const { success } = await ratelimit.limit(ctx.session.user.id);
+      if (!success) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Rate limit exceeded",
+        });
+      }
 
       if (isWordMoreThan(title, 3)) {
         throw new TRPCError({
@@ -69,6 +78,21 @@ export const postTagRouter = createTRPCRouter({
         },
       });
     }),
+  searchSingleWithChildren: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.postTag.findFirst({
+        where: {
+          title: {
+            contains: input,
+            mode: "insensitive",
+          },
+        },
+        include: {
+          children: true,
+        },
+      });
+    }),
   popular: publicProcedure.query(async ({ ctx }) => {
     return await ctx.db.postTag.findMany({
       include: {
@@ -120,6 +144,18 @@ export const postTagRouter = createTRPCRouter({
                 },
               },
             },
+            {
+              parent: {
+                children: {
+                  some: {
+                    slug: input.tagSlug,
+                  },
+                },
+              },
+            },
+            {
+              slug: input.tagSlug,
+            },
           ],
         },
       });
@@ -127,7 +163,19 @@ export const postTagRouter = createTRPCRouter({
       return relatedTags.length === 0 ? popularTags : relatedTags;
     }),
 
-  many: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.db.postTag.findMany();
-  }),
+  relatedChildren: publicProcedure
+    .input(
+      z.object({
+        tagSlug: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.postTag.findMany({
+        where: {
+          parent: {
+            slug: input.tagSlug,
+          },
+        },
+      });
+    }),
 });

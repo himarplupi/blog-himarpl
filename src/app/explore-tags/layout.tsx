@@ -2,11 +2,11 @@ import { Navbar } from "@/components/common/navbar";
 import { getServerAuthSession } from "@/server/auth";
 
 export const metadata = {
-  title: "Cari | HIMARPL",
-  description: "Cari artikel, label, atau pengguna Blog HIMARPL disini!",
+  title: "Telusuri Label | HIMARPL",
+  description: "Telusuri label-label postingan yang umum di sini!",
 };
 
-export default async function SearchLayout({
+export default async function ExploreTagsLayout({
   children,
 }: {
   children: React.ReactNode;

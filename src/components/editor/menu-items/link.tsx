@@ -17,6 +17,7 @@ import { Toggle } from "@/components/ui/toggle";
 import {
   Tooltip,
   TooltipContent,
+  TooltipPortal,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
@@ -58,7 +59,7 @@ export function Link() {
   }, [currentHref, editor]);
 
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={0}>
       <Tooltip>
         <TooltipTrigger asChild>
           <div>
@@ -86,7 +87,10 @@ export function Link() {
             </Toggle>
           </div>
         </TooltipTrigger>
-        <TooltipContent>{`Insert Link`}</TooltipContent>
+
+        <TooltipPortal>
+          <TooltipContent side="bottom">{`Insert Link`}</TooltipContent>
+        </TooltipPortal>
       </Tooltip>
     </TooltipProvider>
   );

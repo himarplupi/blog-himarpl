@@ -4,9 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import moment from "moment";
 
-import { cn } from "@/lib/utils";
-
-import { Skeleton } from "../ui/skeleton";
+import { calculateReadTime, cn } from "@/lib/utils";
 
 export function Article({
   userUrl,
@@ -42,7 +40,7 @@ export function Article({
               src={userImage}
               width={32}
               height={32}
-              alt=""
+              alt={userName + " profile picture"}
             />
           </div>
           <p className="mb-0">{userName}</p>
@@ -51,6 +49,8 @@ export function Article({
         <p className="text-sm font-extralight">
           {moment(published ?? "").format("ddd, DD MMM YY")}
         </p>
+        <span className="hidden h-1 w-1 rounded-full border border-foreground sm:block"></span>
+        <p className="hidden text-sm font-extralight sm:block">{`${calculateReadTime(teaser)} menit baca`}</p>
       </div>
       <div className="grid grid-cols-3 gap-x-4">
         <div className={cn(articleImage ? "col-span-2" : "col-span-3")}>
@@ -66,37 +66,17 @@ export function Article({
         {articleImage && (
           <Link
             href={`/@${userUrl}/${articleUrl}`}
-            className="aspect-video overflow-hidden rounded-md"
+            className="flex aspect-video items-center justify-center overflow-hidden rounded-md"
           >
             <Image
               src={articleImage}
               width={400}
               height={225}
-              alt=""
+              alt={title + " article image"}
               className="w-full"
             />
           </Link>
         )}
-      </div>
-    </div>
-  );
-}
-
-export function ArticleSkeleton() {
-  return (
-    <div className="">
-      <div className="mb-2 flex items-center gap-1">
-        <Skeleton className="h-5 w-5 rounded-full" />
-        <Skeleton className="h-4 w-4/5 rounded-full sm:w-1/2 xl:w-1/3" />
-      </div>
-      <div className="grid grid-cols-3 gap-x-4">
-        <div className="col-span-2">
-          <Skeleton className="mb-4 h-5 w-full rounded-full" />
-          <Skeleton className="mb-1 hidden h-4 w-full rounded-md lg:block" />
-          <Skeleton className="mb-1 hidden h-4 w-full rounded-md lg:block" />
-          <Skeleton className="mb-1 hidden h-4 w-full rounded-md lg:block" />
-        </div>
-        <Skeleton className="col-span-1 aspect-video rounded-md" />
       </div>
     </div>
   );

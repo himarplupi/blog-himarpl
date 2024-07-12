@@ -151,6 +151,12 @@ export function Articles({ authorId }: { authorId?: string }) {
             <span>Tunggu sebentar</span>
           </div>
         )}
+
+        {infiniteQuery.data?.pages[0]?.items.length == 0 && (
+          <div className="flex justify-center gap-2 md:gap-3 xl:gap-4">
+            <span>Tidak Ada Postingan</span>
+          </div>
+        )}
       </div>
     </>
   );

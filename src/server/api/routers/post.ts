@@ -8,12 +8,21 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
+import { ratelimit } from "@/server/ratelimit";
 import { createId } from "@paralleldrive/cuid2";
 import { TRPCError } from "@trpc/server";
 
 export const postRouter = createTRPCRouter({
   new: protectedProcedure.mutation(async ({ ctx }) => {
     const currentUser = ctx.session.user;
+
+    const { success } = await ratelimit.limit(ctx.session.user.id);
+    if (!success) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "Rate limit exceeded",
+      });
+    }
 
     if (!currentUser.username) {
       throw new TRPCError({
@@ -46,6 +55,14 @@ export const postRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const currentUser = ctx.session.user;
+
+      const { success } = await ratelimit.limit(ctx.session.user.id);
+      if (!success) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Rate limit exceeded",
+        });
+      }
 
       if (!currentUser.username) {
         throw new TRPCError({
@@ -295,22 +312,6 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
-  manyPublished: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.db.post.findMany({
-      include: {
-        author: {
-          select: {
-            username: true,
-          },
-        },
-      },
-      where: {
-        publishedAt: {
-          not: null,
-        },
-      },
-    });
-  }),
   infiniteByTag: publicProcedure
     .input(
       z.object({

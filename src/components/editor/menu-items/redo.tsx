@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
+  TooltipPortal,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
@@ -15,7 +16,7 @@ export function Redo() {
   const { editor } = useEditor();
 
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={0}>
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
@@ -27,7 +28,10 @@ export function Redo() {
             <Redo2 className="h-4 w-4" />
           </Button>
         </TooltipTrigger>
-        <TooltipContent>{`Redo (Ctrl + Shift + Z)`}</TooltipContent>
+
+        <TooltipPortal>
+          <TooltipContent side="bottom">{`Redo (Ctrl + Shift + Z)`}</TooltipContent>
+        </TooltipPortal>
       </Tooltip>
     </TooltipProvider>
   );

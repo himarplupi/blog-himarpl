@@ -11,6 +11,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   Tooltip,
   TooltipContent,
+  TooltipPortal,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
@@ -26,7 +27,7 @@ export function HeadingsProvider({ children }: { children: React.ReactNode }) {
       disabled={isHeading}
       asChild
     >
-      <TooltipProvider>{children}</TooltipProvider>
+      <TooltipProvider delayDuration={0}>{children}</TooltipProvider>
     </ToggleGroup>
   );
 }
@@ -48,7 +49,9 @@ export function Heading2() {
           </ToggleGroupItem>
         </div>
       </TooltipTrigger>
-      <TooltipContent>{`Heading 2 (Ctrl + Alt + 2)`}</TooltipContent>
+      <TooltipPortal>
+        <TooltipContent side="bottom">{`Heading 2 (Ctrl + Alt + 2)`}</TooltipContent>
+      </TooltipPortal>
     </Tooltip>
   );
 }
@@ -70,7 +73,9 @@ export function Heading3() {
           </ToggleGroupItem>
         </div>
       </TooltipTrigger>
-      <TooltipContent>{`Heading 3 (Ctrl + Alt + 3)`}</TooltipContent>
+      <TooltipPortal>
+        <TooltipContent side="bottom">{`Heading 3 (Ctrl + Alt + 3)`}</TooltipContent>
+      </TooltipPortal>
     </Tooltip>
   );
 }
@@ -91,7 +96,9 @@ export function Heading4() {
           </ToggleGroupItem>
         </div>
       </TooltipTrigger>
-      <TooltipContent>{`Heading 4 (Ctrl + Alt + 4)`}</TooltipContent>
+      <TooltipPortal>
+        <TooltipContent side="bottom">{`Heading 4 (Ctrl + Alt + 4)`}</TooltipContent>
+      </TooltipPortal>
     </Tooltip>
   );
 }
@@ -112,7 +119,9 @@ export function Heading5() {
           </ToggleGroupItem>
         </div>
       </TooltipTrigger>
-      <TooltipContent>{`Heading 5 (Ctrl + Alt + 5)`}</TooltipContent>
+      <TooltipPortal>
+        <TooltipContent side="bottom">{`Heading 5 (Ctrl + Alt + 5)`}</TooltipContent>
+      </TooltipPortal>
     </Tooltip>
   );
 }

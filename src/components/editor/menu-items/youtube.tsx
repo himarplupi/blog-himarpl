@@ -18,6 +18,7 @@ import { Label } from "@/components/ui/label";
 import {
   Tooltip,
   TooltipContent,
+  TooltipPortal,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
@@ -40,7 +41,7 @@ export function Youtube() {
 
   return (
     <Dialog>
-      <TooltipProvider>
+      <TooltipProvider delayDuration={0}>
         <Tooltip>
           <TooltipTrigger asChild>
             <div>
@@ -54,7 +55,10 @@ export function Youtube() {
               </DialogTrigger>
             </div>
           </TooltipTrigger>
-          <TooltipContent>{`Insert Youtube Video`}</TooltipContent>
+
+          <TooltipPortal>
+            <TooltipContent side="bottom">{`Insert Youtube Video`}</TooltipContent>
+          </TooltipPortal>
         </Tooltip>
 
         <DialogContent className="sm:max-w-[425px]">

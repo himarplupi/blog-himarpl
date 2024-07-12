@@ -1,15 +1,19 @@
+import dynamic from "next/dynamic";
 import { Montserrat as FontSans } from "next/font/google";
 import localFont from "next/font/local";
 
 import { ReactLenis } from "@/components/common/lenis";
+import { PHProvider, ThemeProvider } from "@/components/providers";
 import { SearchHistoryProvider } from "@/components/search/search-history-context";
-import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 import { TRPCReactProvider } from "@/trpc/react";
-import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 
 import "@/styles/globals.css";
+
+const PostHogPageView = dynamic(() => import("./PostHogPageView"), {
+  ssr: false,
+});
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -96,26 +100,26 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <GoogleTagManager gtmId="G-BNJKV201XL" />
+      <TRPCReactProvider>
+        <PHProvider>
+          <body
+            className={cn(
+              "bg-background font-sans antialiased",
+              fontSans.variable,
+              fontSerif.variable,
+            )}
+          >
+            <PostHogPageView />
 
-      <body
-        className={cn(
-          "bg-background font-sans antialiased",
-          fontSans.variable,
-          fontSerif.variable,
-        )}
-      >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <SearchHistoryProvider>
-            <TRPCReactProvider>
-              <ReactLenis>{children}</ReactLenis>
-            </TRPCReactProvider>
-            <Toaster />
-          </SearchHistoryProvider>
-        </ThemeProvider>
-      </body>
-
-      <GoogleAnalytics gaId="G-BNJKV201XL" />
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <SearchHistoryProvider>
+                <ReactLenis>{children}</ReactLenis>
+                <Toaster />
+              </SearchHistoryProvider>
+            </ThemeProvider>
+          </body>
+        </PHProvider>
+      </TRPCReactProvider>
     </html>
   );
 }

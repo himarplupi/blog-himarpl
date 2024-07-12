@@ -37,8 +37,6 @@ export function SearchResultItems({ searchQuery }: { searchQuery: string }) {
     [infiniteQuery.hasNextPage, infiniteQuery.isFetchingNextPage],
   );
 
-  console.dir(infiniteQuery.data?.pages);
-
   return (
     <div ref={parentAutoAnimate}>
       {infiniteQuery.data?.pages.map(({ items, nextCursor }, i) => {

@@ -19,6 +19,7 @@ import { Label } from "@/components/ui/label";
 import {
   Tooltip,
   TooltipContent,
+  TooltipPortal,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
@@ -43,7 +44,7 @@ export function Image() {
 
   return (
     <Dialog>
-      <TooltipProvider>
+      <TooltipProvider delayDuration={0}>
         <Tooltip>
           <TooltipTrigger asChild>
             <div>
@@ -54,7 +55,9 @@ export function Image() {
               </DialogTrigger>
             </div>
           </TooltipTrigger>
-          <TooltipContent>{`Insert Image`}</TooltipContent>
+          <TooltipPortal>
+            <TooltipContent side="bottom">{`Insert Image`}</TooltipContent>
+          </TooltipPortal>
         </Tooltip>
 
         <DialogContent className="sm:max-w-[425px]">
