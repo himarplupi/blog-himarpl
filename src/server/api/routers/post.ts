@@ -128,7 +128,7 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
-  byParams: protectedProcedure
+  byParams: publicProcedure
     .input(
       z.object({
         username: z.string(),
