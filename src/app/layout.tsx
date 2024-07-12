@@ -100,26 +100,26 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <PHProvider>
-        <body
-          className={cn(
-            "bg-background font-sans antialiased",
-            fontSans.variable,
-            fontSerif.variable,
-          )}
-        >
-          <PostHogPageView />
+      <TRPCReactProvider>
+        <PHProvider>
+          <body
+            className={cn(
+              "bg-background font-sans antialiased",
+              fontSans.variable,
+              fontSerif.variable,
+            )}
+          >
+            <PostHogPageView />
 
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <SearchHistoryProvider>
-              <TRPCReactProvider>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <SearchHistoryProvider>
                 <ReactLenis>{children}</ReactLenis>
-              </TRPCReactProvider>
-              <Toaster />
-            </SearchHistoryProvider>
-          </ThemeProvider>
-        </body>
-      </PHProvider>
+                <Toaster />
+              </SearchHistoryProvider>
+            </ThemeProvider>
+          </body>
+        </PHProvider>
+      </TRPCReactProvider>
     </html>
   );
 }
