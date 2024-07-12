@@ -121,6 +121,7 @@ export const postTagRouter = createTRPCRouter({
     .input(
       z.object({
         tagSlug: z.string().nullish(),
+        take: z.number().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -135,7 +136,7 @@ export const postTagRouter = createTRPCRouter({
             _count: "desc",
           },
         },
-        take: 10,
+        take: input.take ? input.take : 10,
       });
 
       if (input.tagSlug === null) {
@@ -167,7 +168,7 @@ export const postTagRouter = createTRPCRouter({
             },
           ],
         },
-        take: 10,
+        take: input.take ? input.take : 10,
       });
 
       return relatedTags.length === 0 ? popularTags : relatedTags;
