@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import moment from "moment";
 
-import { cn } from "@/lib/utils";
+import { calculateReadTime, cn } from "@/lib/utils";
 
 import { Skeleton } from "../ui/skeleton";
 
@@ -51,6 +51,8 @@ export function Article({
         <p className="text-sm font-extralight">
           {moment(published ?? "").format("ddd, DD MMM YY")}
         </p>
+        <span className="hidden h-1 w-1 rounded-full border border-foreground sm:block"></span>
+        <p className="hidden text-sm font-extralight sm:block">{`${calculateReadTime(teaser)} menit baca`}</p>
       </div>
       <div className="grid grid-cols-3 gap-x-4">
         <div className={cn(articleImage ? "col-span-2" : "col-span-3")}>
