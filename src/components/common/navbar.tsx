@@ -100,12 +100,25 @@ export function Navbar({ session }: { session: Session | null }) {
           )}
 
           {!session && (
-            <Link
-              href="/login"
-              className={cn(buttonVariants({ size: "sm", variant: "outline" }))}
-            >
-              Login
-            </Link>
+            <div className="flex items-center gap-x-4">
+              <Link
+                href="/search"
+                className={cn(
+                  buttonVariants({ variant: "outline", size: "icon" }),
+                  "w-10 md:hidden",
+                )}
+              >
+                <SearchIcon className="h-5 w-5" />
+              </Link>
+              <Link
+                href="/login"
+                className={cn(
+                  buttonVariants({ size: "sm", variant: "outline" }),
+                )}
+              >
+                Login
+              </Link>
+            </div>
           )}
         </div>
       </nav>
