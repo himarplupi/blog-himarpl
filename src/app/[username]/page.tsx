@@ -22,7 +22,7 @@ export async function generateMetadata(
   const previousImages = (await parent).openGraph?.images ?? [];
 
   return {
-    title: `${user?.name} ${user?.position} ${user?.department?.acronym}`,
+    title: `${user?.name} ${user?.position?.toUpperCase()} ${user?.department?.acronym.toUpperCase()}`,
     description: `Mengenal lebih dekat ${user?.name}, simak selengkapnya di sini!`,
     openGraph: {
       images: [`${user?.image}`, ...previousImages],

@@ -93,6 +93,15 @@ export const postTagRouter = createTRPCRouter({
         },
       });
     }),
+  searchUnique: publicProcedure
+    .input(z.object({ slug: z.string().optional() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.postTag.findUnique({
+        where: {
+          slug: input.slug,
+        },
+      });
+    }),
   popular: publicProcedure.query(async ({ ctx }) => {
     return await ctx.db.postTag.findMany({
       include: {
