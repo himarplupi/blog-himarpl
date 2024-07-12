@@ -69,6 +69,21 @@ export const postTagRouter = createTRPCRouter({
         },
       });
     }),
+  searchSingleWithChildren: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.postTag.findFirst({
+        where: {
+          title: {
+            contains: input,
+            mode: "insensitive",
+          },
+        },
+        include: {
+          children: true,
+        },
+      });
+    }),
   popular: publicProcedure.query(async ({ ctx }) => {
     return await ctx.db.postTag.findMany({
       include: {
@@ -125,6 +140,22 @@ export const postTagRouter = createTRPCRouter({
       });
 
       return relatedTags.length === 0 ? popularTags : relatedTags;
+    }),
+
+  relatedChildren: publicProcedure
+    .input(
+      z.object({
+        tagSlug: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.postTag.findMany({
+        where: {
+          parent: {
+            slug: input.tagSlug,
+          },
+        },
+      });
     }),
 
   many: publicProcedure.query(async ({ ctx }) => {
