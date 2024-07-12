@@ -38,7 +38,7 @@ export function RegisterUsername() {
   const router = useRouter();
 
   useEffect(() => {
-    const limitedUsername = username.slice(0, 32);
+    const limitedUsername = username.slice(0, 32).toLowerCase();
     const formattedUsername = limitedUsername.replace(/\s+/g, "-");
     setOutputUsername(formattedUsername);
   }, [username]);
@@ -64,17 +64,25 @@ export function RegisterUsername() {
       <CardContent>
         <div className="flex w-full flex-col gap-y-4">
           {!!usernameTaken.data && (
-            <Alert variant="destructive">
+            <Alert variant="destructive" className="animate-in fade-in zoom-in">
               <AlertCircle className="h-4 w-4" />
               <AlertTitle>Username Telah Digunakan!</AlertTitle>
             </Alert>
           )}
           {username.length > 32 && (
-            <Alert variant="destructive">
+            <Alert variant="destructive" className="animate-in fade-in zoom-in">
               <AlertCircle className="h-4 w-4" />
               <AlertTitle>Username Terlalu Panjang!</AlertTitle>
             </Alert>
           )}
+
+          {username.length < 4 && (
+            <Alert variant="destructive" className="animate-in fade-in zoom-in">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Username Terlalu Pendek!</AlertTitle>
+            </Alert>
+          )}
+
           <Input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
