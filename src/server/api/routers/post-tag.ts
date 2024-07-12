@@ -7,6 +7,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
+import { ratelimit } from "@/server/ratelimit";
 import { TRPCError } from "@trpc/server";
 
 export const postTagRouter = createTRPCRouter({
@@ -14,6 +15,14 @@ export const postTagRouter = createTRPCRouter({
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
       const title = input.toLowerCase();
+
+      const { success } = await ratelimit.limit(ctx.session.user.id);
+      if (!success) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Rate limit exceeded",
+        });
+      }
 
       if (isWordMoreThan(title, 3)) {
         throw new TRPCError({
@@ -169,8 +178,4 @@ export const postTagRouter = createTRPCRouter({
         },
       });
     }),
-
-  many: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.db.postTag.findMany();
-  }),
 });

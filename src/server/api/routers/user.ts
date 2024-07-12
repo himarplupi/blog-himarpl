@@ -5,40 +5,10 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
+import { ratelimit } from "@/server/ratelimit";
+import { TRPCError } from "@trpc/server";
 
 export const userRouter = createTRPCRouter({
-  many: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.user.findMany();
-  }),
-  getManyInclude: protectedProcedure
-    .input(
-      z.object({
-        department: z
-          .object({
-            id: z.boolean().default(true),
-            acronym: z.boolean().optional(),
-            name: z.boolean().optional(),
-          })
-          .optional(),
-        accounts: z
-          .object({
-            id: z.boolean().default(true),
-            provider: z.boolean().optional(),
-          })
-          .optional(),
-      }),
-    )
-    .query(({ ctx, input }) => {
-      return ctx.db.user.findMany({
-        include: {
-          department: input.department && { select: input.department },
-          accounts: input.accounts && { select: input.accounts },
-        },
-      });
-    }),
-  getById: publicProcedure.input(z.string()).query(({ ctx, input }) => {
-    return ctx.db.user.findFirst({ where: { id: input } });
-  }),
   getByEmail: publicProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.user.findFirst({ where: { email: input } });
   }),
@@ -54,8 +24,8 @@ export const userRouter = createTRPCRouter({
   }),
   setSelfUsername: protectedProcedure
     .input(z.string())
-    .mutation(({ ctx, input }) => {
-      return ctx.db.user.update({
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.user.update({
         where: { id: ctx.session.user.id },
         data: { username: input.toLowerCase() },
       });
@@ -82,6 +52,14 @@ export const userRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const inputSocialMedias = input;
       const userId = ctx.session.user.id;
+
+      const { success } = await ratelimit.limit(userId);
+      if (!success) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Rate limit exceeded",
+        });
+      }
 
       const currentSosialMedias = await ctx.db.socialMedia.findMany({
         where: { userId },
@@ -140,6 +118,14 @@ export const userRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const { success } = await ratelimit.limit(ctx.session.user.id);
+      if (!success) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Rate limit exceeded",
+        });
+      }
+
       return await ctx.db.user.update({
         where: { id: ctx.session.user.id },
         data: {
