@@ -21,6 +21,7 @@ export function TagResult() {
 
   const relatedTagsQuery = api.postTag.related.useQuery({
     tagSlug,
+    take: 200,
   });
 
   return (
