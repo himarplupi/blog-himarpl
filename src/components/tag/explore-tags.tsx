@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { CompassIcon } from "lucide-react";
@@ -31,12 +30,6 @@ export function ExploreTags() {
   const pathname = usePathname();
   const router = useRouter();
   const currentTag = pathname.split("/").pop();
-
-  useEffect(() => {
-    defaultParentTags.forEach((tag) => {
-      console.log(tag);
-    });
-  }, [defaultParentTags]);
 
   return (
     <div className="container">

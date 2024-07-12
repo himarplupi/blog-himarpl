@@ -37,8 +37,6 @@ const socialMediaSchema = z.object({
 export function FormSocialMedia() {
   const me = useMe();
 
-  console.log(me);
-
   const mutation = api.user.updateSelfSocialMedia.useMutation();
 
   const form = useForm<z.infer<typeof socialMediaSchema>>({
