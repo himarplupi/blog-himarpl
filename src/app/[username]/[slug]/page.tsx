@@ -1,3 +1,4 @@
+import { type Metadata, type ResolvingMetadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import parse from "html-react-parser";
@@ -9,14 +10,40 @@ import { abbreviation, calculateReadTime, momentId } from "@/lib/utils";
 import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
 
-export default async function PostPage({
-  params,
-}: {
+type PostPageProps = {
   params: {
     username: string;
     slug: string;
   };
-}) {
+};
+
+export async function generateMetadata(
+  { params }: PostPageProps,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const username = params.username.substring(3);
+  const { post, author } = await api.post.byParams.query({
+    slug: params.slug,
+    username: username,
+  });
+
+  const previousImages = (await parent).openGraph?.images ?? [];
+
+  const description =
+    (post?.content?.length ?? 0) > 160
+      ? `${post?.content.slice(0, 160)}...`
+      : post?.content;
+
+  return {
+    title: `${post?.metaTitle} oleh ${author?.name}`,
+    description: description,
+    openGraph: {
+      images: [`${post?.image}`, ...previousImages],
+    },
+  };
+}
+
+export default async function PostPage({ params }: PostPageProps) {
   const session = await getServerAuthSession();
   const username = params.username.substring(3);
   const { post, author } = await api.post.byParams.query({

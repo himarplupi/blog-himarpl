@@ -1,3 +1,4 @@
+import { type Metadata, type ResolvingMetadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,11 +9,28 @@ import { cn } from "@/lib/utils";
 import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
 
-export default async function UserPage({
-  params,
-}: {
+type UserPageProps = {
   params: { username: string };
-}) {
+};
+
+export async function generateMetadata(
+  { params }: UserPageProps,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const username = params.username.replace("%40", "");
+  const user = await api.user.byUsername.query(username);
+  const previousImages = (await parent).openGraph?.images ?? [];
+
+  return {
+    title: `${user?.name} ${user?.position} ${user?.department?.acronym}`,
+    description: `Mengenal lebih dekat ${user?.name}, simak selengkapnya di sini!`,
+    openGraph: {
+      images: [`${user?.image}`, ...previousImages],
+    },
+  };
+}
+
+export default async function UserPage({ params }: UserPageProps) {
   const session = await getServerAuthSession();
   const username = params.username.replace("%40", "");
 
@@ -39,7 +57,7 @@ export default async function UserPage({
               <p className="mb-1 text-lg capitalize">{`${user?.position}`}</p>
             ) : (
               <p className="mb-1 text-lg capitalize">
-                {`${user?.position} ${user?.department?.name}`}
+                {`${user?.position} ${user?.department?.acronym}`}
               </p>
             )}
 
