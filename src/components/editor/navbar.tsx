@@ -36,7 +36,7 @@ export function EditorNavbar({ session }: { session: Session | null }) {
         </div>
 
         <div className="ml-auto flex items-center gap-x-2 md:gap-x-4">
-          <Publish session={session} />
+          <Publish />
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
