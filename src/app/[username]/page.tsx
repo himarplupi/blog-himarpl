@@ -1,6 +1,7 @@
 import { type Metadata, type ResolvingMetadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound, redirect } from "next/navigation";
 
 import { Navbar } from "@/components/common/navbar";
 import { Articles } from "@/components/home/articles";
@@ -35,6 +36,16 @@ export default async function UserPage({ params }: UserPageProps) {
   const username = params.username.replace("%40", "");
 
   const user = await api.user.byUsername.query(username);
+
+  if (!user) {
+    return notFound();
+  }
+
+  if (session?.user.id == user.id) {
+    if (!session.user.username) {
+      return redirect("/register/username");
+    }
+  }
 
   return (
     <>
