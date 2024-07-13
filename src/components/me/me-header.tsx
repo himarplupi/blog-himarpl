@@ -18,7 +18,7 @@ export function MeHeader() {
   const pathname = usePathname();
 
   return (
-    <header className="container mt-16 py-4">
+    <header className="container mt-4 py-4">
       <div className="flex flex-col justify-between gap-y-2 pb-4 md:flex-row md:pb-2">
         <h2 className="scroll-m-20 font-serif text-3xl font-semibold tracking-wide">
           Postinganku

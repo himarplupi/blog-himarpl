@@ -452,4 +452,31 @@ export const postRouter = createTRPCRouter({
         nextCursor,
       };
     }),
+  getAnnouncement: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.db.post.findFirst({
+      include: {
+        author: {
+          select: {
+            username: true,
+          },
+        },
+      },
+      where: {
+        tags: {
+          some: {
+            title: "developer announcement",
+          },
+        },
+        author: {
+          role: "admin",
+        },
+        publishedAt: {
+          not: null,
+        },
+      },
+      orderBy: {
+        publishedAt: "desc",
+      },
+    });
+  }),
 });
