@@ -124,7 +124,7 @@ export default async function PostPage({ params }: PostPageProps) {
           </div>
         </div>
 
-        <article className="prose mt-4 min-h-screen max-w-none dark:prose-invert lg:prose-xl prose-headings:border-b prose-headings:border-border prose-headings:font-serif prose-headings:font-semibold prose-headings:tracking-wide prose-h1:text-5xl prose-h2:text-4xl prose-h3:text-2xl prose-h4:text-xl prose-h5:text-lg sm:prose-h1:text-6xl sm:prose-h2:text-5xl sm:prose-h3:text-3xl sm:prose-h4:text-2xl sm:prose-h5:text-xl ">
+        <article className="prose mt-4 min-h-screen max-w-none dark:prose-invert lg:prose-xl prose-headings:break-words prose-headings:border-b prose-headings:border-border prose-headings:font-serif prose-headings:font-semibold prose-headings:tracking-wide prose-h1:text-5xl prose-h2:text-4xl prose-h3:text-2xl prose-h4:text-xl prose-h5:text-lg prose-p:break-words prose-a:break-words sm:prose-h1:text-6xl sm:prose-h2:text-5xl sm:prose-h3:text-3xl sm:prose-h4:text-2xl sm:prose-h5:text-xl">
           {parse(post.rawHtml)}
         </article>
       </main>
