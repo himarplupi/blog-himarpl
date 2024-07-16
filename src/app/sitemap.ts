@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
 
 import { env } from "@/env";
+import { db } from "@/server/db";
 
 // This is the combination of the Application Base URL and Base PATH
-const baseUrlAndPath = `${env.BASE_URL}${env.BASE_PATH}`;
+const baseUrlAndPath = `${env.BASE_URL}`;
 
 const EXTERNAL_LINKS_SITEMAP = [
   "https://pmb.himarpl.com/",
@@ -17,12 +18,34 @@ const EXTERNAL_LINKS_SITEMAP = [
 // @see https://github.com/vercel/next.js/discussions/55646
 const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
   const paths: Array<string> = [
+    `${baseUrlAndPath}`,
     `${baseUrlAndPath}/explore-tags`,
     `${baseUrlAndPath}/search`,
-    `${baseUrlAndPath}/me`,
+    `${baseUrlAndPath}/login`,
   ];
 
-  paths.push(`${baseUrlAndPath}`);
+  const users = await db.user.findMany({
+    where: {
+      username: {
+        not: null,
+      },
+    },
+    select: {
+      username: true,
+      posts: {
+        select: {
+          slug: true,
+        },
+      },
+    },
+  });
+
+  users.forEach((user) => {
+    paths.push(`${baseUrlAndPath}/@${user.username}`);
+    user.posts.forEach((post) => {
+      paths.push(`${baseUrlAndPath}/@${user.username}/${post.slug}`);
+    });
+  });
 
   const currentDate = new Date().toISOString();
 
@@ -35,6 +58,5 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
 
 export default sitemap;
 
-// Enforces that this route is used as static rendering
 // @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic
-export const dynamic = "error";
+export const dynamic = "auto";
