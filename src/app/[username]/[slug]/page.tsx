@@ -45,8 +45,15 @@ export async function generateMetadata(
       : post?.content;
 
   return {
-    title: `${post?.metaTitle} oleh ${author?.name}`,
+    title: `${post?.metaTitle.toUpperCase()} | ${author?.name?.toUpperCase()}`,
     description: description,
+    authors: [
+      {
+        name: author?.name ?? "",
+        url: `/@${author?.username}`,
+      },
+    ],
+    keywords: post?.tags?.map((tag) => tag.title) ?? [],
     openGraph: {
       images: [`${post?.image}`, ...previousImages],
     },
