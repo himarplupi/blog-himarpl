@@ -47,6 +47,16 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
     });
   });
 
+  const tags = await db.postTag.findMany({
+    select: {
+      slug: true,
+    },
+  });
+
+  tags.forEach((tag) => {
+    paths.push(`${baseUrlAndPath}/tag/${tag.slug}`);
+  });
+
   const currentDate = new Date().toISOString();
 
   return [...paths, ...EXTERNAL_LINKS_SITEMAP].map((route) => ({
