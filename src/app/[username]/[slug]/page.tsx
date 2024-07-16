@@ -39,10 +39,13 @@ export async function generateMetadata(
 
   const previousImages = (await parent).openGraph?.images ?? [];
 
+  const cleanContent = post?.content
+    .replace(/[^\w\s]/g, "")
+    .replace(/\s+/g, " ");
   const description =
-    (post?.content?.length ?? 0) > 160
-      ? `${post?.content.slice(0, 160)}...`
-      : post?.content;
+    (cleanContent?.length ?? 0) > 160
+      ? `${cleanContent?.slice(0, 160)}...`
+      : cleanContent;
 
   return {
     title: `${post?.metaTitle.toUpperCase()} | ${author?.name?.toUpperCase()}`,
