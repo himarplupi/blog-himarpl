@@ -65,6 +65,10 @@ export default async function PostPage({ params }: PostPageProps) {
     return notFound();
   }
 
+  if (!post.publishedAt) {
+    return notFound();
+  }
+
   return (
     <>
       <Navbar session={session} />

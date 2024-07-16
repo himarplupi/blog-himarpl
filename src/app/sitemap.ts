@@ -33,6 +33,11 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
     select: {
       username: true,
       posts: {
+        where: {
+          publishedAt: {
+            not: null,
+          },
+        },
         select: {
           slug: true,
         },
