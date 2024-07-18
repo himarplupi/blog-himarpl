@@ -7,10 +7,8 @@ import { db } from "@/server/db";
 const baseUrlAndPath = `${env.BASE_URL}`;
 
 const EXTERNAL_LINKS_SITEMAP = [
+  "https://www.himarpl.com/",
   "https://pmb.himarpl.com/",
-  "https://himarpl.com/",
-  "https://upi.edu/",
-  "https://rpl.upi.edu/",
 ];
 
 // This allows us to generate a `sitemap.xml` file dynamically based on the needs of the Node.js Website
