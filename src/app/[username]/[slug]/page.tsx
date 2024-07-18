@@ -54,7 +54,7 @@ export async function generateStaticParams() {
   for (const user of users) {
     for (const post of user.posts) {
       paths.push({
-        username: user.username,
+        username: `@${user.username}`,
         slug: post.slug,
       });
     }

@@ -8,18 +8,52 @@ import { Articles } from "@/components/home/articles";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getServerAuthSession } from "@/server/auth";
+import { db } from "@/server/db";
 import { api } from "@/trpc/server";
 
 type UserPageProps = {
   params: { username: string };
 };
 
+export async function generateStaticParams() {
+  const users = await db.user.findMany({
+    where: {
+      username: {
+        not: null,
+      },
+    },
+    select: {
+      username: true,
+    },
+  });
+
+  return users.map((user) => ({
+    username: `@${user.username}`,
+  }));
+}
+
 export async function generateMetadata(
   { params }: UserPageProps,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const username = params.username.replace("%40", "");
-  const user = await api.user.byUsername.query(username);
+  const user = await db.user.findFirst({
+    where: {
+      username: {
+        equals: username,
+      },
+    },
+    select: {
+      name: true,
+      position: true,
+      department: {
+        select: {
+          acronym: true,
+        },
+      },
+      image: true,
+    },
+  });
   const previousImages = (await parent).openGraph?.images ?? [];
 
   return {
