@@ -1,7 +1,7 @@
 import { type Metadata } from "next";
 
 import { TagResult } from "@/components/tag/tag-result";
-import { api } from "@/trpc/server";
+import { db } from "@/server/db";
 
 type TagSlugPage = {
   params: {
@@ -9,15 +9,35 @@ type TagSlugPage = {
   };
 };
 
+export async function generateStaticParams() {
+  const postTags = await db.postTag.findMany({
+    where: {
+      posts: {
+        some: {
+          publishedAt: {
+            not: null,
+          },
+        },
+      },
+    },
+  });
+
+  return postTags.map((tag) => ({
+    "tag-slug": tag.slug,
+  }));
+}
+
 export async function generateMetadata({
   params,
 }: TagSlugPage): Promise<Metadata> {
-  const tag = await api.postTag.searchUnique.query({
-    slug: params["tag-slug"],
+  const tag = await db.postTag.findFirst({
+    where: {
+      slug: params["tag-slug"],
+    },
   });
 
   return {
-    title: `LABEL ${tag?.title.toUpperCase()} | HIMARPL`,
+    title: `${tag?.title.toUpperCase()} | HIMARPL`,
     description: `Lihat semua artikel yang berkaitan dengan ${tag?.title} hanya di HIMARPL!`,
   };
 }
