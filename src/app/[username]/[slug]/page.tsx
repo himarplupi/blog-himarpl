@@ -1,9 +1,10 @@
 import { type Metadata, type ResolvingMetadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import parse from "html-react-parser";
+import { SearchIcon } from "lucide-react";
 
-import { Navbar } from "@/components/common/navbar";
 import {
   CopyLink,
   Facebook,
@@ -14,10 +15,12 @@ import {
   Twitter,
   Whatsapp,
 } from "@/components/common/share-buttons";
+import { NavSearchInput } from "@/components/search/nav-search-input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { abbreviation, calculateReadTime, momentId } from "@/lib/utils";
-import { getServerAuthSession } from "@/server/auth";
+import { buttonVariants } from "@/components/ui/button";
+import logo from "@/images/logo.png";
+import { abbreviation, calculateReadTime, cn, momentId } from "@/lib/utils";
 import { db } from "@/server/db";
 import { api } from "@/trpc/server";
 
@@ -100,7 +103,6 @@ export async function generateMetadata(
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const session = await getServerAuthSession();
   const username = params.username.substring(3);
   const { post, author } = await api.post.byParams.query({
     slug: params.slug,
@@ -117,7 +119,32 @@ export default async function PostPage({ params }: PostPageProps) {
 
   return (
     <>
-      <Navbar session={session} />
+      <nav className="fixed top-0 z-10 w-full drop-shadow-md">
+        <div className="container flex items-center justify-between gap-x-4 bg-background py-2 backdrop-blur-md">
+          <div className="flex items-center gap-x-5">
+            <div className="flex items-center gap-x-2">
+              <Link href="/">
+                <Image src={logo} alt="HIMARPL Logo" className="w-12" />
+              </Link>
+            </div>
+
+            <NavSearchInput />
+          </div>
+
+          <div className="flex items-center gap-x-4">
+            <Link
+              href="/search"
+              className={cn(
+                buttonVariants({ variant: "outline", size: "icon" }),
+                "w-10 md:hidden",
+              )}
+            >
+              <SearchIcon className="h-5 w-5" />
+            </Link>
+          </div>
+        </div>
+      </nav>
+
       <main role="main">
         <article
           itemScope

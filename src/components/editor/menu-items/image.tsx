@@ -79,7 +79,7 @@ export function Image() {
               />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="alt">Judul Gambar</Label>
+              <Label htmlFor="alt">Keterangan Gambar</Label>
               <Input
                 id="alt"
                 type="text"
@@ -87,6 +87,10 @@ export function Image() {
                 onChange={(e) => setAlt(e.target.value)}
                 placeholder="Kucing Lucu"
               />
+              <p className="text-xs text-muted">
+                Berikan keterangan yang singkat dan jelas tentang gambar yang
+                Anda sisipkan agar memudahkan SEO.
+              </p>
             </div>
           </div>
           <DialogFooter>
