@@ -209,8 +209,9 @@ export default async function PostPage({ params }: PostPageProps) {
             <section className="mt-4 flex flex-col justify-between gap-x-3 gap-y-6 sm:flex-row">
               <div className="flex items-center gap-x-4">
                 <Link rel="author" href={`/@${author.username}`}>
-                  <Avatar className="h-12 w-12">
+                  <Avatar className="h-12 w-12 overflow-hidden">
                     <AvatarImage
+                      className="scale-125 object-cover object-center"
                       src={author.image ?? ""}
                       alt={author.name + " profile picture"}
                     />
