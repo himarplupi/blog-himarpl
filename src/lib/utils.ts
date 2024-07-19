@@ -18,6 +18,11 @@ export function getContent(content: string) {
   return content.replace(regex, " ").replace(/\W/g, " ");
 }
 
+// Trim all tabs, newlines, and spaces
+export function trimAll(content: string) {
+  return content.replace(/\s/g, "");
+}
+
 export function calculateReadTime(content: string) {
   const wordsPerMinute = 200;
   const text = getContent(content);

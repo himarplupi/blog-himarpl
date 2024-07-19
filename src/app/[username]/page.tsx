@@ -84,42 +84,64 @@ export default async function UserPage({ params }: UserPageProps) {
   return (
     <>
       <Navbar session={session} />
-      <main className="container mx-auto mt-16 min-h-screen py-8">
-        <div className="xxl:gap-8 grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-4 xl:gap-6">
+      <main role="main" className="container mx-auto mt-16 min-h-screen py-8">
+        <article
+          itemScope
+          itemType="http://schema.org/Person"
+          className="xxl:gap-8 grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-4 xl:gap-6"
+        >
+          <meta itemProp="identifier" content={user.id} />
           <div className="static flex flex-col pb-8 md:sticky md:top-20 md:overflow-y-scroll md:px-6 md:py-4 xl:border-0">
-            <div className="mb-8 h-32 w-32 overflow-hidden rounded-full bg-secondary">
-              <Image
-                width={128}
-                height={128}
-                src={user?.image ?? ""}
-                alt={"Photo " + user?.username}
-              />
-            </div>
-            <p className="mb-6 text-lg font-bold">@{user?.username}</p>
-            <p className="mb-3 text-wrap text-xl font-semibold">{user?.name}</p>
+            {user?.image && (
+              <div className="relative mb-8 h-32 w-32 overflow-hidden rounded-full bg-secondary">
+                <Image
+                  itemProp="image"
+                  fill
+                  sizes="100%"
+                  className="scale-110 object-cover object-center"
+                  src={user.image}
+                  alt={user?.name + " Photo"}
+                />
+              </div>
+            )}
+            <h2 itemProp="alternateName" className="mb-6 text-lg font-bold">
+              @{user?.username}
+            </h2>
+            <h1
+              itemProp="name"
+              className="mb-3 text-wrap text-xl font-semibold"
+            >
+              {user?.name}
+            </h1>
 
             {user?.department && (
               <>
                 {user?.department?.name === "pimpinan" ? (
-                  <p className="mb-1 text-lg capitalize">{`${user?.position}`}</p>
+                  <p
+                    itemProp="jobTitle"
+                    className="mb-1 text-lg capitalize"
+                  >{`${user?.position}`}</p>
                 ) : (
-                  <p className="mb-1 text-lg capitalize">
+                  <p itemProp="jobTitle" className="mb-1 text-lg capitalize">
                     {`${user?.position} ${user?.department?.acronym}`}
                   </p>
                 )}
 
-                <p className="mb-6 text-lg capitalize">
+                <p itemProp="jobTitle" className="mb-6 text-lg capitalize">
                   {`${user?.department?.type === "BE" ? "Badan Eksekutif" : "Dewan Perwakilan"}`}
                 </p>
               </>
             )}
 
-            <p className="mb-6 text-wrap">{user?.bio}</p>
+            <p itemProp="description" className="mb-6 text-wrap">
+              {user?.bio}
+            </p>
 
             <h4 className="mb-2 text-lg font-semibold">Link Sosial Media</h4>
             <div className="flex flex-col gap-1">
               {user?.socialMedia.map((social, i) => (
                 <Link
+                  itemProp="url"
                   key={i}
                   href={social.url}
                   className="underline-offset-4 hover:underline"
@@ -136,13 +158,14 @@ export default async function UserPage({ params }: UserPageProps) {
               </Link>
             )}
           </div>
+
           <div className="col-span-1 flex flex-col gap-y-4 md:col-span-2 md:gap-y-6">
             <h2 className="font-serif text-3xl font-bold italic tracking-wide first:mt-0">
               Postingan Terbaru
             </h2>
             <Articles authorId={user?.id} />
           </div>
-        </div>
+        </article>
       </main>
     </>
   );
