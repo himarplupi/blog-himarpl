@@ -138,11 +138,13 @@ export default async function PostPage({ params }: PostPageProps) {
             content={new Date(post.createdAt).toISOString()}
           />
           <meta itemProp="publisher" content="blog.himarpl.com" />
-          <meta
-            itemProp="url"
-            content={`https://blog.himarpl.com/@${author.username}/${post.slug}`}
-          />
           {post.image && <meta itemProp="image" content={post.image} />}
+
+          <link
+            itemProp="url"
+            rel="canonical"
+            href={`https://blog.himarpl.com/@${author.username}/${post.slug}`}
+          />
 
           <h1
             itemProp="name headline"
