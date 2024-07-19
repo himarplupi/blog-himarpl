@@ -2,7 +2,6 @@ import { type Metadata, type ResolvingMetadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { title } from "process";
 
 import { Navbar } from "@/components/common/navbar";
 import { Articles } from "@/components/home/articles";
@@ -67,22 +66,24 @@ export async function generateMetadata(
     (user?.bio ?? "").length > 1
       ? user.bio ?? ""
       : `Mengenal lebih dekat ${user?.name}, simak selengkapnya di sini!`;
+  const title = `${user?.name ? user.name.toUpperCase() : ""} ${user?.position ? user.position.toUpperCase() : ""} ${user?.department ? user.department.acronym.toUpperCase() : ""}`;
 
   return {
-    title: `${user?.name ? user.name.toUpperCase() : ""} ${user?.position ? user.position.toUpperCase() : ""} ${user?.department ? user.department.acronym.toUpperCase() : ""}`,
+    title: title,
     description: description,
     openGraph: {
       title: title,
       description: description,
       url: `https://blog.himarpl.com/@${user?.username}`,
       siteName: "Blog HIMARPL",
-      images: [`${user?.image}`, ...previousImages],
+      images: [...previousImages, `${user?.image}`],
     },
     twitter: {
       title: title,
       description: description,
+      card: "summary_large_image",
       creator: `@${user.username}`,
-      images: [`${user?.image}`, ...previousImages],
+      images: [...previousImages, `${user?.image}`],
     },
   };
 }

@@ -102,13 +102,14 @@ export async function generateMetadata(
       description: description,
       url: `https://blog.himarpl.com/@${author?.username}/${post?.slug}`,
       siteName: "Blog HIMARPL",
-      images: [`${post?.image}`, ...previousImages],
+      images: [...previousImages, `${post?.image}`],
     },
     twitter: {
       title: title,
       description: description,
+      card: "summary_large_image",
       creator: `@${author?.username}`,
-      images: [`${post?.image}`, ...previousImages],
+      images: [...previousImages, `${post?.image}`],
     },
   };
 }
