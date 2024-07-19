@@ -248,22 +248,24 @@ export default async function PostPage({ params }: PostPageProps) {
             >
               {parse(post.rawHtml)}
             </section>
-
-            <div className="flex items-center justify-center py-4">
-              <Link
-                itemProp="license"
-                rel="license"
-                target="_black"
-                href="http://creativecommons.org/licenses/by-nc/4.0/"
-                className="text-sm text-muted-foreground hover:underline"
-              >
-                Creative Commons Attribution-NonCommercial 4.0 International
-                License
-              </Link>
-            </div>
           </section>
         </article>
       </main>
+      <footer className="container flex items-center justify-center py-8">
+        <p className="text-center text-sm text-muted-foreground ">
+          {"© 2024 HIMARPL. All rights reserved. "}
+
+          <Link
+            itemProp="license"
+            rel="license"
+            target="_black"
+            href="http://creativecommons.org/licenses/by-nc/4.0/"
+            className="hover:underline"
+          >
+            CC BY-NC 4.0 Licence
+          </Link>
+        </p>
+      </footer>
     </>
   );
 }
