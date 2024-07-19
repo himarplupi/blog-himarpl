@@ -85,9 +85,10 @@ export async function generateMetadata(
     (cleanContent?.length ?? 0) > 160
       ? `${cleanContent?.slice(0, 160)}...`
       : cleanContent;
+  const title = `${post?.metaTitle.toUpperCase()} | ${author?.name?.toUpperCase()}`;
 
   return {
-    title: `${post?.metaTitle.toUpperCase()} | ${author?.name?.toUpperCase()}`,
+    title: title,
     description: description,
     authors: [
       {
@@ -97,6 +98,16 @@ export async function generateMetadata(
     ],
     keywords: post?.tags?.map((tag) => tag.title) ?? [],
     openGraph: {
+      title: title,
+      description: description,
+      url: `https://blog.himarpl.com/@${author?.username}/${post?.slug}`,
+      siteName: "Blog HIMARPL",
+      images: [`${post?.image}`, ...previousImages],
+    },
+    twitter: {
+      title: title,
+      description: description,
+      creator: `@${author?.username}`,
       images: [`${post?.image}`, ...previousImages],
     },
   };
