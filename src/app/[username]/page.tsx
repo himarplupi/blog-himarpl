@@ -98,17 +98,21 @@ export default async function UserPage({ params }: UserPageProps) {
             <p className="mb-6 text-lg font-bold">@{user?.username}</p>
             <p className="mb-3 text-wrap text-xl font-semibold">{user?.name}</p>
 
-            {user?.department?.name === "pimpinan" ? (
-              <p className="mb-1 text-lg capitalize">{`${user?.position}`}</p>
-            ) : (
-              <p className="mb-1 text-lg capitalize">
-                {`${user?.position} ${user?.department?.acronym}`}
-              </p>
-            )}
+            {user?.department && (
+              <>
+                {user?.department?.name === "pimpinan" ? (
+                  <p className="mb-1 text-lg capitalize">{`${user?.position}`}</p>
+                ) : (
+                  <p className="mb-1 text-lg capitalize">
+                    {`${user?.position} ${user?.department?.acronym}`}
+                  </p>
+                )}
 
-            <p className="mb-6 text-lg capitalize">
-              {`${user?.department?.type === "BE" ? "Badan Eksekutif" : "Dewan Perwakilan"}`}
-            </p>
+                <p className="mb-6 text-lg capitalize">
+                  {`${user?.department?.type === "BE" ? "Badan Eksekutif" : "Dewan Perwakilan"}`}
+                </p>
+              </>
+            )}
 
             <p className="mb-6 text-wrap">{user?.bio}</p>
 
