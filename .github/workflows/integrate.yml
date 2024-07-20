@@ -26,6 +26,8 @@ jobs:
         run: cp .vercel/.env.preview.local .env
       - name: Install dependencies
         run: npm ci
+      - name: Run postinstall
+        run: npm run postinstall
       - name: Check commit messages
         run: npm run commitlint
       - name: Run build
