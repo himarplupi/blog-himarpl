@@ -69,7 +69,8 @@ const fontSerif = localFont({
 export const metadata = {
   title: "Blog | HIMARPL",
   metadataBase: new URL("https://blog.himarpl.com"),
-  description: "Tulisan-tulisan pengurus HIMARPL",
+  description:
+    "Tulisan-tulisan pengurus HIMARPL (Himpunan Mahasiswa Rekayasa Perangkat Lunak)",
   icons: [
     {
       rel: "icon",
@@ -78,7 +79,8 @@ export const metadata = {
   ],
   openGraph: {
     title: "Blog HIMARPL",
-    description: "Tulisan-tulisan pengurus HIMARPL",
+    description:
+      "Tulisan-tulisan pengurus HIMARPL (Himpunan Mahasiswa Rekayasa Perangkat Lunak)",
     url: "https://blog.himarpl.com",
     siteName: "Blog HIMARPL",
     images: "https://blog.himarpl.com/opengraph-image.gif",
@@ -87,7 +89,8 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Blog HIMARPL",
-    description: "Tulisan-tulisan pengurus HIMARPL",
+    description:
+      "Tulisan-tulisan pengurus HIMARPL (Himpunan Mahasiswa Rekayasa Perangkat Lunak)",
     creator: "@himarpl",
     images: ["https://blog.himarpl.com/twitter-image.gif"], // Must be an absolute URL
   },
