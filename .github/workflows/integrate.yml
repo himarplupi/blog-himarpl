@@ -9,7 +9,31 @@ on:
     branches: [main]
 
 jobs:
+  Code-Quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20.x"
+      - name: Create env file
+        run: |
+          touch .env
+          echo "${{ secrets.ENV_FILE }}" > .env
+          cat .env
+      - name: Install Dependencies
+        run: npm ci
+      - name: Post Install
+        run: npm run postinstall
+      - name: Run Commitlint
+        run: npm run commitlint
+      - name: Run Linting
+        run: npm run lint
+
   Deploy-Preview:
+    needs: Code-Quality
     runs-on: ubuntu-latest
 
     steps:
@@ -24,22 +48,3 @@ jobs:
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
       - name: Deploy Project Artifacts to Vercel
         run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
-
-  Code-Quality:
-    needs: Deploy-Preview
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js 20.x
-        uses: actions/setup-node@v2
-        with:
-          node-version: "20.x"
-      - name: Install Dependencies
-        run: npm ci
-      - name: Post Install
-        run: npm run postinstall
-      - name: Run Commitlint
-        run: npm run commitlint
-      - name: Run Linting
-        run: npm run lint
