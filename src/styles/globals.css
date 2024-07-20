@@ -80,6 +80,12 @@ div[data-youtube-video] {
   margin: 0 16px;
 }
 
+@media screen and (max-width: 768px) {
+  div[data-youtube-video] {
+    margin: 0;
+  }
+}
+
 div[data-youtube-video].ProseMirror-selectednode {
   background: hsl(var(--muted));
 }

@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { getServerAuthSession } from "@/server/auth";
 import { db } from "@/server/db";
 import { api } from "@/trpc/server";
+import { SiGithub, SiInstagram } from "@icons-pack/react-simple-icons";
 
 type UserPageProps = {
   params: { username: string };
@@ -160,16 +161,22 @@ export default async function UserPage({ params }: UserPageProps) {
               {user?.bio}
             </p>
 
-            <h4 className="mb-2 text-lg font-semibold">Link Sosial Media</h4>
+            <h4 className="mb-2 text-lg font-semibold">Media Sosial</h4>
             <div className="flex flex-col gap-1">
               {user?.socialMedia.map((social, i) => (
                 <Link
                   itemProp="url"
                   key={i}
                   href={social.url}
-                  className="underline-offset-4 hover:underline"
+                  target="_blank"
+                  className="flex w-fit items-center gap-x-2 underline-offset-4 hover:underline"
                 >
-                  {social.name} - {social.username}
+                  {social.name === "instagram" ? (
+                    <SiInstagram className="h-4 w-4" />
+                  ) : (
+                    <SiGithub className="h-4 w-4" />
+                  )}
+                  {social.username}
                 </Link>
               ))}
             </div>

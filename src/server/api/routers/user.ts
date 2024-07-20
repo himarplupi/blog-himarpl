@@ -162,6 +162,11 @@ export const userRouter = createTRPCRouter({
     thisMonth.setMonth(thisMonth.getMonth() - 1);
 
     return await ctx.db.user.findMany({
+      orderBy: {
+        posts: {
+          _count: "asc",
+        },
+      },
       where: {
         posts: {
           some: {

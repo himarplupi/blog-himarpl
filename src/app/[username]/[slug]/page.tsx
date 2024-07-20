@@ -187,7 +187,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
           <h1
             itemProp="name headline"
-            className="mt-2 text-pretty font-serif text-5xl font-bold leading-none tracking-wider sm:text-7xl sm:leading-tight"
+            className="mt-2 overflow-hidden text-ellipsis text-pretty font-serif text-5xl font-bold leading-none tracking-wider sm:text-7xl sm:leading-tight"
           >
             {post.title}
           </h1>
@@ -275,7 +275,7 @@ export default async function PostPage({ params }: PostPageProps) {
             href="http://creativecommons.org/licenses/by-nc/4.0/"
             className="hover:underline"
           >
-            CC BY-NC 4.0 Licence
+            CC BY-NC 4.0 License
           </Link>
         </p>
       </footer>
