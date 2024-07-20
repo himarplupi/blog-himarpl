@@ -22,7 +22,6 @@ jobs:
         run: |
           touch .env
           echo "${{ secrets.ENV_FILE }}" > .env
-          cat .env
       - name: Install Dependencies
         run: npm ci
       - name: Post Install
