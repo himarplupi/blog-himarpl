@@ -9,26 +9,37 @@ on:
     branches: [main]
 
 jobs:
-  test_pull_request:
+  Deploy-Preview:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      # - name: Use Node.js 20.x
-      #   uses: actions/setup-node@v2
-      #   with:
-      #     node-version: "20.x"
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
       - name: Copy Vercel Environment Information
         run: cp .vercel/.env.preview.local .env
-      - name: Check commit messages
-        run: npm run commitlint
-      - name: Run lint
-        run: npm run lint
       - name: Build Project Artifacts
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
       - name: Deploy Project Artifacts to Vercel
         run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+
+  Code-Quality:
+    needs: Deploy-Preview
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20.x"
+      - name: Install Dependencies
+        run: npm ci
+      - name: Post Install
+        run: npm run postinstall
+      - name: Run Commitlint
+        run: npm run commitlint
+      - name: Run Linting
+        run: npm run lint
