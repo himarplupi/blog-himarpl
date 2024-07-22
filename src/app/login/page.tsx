@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { AlertCircle } from "lucide-react";
 
 import { GoogleLoginButton } from "@/components/common/auth";
+import { LoginBackground } from "@/components/common/login-background";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Card,
@@ -27,8 +28,9 @@ export default async function LoginPage({
   if (session) return redirect("/");
 
   return (
-    <main className="flex min-h-screen items-center justify-center">
-      <Card className="w-96">
+    <main className="flex min-h-screen items-center justify-center overflow-hidden">
+      <LoginBackground />
+      <Card className="z-50 w-96">
         <CardHeader>
           <CardTitle>Login</CardTitle>
           <CardDescription>
