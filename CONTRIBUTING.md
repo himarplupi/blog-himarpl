@@ -16,30 +16,6 @@ Any individual is welcome to contribute to the Blog HIMARPL Website. The reposit
 
 - A **Contributor** is any individual who creates an issue/PR, comments on an issue/PR, or contributes in some other way.
 
-## Prerequisites for .env file
-
-1. Create a `.env` file in the root of the project.
-
-2. Follow the getting started guide in [CoackroachDB](https://www.cockroachlabs.com/docs/cockroachcloud/quickstart) for the `DATABASE_URL` value.
-
-   ```bash
-   DATABASE_URL=
-   ```
-
-3. Follow the getting started guide in [Google OAuth](https://developers.google.com/identity/protocols/oauth2) to obtain OAuth 2.0 credentials from the Google API Console for the `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` values.
-
-   ```bash
-   GOOGLE_CLIENT_ID=
-   GOOGLE_CLIENT_SECRET=
-   ```
-
-4. Follow the getting started guide in [Upstash Ratelimiting](https://upstash.com/docs/oss/sdks/ts/ratelimit/gettingstarted) to obtain the `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` values.
-
-   ```bash
-   UPSTASH_REDIS_REST_URL=
-   UPSTASH_REDIS_REST_TOKEN=
-   ```
-
 ## Getting started
 
 The steps below will give you a general idea of how to prepare your local environment for the Blog HIMARPL Website and general steps for getting things done and landing your contribution.
@@ -59,6 +35,28 @@ The steps below will give you a general idea of how to prepare your local enviro
    ```bash
    cd blog-himarpl
    ```
+
+   1. **Prerequisites for .env file**: Create a `.env` file in the root of the project.
+
+   2. Follow the getting started guide in [CoackroachDB](https://www.cockroachlabs.com/docs/cockroachcloud/quickstart) for the `DATABASE_URL` value.
+
+      ```bash
+      DATABASE_URL=
+      ```
+
+   3. Follow the getting started guide in [Google OAuth](https://developers.google.com/identity/protocols/oauth2) to obtain OAuth 2.0 credentials from the Google API Console for the `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` values.
+
+      ```bash
+      GOOGLE_CLIENT_ID=
+      GOOGLE_CLIENT_SECRET=
+      ```
+
+   4. Follow the getting started guide in [Upstash Ratelimiting](https://upstash.com/docs/oss/sdks/ts/ratelimit/gettingstarted) to obtain the `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` values.
+
+      ```bash
+      UPSTASH_REDIS_REST_URL=
+      UPSTASH_REDIS_REST_TOKEN=
+      ```
 
 4. Create a remote to keep your fork and local clone up-to-date.
 
@@ -93,9 +91,9 @@ The steps below will give you a general idea of how to prepare your local enviro
 
 9. Run `npm run format` to confirm that linting and formatting are passing.
 
-   ```bash
-   npm run lint
-   ```
+```bash
+npm run lint
+```
 
 10. Once you're happy with your changes, add and commit them to your branch, then push the branch to your fork.
 
