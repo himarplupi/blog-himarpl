@@ -31,17 +31,9 @@
 
 ## Installation
 
-1. Clone the repository with HTTPS or SSH
+Follow the getting started guide from the [Contribution Guidelines][] to set up the project locally.
 
 ```bash
-git clone https://github.com/himarplupi/blog-himarpl.git
-git clone git@github.com:himarplupi/blog-himarpl.git
-```
-
-2. Install the dependencies and run the development server
-
-```bash
-cd blog-himarpl
 
 npm ci
 npm run dev
