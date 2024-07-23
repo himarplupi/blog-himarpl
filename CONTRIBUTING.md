@@ -63,9 +63,9 @@ The steps below will give you a general idea of how to prepare your local enviro
 4. Create a remote to keep your fork and local clone up-to-date.
 
    ```bash
-   git remote add upstream git@github.com:nodejs/blog-himarpl.git # SSH
-   git remote add upstream https://github.com/nodejs/blog-himarpl.git # HTTPS
-   gh repo sync nodejs/blog-himarpl # GitHub CLI
+   git remote add upstream git@github.com:himarplupi/blog-himarpl.git # SSH
+   git remote add upstream https://github.com/himarplupi/blog-himarpl.git # HTTPS
+   gh repo sync himarplupi/blog-himarpl # GitHub CLI
    ```
 
 5. Create a new branch for your work.
