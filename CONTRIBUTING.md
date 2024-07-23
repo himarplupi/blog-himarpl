@@ -77,6 +77,7 @@ The steps below will give you a general idea of how to prepare your local enviro
 6. Run the following to install the dependencies and start a local preview of your work.
 
    ```bash
+   npm run db:push # pushes the database schema to the CockroachDB
    npm ci # installs this project's dependencies
    npm run dev # starts a development environment
    ```
@@ -130,6 +131,8 @@ This repository contains several scripts and commands for performing numerous ta
 <details>
   <summary>Commands for Maintenance Tasks and Tests</summary>
 
+- `npm run db:push` pushes the database schema to the CockroachDB.
+- `npm run db:studio` runs the prisma studio for database management.
 - `npm run lint` runs the linter for all files.
 - `npm run test` runs all tests locally
 
