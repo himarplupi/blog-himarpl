@@ -16,7 +16,10 @@
 
 ## Deskripsi (Description)
 
-<!-- deskripsikan tentang perubahan yang kamu berikan -->
+<!--
+  deskripsikan tentang perubahan yang kamu berikan
+  lebih baik jika dijelaskan lebih detail
+ -->
 
 - [ ] saya menambahkan fitur baru
 - [ ] saya memperbaiki fitur yang sudah ada
@@ -41,7 +44,7 @@ automatically close the issue.
 
 ## Testing
 
-> _Beberapa testing akan otomatis dilakukan jika commit menggunakan git cmd tanpa menggunakan git GUI_
+> _Beberapa testing akan otomatis dilakukan dengan github action ketika pull request_
 
 - [ ] lint testing eslint `npm run lint` || `bun run lint`
 - [ ] commit message sesuai [Conventional Commits](https://gist.github.com/qoomon/5dfcdf8eec66a051ecd85625518cfd13) `npm run commitlint` || `bun run commitlint`
@@ -59,6 +62,8 @@ automatically close the issue.
 ## Environment
 
 saya menggunakan (im used):
+
+> _misal: tuliskan hanya windows jika kamu menggunakan windows_
 
 - `os` = `linux / windows / macOS`
 
