@@ -44,7 +44,7 @@ npm run dev
 ## Contributing
 
 This project adopts the HIMARPL [Code of Conduct][].
-The documentation for the complete infrastructure design can be found in the [HIMARPL Documentation Website][https://docs.himarpl.com].
+The documentation for the complete infrastructure design can be found in the [HIMARPL Documentation Website](https://docs.himarpl.com).
 
 > \[!NOTE]\
 > We recommend a read of all Relevant Links below before doing code changes; Including Dependency changes, Content changes, and Code changes.
