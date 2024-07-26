@@ -2,6 +2,7 @@ import { revalidatePath } from "next/cache";
 import GithubSlugger from "github-slugger";
 import { z } from "zod";
 
+import { env } from "@/env";
 import { parseMetaTitle } from "@/lib/utils";
 import {
   createTRPCRouter,
@@ -100,6 +101,32 @@ export const postRouter = createTRPCRouter({
           publishedAt: new Date(),
         },
       });
+
+      const response = await fetch(
+        "https://bot.himarpl.com/api/telegram/notify",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            title: post.title,
+            slug: post.slug,
+            author: {
+              username: currentUser.username,
+              name: currentUser.name,
+            },
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-token": env.BOT_API_TOKEN,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to notify telegram HIMARPL bot",
+        });
+      }
 
       slugger.reset();
       revalidatePath("/me/posts", "layout");
