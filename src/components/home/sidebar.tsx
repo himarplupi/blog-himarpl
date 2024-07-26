@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ReactLenis } from "lenis/react";
 import { useQueryState } from "nuqs";
 
+import { BotCard } from "@/components/common/bot-card";
 import { Footer } from "@/components/home/footer";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -88,6 +89,8 @@ export function Sidebar({
             </div>
           ))}
         </div>
+
+        <BotCard />
 
         <Footer />
       </div>
