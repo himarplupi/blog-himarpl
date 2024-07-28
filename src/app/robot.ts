@@ -6,7 +6,7 @@ const robots = (): MetadataRoute.Robots => ({
   rules: [
     {
       userAgent: "*",
-      disallow: [],
+      disallow: ["/new", "/me"],
       allow: "/",
     },
   ],
