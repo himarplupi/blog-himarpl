@@ -16,6 +16,8 @@ Setiap individu dipersilakan untuk berkontribusi pada Website Blog HIMARPL. Repo
 
 - **Kontributor** adalah setiap individu yang membuat isu/PR, mengomentari isu/PR, atau berkontribusi dengan cara lain.
 
+- **Kolaborator** adalah setiap individu yang mereview isu/PR, mengelola isu/PR, atau berkontribusi dengan cara lain yang aktif dalam berdiskusi dan pengambilan keputusan dalam proyek ini.
+
 ## Memulai
 
 Langkah-langkah di bawah ini akan memberi Anda gambaran umum tentang cara mempersiapkan lingkungan lokal Anda untuk Website Blog HIMARPL dan langkah-langkah umum untuk menyelesaikan sesuatu dan menyampaikan kontribusi Anda.

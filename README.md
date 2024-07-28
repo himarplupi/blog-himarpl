@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://blog.himarpl.com">blog.himarpl.com</a> Website built using Next.js with <a href="https://create.t3.gg/en/introduction">T3 Stack</a> and <a href="https://tiptap.dev/">TipTap</a> Headless WYSIWYG Editor.
+  <a href="https://blog.himarpl.com">blog.himarpl.com</a> Website dibangun menggunakan Next.js dengan <a href="https://create.t3.gg/en/introduction">T3 Stack</a> dan <a href="https://tiptap.dev/">TipTap</a> Headless WYSIWYG Editor.
 </p>
 
 <p align="center">
@@ -25,45 +25,42 @@
   <br />
 </p>
 
-## What is this repo?
+## Ini repo apa sih?
 
-[blog-himarpl](https://blog.himarpl.com/) by the [Department Kominfo HIMARPL](https://www.himarpl.com/about/be/kominfo) is the official blog for the activity of Himpunan Mahasiswa Rekayasa Perangkat Lunak. This repo is the source code for the blog. It is built using [Next.js](https://nextjs.org), a React Framework.
+[blog-himarpl](https://blog.himarpl.com/) oleh [Departemen Kominfo HIMARPL](https://www.himarpl.com/about/be/kominfo) adalah blog resmi untuk kegiatan Himpunan Mahasiswa Rekayasa Perangkat Lunak. Repo ini adalah kode sumber untuk blog tersebut. Dibangun menggunakan [Next.js](https://nextjs.org), sebuah Framework React.
 
-## Installation
+## Instalasi
 
-Follow the getting started guide from the [Contribution Guidelines][] to set up the project locally.
+Ikuti panduan memulai installasi dari [Panduan Kontribusi][] untuk menyiapkan proyek secara lokal.
 
 ```bash
-
 npm ci
 npm run dev
-
-# listening at localhost:3000
 ```
 
-## Contributing
+## Kontribusi
 
-This project adopts the HIMARPL [Code of Conduct][].
-The documentation for the complete infrastructure design can be found in the [HIMARPL Documentation Website](https://docs.himarpl.com).
+Proyek ini mengadopsi [Kode Etik HIMARPL][].
+Dokumentasi untuk desain infrastruktur lengkap dapat ditemukan di [Website Dokumentasi HIMARPL](https://docs.himarpl.com).
 
-> \[!NOTE]\
-> We recommend a read of all Relevant Links below before doing code changes; Including Dependency changes, Content changes, and Code changes.
+> \[!CATATAN]\
+> Kami merekomendasikan membaca semua Tautan Relevan di bawah ini sebelum melakukan perubahan kode; Termasuk perubahan Dependency, perubahan Konten, dan perubahan Kode.
 
 ### Deployment
 
-The Website is automatically deployed to [Vercel](https://vercel.com) through its GitHub App integration when new pushes happen on the `main` branch.
+Website secara otomatis di-deploy ke [Vercel](https://vercel.com) melalui integrasi Aplikasi GitHub Action saat ada push baru pada cabang `main`.
 
-The current integration is owned and managed by the Website Team in Department Kominfo HIMARPL.
+Integrasi saat ini dimiliki dan dikelola oleh Tim Website di Departemen Kominfo HIMARPL.
 
-## Relevant Links
+## Tautan Relevan
 
-[Code of Conduct][]
+[Kode Etik][]
 
-[Contribution Guidelines][]
+[Panduan Kontribusi][]
 
-## Thanks
+## Terima Kasih
 
-- Thanks to all contributors and collaborators that make this project possible.
+- Terima kasih kepada semua kontributor dan kolaborator yang mengembangkan proyek ini.
 
-[code of conduct]: https://github.com/himarplupi/blog-himarpl/blob/main/CODE_OF_CONDUCT.md
-[contribution guidelines]: https://github.com/himarplupi/blog-himarpl/blob/main/CONTRIBUTING.md
+[kode etik]: https://github.com/himarplupi/blog-himarpl/blob/main/CODE_OF_CONDUCT.md
+[panduan kontribusi]: https://github.com/himarplupi/blog-himarpl/blob/main/CONTRIBUTING.md
