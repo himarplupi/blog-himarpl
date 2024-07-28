@@ -106,12 +106,12 @@ Langkah-langkah di bawah ini akan memberi Anda gambaran umum tentang cara memper
     git push -u origin nama-cabang-anda
     ```
 
-> [!PENTING]\
+> [!IMPORTANT]\
 > Sebelum commit dan membuka Pull Request, harap baca terlebih dahulu [Pedoman Commit](#pedoman-commit) dan [Kebijakan Pull Request](#kebijakan-pull-request) yang dijelaskan di bawah ini.
 
 11. Buat Pull Request.
 
-> [!CATATAN]\
+> [!NOTE]\
 > Kami meminta penulis PR untuk menghindari rebase/memperbarui PR mereka dengan cabang dasar (`main`) secara tidak perlu.
 
 ### Perintah CLI
