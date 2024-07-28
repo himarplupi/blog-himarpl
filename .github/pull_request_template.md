@@ -1,71 +1,68 @@
 <!--
-    Before submitting a Pull Request, please ensure you've done the following:
-    - 👷‍♀️ Create small PRs. In most cases this will be possible.
-    - ✅ Provide tests for your changes.
-    - 📝 Use descriptive commit messages.
-    - 📗 Update any related documentation and include any relevant screenshots.
+    Sebelum mengajukan Pull Request, pastikan Anda telah melakukan hal berikut:
+    - 👷‍♀️ Buat PR yang kecil. Biasanya hal ini mungkin dilakukan.
+    - ✅ Sediakan tes untuk perubahan Anda.
+    - 📝 Gunakan pesan commit yang deskriptif.
+    - 📗 Perbarui dokumentasi terkait dan sertakan tangkapan layar yang relevan.
 -->
 
 ## Jenis PR (centang semua yang berlaku)
 
-- [ ] Feature
-- [ ] Refactor
-- [ ] Bug Fix
-- [ ] Optimization
-- [ ] Documentation Update
+- [ ] Fitur Baru
+- [ ] Refaktor
+- [ ] Perbaikan Bug
+- [ ] Optimasi
+- [ ] Pembaruan Dokumentasi
 
-## Deskripsi (Description)
+## Deskripsi
 
 <!--
-  deskripsikan tentang perubahan yang kamu berikan
-  lebih baik jika dijelaskan lebih detail
+  Deskripsikan tentang perubahan yang Anda berikan
+  Lebih baik jika dijelaskan lebih detail
  -->
 
-- [ ] saya menambahkan fitur baru
-- [ ] saya memperbaiki fitur yang sudah ada
-- [ ] saya memperbaiki bug
-- [ ] saya melakukan optimasi
-- [ ] saya menambah dokumentasi
-- [ ] saya memperbaiki dokumentasi
+- [ ] Saya menambahkan fitur baru
+- [ ] Saya memperbaiki fitur yang sudah ada
+- [ ] Saya memperbaiki bug
+- [ ] Saya melakukan optimasi
+- [ ] Saya menambah dokumentasi
+- [ ] Saya memperbaiki dokumentasi
 
-## Related Tickets & Documents
+## Terkait Tiket & Dokumen
 
 <!--
-For pull requests that relate or close an issue, please include them
-below.  We like to follow [Github's guidance on linking issues to pull requests](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue).
+Untuk pull request yang berkaitan atau menutup sebuah isu, silakan sertakan di bawah ini.
+Kami mengikuti panduan [Github tentang menghubungkan isu ke pull request](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue).
 
-For example having the text: "closes #1234" would connect the current pull
-request to issue 1234.  And when we merge the pull request, Github will
-automatically close the issue.
+Contohnya dengan menuliskan: "closes #1234" akan menghubungkan pull request ini dengan isu 1234. Dan ketika pull request digabung, Github akan otomatis menutup isu tersebut.
 -->
 
-- Related Issue #
-- Closes #
+- Terkait Isu #
+- Menutup #
 
-## Testing
+## Pengujian
 
-> _Beberapa testing akan otomatis dilakukan dengan github action ketika pull request_
+> _Beberapa pengujian akan dilakukan otomatis dengan GitHub Actions saat pull request dibuat_
 
-- [ ] lint testing eslint `npm run lint` || `bun run lint`
-- [ ] commit message sesuai [Conventional Commits](https://gist.github.com/qoomon/5dfcdf8eec66a051ecd85625518cfd13) `npm run commitlint` || `bun run commitlint`
-- [ ] build local `npm run build` || `bun run build`
+- [ ] Tes linting eslint `npm run lint` || `bun run lint`
+- [ ] Pesan commit sesuai [Conventional Commits](https://gist.github.com/qoomon/5dfcdf8eec66a051ecd85625518cfd13) `npm run commitlint` || `bun run commitlint`
+- [ ] Build lokal `npm run build` || `bun run build`
 
-### UI Accessibility Checklist
+### Checklist Aksesibilitas UI
 
 > _Jika PR Anda menyertakan perubahan UI, silakan ceklis daftar berikut ini:_
 
-- [ ] Semantic HTML implemented?
-- [ ] Color contrast tested?
+- [ ] HTML Semantik diterapkan?
+- [ ] Kontras warna diuji?
 
-> _Info lebih lanjut, cek tautan berikut: [Forem Accessibility Docs](https://developers.forem.com/frontend/accessibility)._
+> _Untuk informasi lebih lanjut, cek tautan berikut: [Forem Accessibility Docs](https://developers.forem.com/frontend/accessibility)._
 
-## Environment
+## Lingkungan Pengembangan
 
-saya menggunakan (im used):
+Saya menggunakan:
 
-> _misal: tuliskan hanya windows jika kamu menggunakan windows_
+> _Misal: tuliskan hanya "Windows" jika Anda menggunakan Windows_
 
 - `os` = `linux / windows / macOS`
 
-<!-- jika ada gagal pada salah satu test kami akan mengeceknya kembali -->
-<!-- if there is a failure in one of the tests we will check it again -->
+<!-- jika ada kegagalan pada salah satu tes, kami akan memeriksanya kembali -->
