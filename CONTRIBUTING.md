@@ -1,64 +1,64 @@
-# Blog HIMARPL Website Contributing Guide
+# Panduan Kontribusi Website Blog HIMARPL
 
-Thank you for your interest in contributing to the Blog HIMARPL Website. Before you proceed, briefly go through the following:
+Terima kasih atas minat Anda untuk berkontribusi pada Website Blog HIMARPL. Sebelum Anda melanjutkan, bacalah singkat hal-hal berikut:
 
-- [Code of Conduct](https://github.com/himarplupi/blog-himarpl/blob/main/CODE_OF_CONDUCT.md)
-- [Contributing](#contributing)
-- [Getting started](#getting-started)
-  - [CLI Commands](#cli-commands)
-- [Commit Guidelines](#commit-guidelines)
-- [Pull Request Policy](#pull-request-policy)
-- [Developer's Certificate of Origin 1.1](#developers-certificate-of-origin-11)
+- [Kode Etik](https://github.com/himarplupi/blog-himarpl/blob/main/CODE_OF_CONDUCT.md)
+- [Kontribusi](#kontribusi)
+- [Memulai](#memulai)
+  - [Perintah CLI](#perintah-cli)
+- [Pedoman Commit](#pedoman-commit)
+- [Kebijakan Pull Request](#kebijakan-pull-request)
+- [Sertifikat Asal Pengembang 1.1](#sertifikat-asal-pengembang-11)
 
-## Contributing
+## Kontribusi
 
-Any individual is welcome to contribute to the Blog HIMARPL Website. The repository currently has one kind of contribution personas:
+Setiap individu dipersilakan untuk berkontribusi pada Website Blog HIMARPL. Repositori ini saat ini memiliki satu jenis persona kontribusi:
 
-- A **Contributor** is any individual who creates an issue/PR, comments on an issue/PR, or contributes in some other way.
+- **Kontributor** adalah setiap individu yang membuat isu/PR, mengomentari isu/PR, atau berkontribusi dengan cara lain.
 
-## Getting started
+## Memulai
 
-The steps below will give you a general idea of how to prepare your local environment for the Blog HIMARPL Website and general steps for getting things done and landing your contribution.
+Langkah-langkah di bawah ini akan memberi Anda gambaran umum tentang cara mempersiapkan lingkungan lokal Anda untuk Website Blog HIMARPL dan langkah-langkah umum untuk menyelesaikan sesuatu dan menyampaikan kontribusi Anda.
 
-1. Click the fork button in the top right to clone the [Blog HIMARPL Website Repository](https://github.com/himarplupi/blog-himarpl/fork)
+1. Klik tombol fork di kanan atas untuk menyalin [Repositori Website Blog HIMARPL](https://github.com/himarplupi/blog-himarpl/fork)
 
-2. Clone your fork using SSH, GitHub CLI, or HTTPS.
+2. Clone fork Anda menggunakan SSH, GitHub CLI, atau HTTPS.
 
    ```bash
-   git clone git@github.com:<YOUR_GITHUB_USERNAME>/blog-himarpl.git # SSH
-   git clone https://github.com/<YOUR_GITHUB_USERNAME>/blog-himarpl.git # HTTPS
-   gh repo clone <YOUR_GITHUB_USERNAME>/blog-himarpl # GitHub CLI
+   git clone git@github.com:<NAMA_PENGGUNA_GITHUB_ANDA>/blog-himarpl.git # SSH
+   git clone https://github.com/<NAMA_PENGGUNA_GITHUB_ANDA>/blog-himarpl.git # HTTPS
+   gh repo clone <NAMA_PENGGUNA_GITHUB_ANDA>/blog-himarpl # GitHub CLI
    ```
 
-3. Change into the blog-himarpl directory.
+3. Pindah ke direktori blog-himarpl.
 
    ```bash
    cd blog-himarpl
    ```
 
-   1. **Prerequisites for .env file**: Create a `.env` file in the root of the project.
+   1. **Prasyarat untuk file .env**: Buat file `.env` di root proyek.
 
-   2. Follow the getting started guide in [CoackroachDB](https://www.cockroachlabs.com/docs/cockroachcloud/quickstart) for the `DATABASE_URL` value.
+   2. Ikuti panduan memulai di [CoackroachDB](https://www.cockroachlabs.com/docs/cockroachcloud/quickstart) untuk nilai `DATABASE_URL`.
 
       ```bash
       DATABASE_URL=
       ```
 
-   3. Follow the getting started guide in [Google OAuth](https://developers.google.com/identity/protocols/oauth2) to obtain OAuth 2.0 credentials from the Google API Console for the `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` values.
+   3. Ikuti panduan memulai di [Google OAuth](https://developers.google.com/identity/protocols/oauth2) untuk mendapatkan kredensial OAuth 2.0 dari Google API Console untuk nilai `GOOGLE_CLIENT_ID` dan `GOOGLE_CLIENT_SECRET`.
 
       ```bash
       GOOGLE_CLIENT_ID=
       GOOGLE_CLIENT_SECRET=
       ```
 
-   4. Follow the getting started guide in [Upstash Ratelimiting](https://upstash.com/docs/oss/sdks/ts/ratelimit/gettingstarted) to obtain the `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` values.
+   4. Ikuti panduan memulai di [Upstash Ratelimiting](https://upstash.com/docs/oss/sdks/ts/ratelimit/gettingstarted) untuk mendapatkan nilai `UPSTASH_REDIS_REST_URL` dan `UPSTASH_REDIS_REST_TOKEN`.
 
       ```bash
       UPSTASH_REDIS_REST_URL=
       UPSTASH_REDIS_REST_TOKEN=
       ```
 
-4. Create a remote to keep your fork and local clone up-to-date.
+4. Buat remote untuk menjaga fork dan clone lokal Anda tetap terbaru.
 
    ```bash
    git remote add upstream git@github.com:himarplupi/blog-himarpl.git # SSH
@@ -66,118 +66,108 @@ The steps below will give you a general idea of how to prepare your local enviro
    gh repo sync himarplupi/blog-himarpl # GitHub CLI
    ```
 
-5. Create a new branch for your work.
+5. Buat cabang baru untuk pekerjaan Anda.
 
    ```bash
-   git checkout -b name-of-your-branch
+   git checkout -b nama-cabang-anda
    ```
 
-6. Run the following to install the dependencies and start a local preview of your work.
+6. Jalankan perintah berikut untuk menginstal dependensi dan memulai pratinjau lokal dari pekerjaan Anda.
 
    ```bash
-   npm run db:push # pushes the database schema to the CockroachDB
-   npm ci # installs this project's dependencies
-   npm run dev # starts a development environment
+   npm run db:push # mendorong skema database ke CockroachDB
+   npm ci # menginstal dependensi proyek ini
+   npm run dev # memulai lingkungan pengembangan
    ```
 
-7. Perform your changes. In case you're unfamiliar with the structure of this repository, we recommend a read on the [HIMARPL Documentation Website](https://docs.himarpl.com).
+7. Lakukan perubahan Anda. Jika Anda tidak familiar dengan struktur repositori ini, kami merekomendasikan membaca [Website Dokumentasi HIMARPL](https://docs.himarpl.com).
 
-8. Perform a merge to sync your current branch with the upstream branch.
+8. Lakukan merge untuk menyinkronkan cabang Anda saat ini dengan cabang upstream.
 
    ```bash
    git fetch upstream
    git merge upstream/main
    ```
 
-9. Run `npm run format` to confirm that linting and formatting are passing.
+9. Jalankan `npm run lint` untuk memastikan bahwa linting dan format sudah sesuai.
 
-```bash
-npm run lint
-```
+   ```bash
+   npm run lint
+   ```
 
-10. Once you're happy with your changes, add and commit them to your branch, then push the branch to your fork.
+10. Setelah Anda puas dengan perubahan Anda, tambahkan dan commit perubahan tersebut ke cabang Anda, lalu push cabang tersebut ke fork Anda.
 
     ```bash
     cd ~/blog-himarpl
     git add .
-    git commit # Please follow the commit guidelines below
-    git push -u origin name-of-your-branch
+    git commit # Silakan ikuti pedoman commit di bawah ini
+    git push -u origin nama-cabang-anda
     ```
 
-> [!IMPORTANT]\
-> Before committing and opening a Pull Request, please go first through our [Commit](#commit-guidelines) and [Pull Request](#pull-request-policy) guidelines outlined below.
+> [!PENTING]\
+> Sebelum commit dan membuka Pull Request, harap baca terlebih dahulu [Pedoman Commit](#pedoman-commit) dan [Kebijakan Pull Request](#kebijakan-pull-request) yang dijelaskan di bawah ini.
 
-11. Create a Pull Request.
+11. Buat Pull Request.
 
-> [!NOTE]\
-> We ask for PR authors to avoid to rebase/update their PRs with the base branch (`main`) unnecessarily.
+> [!CATATAN]\
+> Kami meminta penulis PR untuk menghindari rebase/memperbarui PR mereka dengan cabang dasar (`main`) secara tidak perlu.
 
-### CLI Commands
+### Perintah CLI
 
-This repository contains several scripts and commands for performing numerous tasks. The most relevant ones are described below.
+Repositori ini berisi beberapa skrip dan perintah untuk melakukan berbagai tugas. Perintah yang paling relevan dijelaskan di bawah ini.
 
 <details>
-  <summary>Commands for Running & Building the Website</summary>
+  <summary>Perintah untuk Menjalankan & Membangun Website</summary>
 
-- `npm run dev` runs Next.js's Local Development Server, listening by default on `http://localhost:3000/`.
-- `npm run build` builds the Application on Production mode. The output is by default within `.next` folder.
-  - This is used for the Blog HIMARPL Vercel Deployments (Preview & Production)
-- `npm run start` starts a web server running serving the built content from `npm run build`
+- `npm run dev` menjalankan Server Pengembangan Lokal Next.js, mendengarkan secara default di `http://localhost:3000/`.
+- `npm run build` membangun Aplikasi dalam mode Produksi. Outputnya secara default berada di dalam folder `.next`.
+  - Ini digunakan untuk Blog HIMARPL Vercel Deployments (Pratinjau & Produksi)
+- `npm run start` memulai server web yang menjalankan konten yang dibangun dari `npm run build`
 
 </details>
 
 <details>
-  <summary>Commands for Maintenance Tasks and Tests</summary>
+  <summary>Perintah untuk Tugas Pemeliharaan dan Tes</summary>
 
-- `npm run db:push` pushes the database schema to the CockroachDB.
-- `npm run db:studio` runs the prisma studio for database management.
-- `npm run lint` runs the linter for all files.
-- `npm run test` runs all tests locally
+- `npm run db:push` mendorong skema database ke CockroachDB.
+- `npm run db:studio` menjalankan prisma studio untuk manajemen database.
+- `npm run lint` menjalankan linter untuk semua file.
+- `npm run test` menjalankan semua tes secara lokal
 
 </details>
 
-## Commit Guidelines
+## Pedoman Commit
 
-This project follows the [Conventional Commits][] specification.
+Proyek ini mengikuti spesifikasi [Conventional Commits][].
 
-Commits should be signed. You can read more about [Commit Signing][] here.
+Commit harus ditandatangani. Anda bisa membaca lebih lanjut tentang [Penandatanganan Commit][] di sini.
 
-### Commit Message Guidelines
+### Pedoman Pesan Commit
 
-- Commit messages must include a "type" as described on Conventional Commits
-- Commit messages **must not** end with a period `.`
+- Pesan commit harus menyertakan "type" seperti yang dijelaskan pada Conventional Commits
+- Pesan commit **tidak boleh** diakhiri dengan tanda titik `.`
 
-## Pull Request Policy
+## Kebijakan Pull Request
 
-This policy governs how contributions should land within this repository. The lines below state the checks and policies to be followed before merging and in the act of merging.
+Kebijakan ini mengatur bagaimana kontribusi harus dilakukan dalam repositori ini. Baris di bawah ini menyatakan pemeriksaan dan kebijakan yang harus diikuti sebelum menggabungkan dan saat menggabungkan.
 
-### When merging
+### Saat menggabungkan
 
-- All required Status-checks must have passed.
-- Please make sure that all discussions are resolved.
-- [`squash`][] pull requests made up of multiple commits
+- Semua pemeriksaan Status yang diperlukan harus lulus.
+- Pastikan bahwa semua diskusi telah diselesaikan.
+- [`squash`][] pull request yang terdiri dari beberapa commit
 
-## Developer's Certificate of Origin 1.1
+## Sertifikat Asal Pengembang 1.1
 
 ```
-By contributing to this project, I certify that:
+Dengan berkontribusi pada proyek ini, saya menyatakan bahwa:
 
-- (a) The contribution was created in whole or in part by me and I have the right to
-  submit it under the open source license indicated in the file; or
-- (b) The contribution is based upon previous work that, to the best of my knowledge,
-  is covered under an appropriate open source license and I have the right under that
-  license to submit that work with modifications, whether created in whole or in part
-  by me, under the same open source license (unless I am permitted to submit under a
-  different license), as indicated in the file; or
-- (c) The contribution was provided directly to me by some other person who certified
-  (a), (b) or (c) and I have not modified it.
-- (d) I understand and agree that this project and the contribution are public and that
-  a record of the contribution (including all personal information I submit with it,
-  including my sign-off) is maintained indefinitely and may be redistributed consistent
-  with this project or the open source license(s) involved.
-
+- (a) Kontribusi dibuat seluruhnya atau sebagian oleh saya dan saya memiliki hak untuk mengajukannya di bawah lisensi open source yang ditunjukkan dalam file; atau
+- (b) Kontribusi didasarkan pada pekerjaan sebelumnya yang, sepengetahuan saya, dilindungi oleh lisensi open source yang sesuai dan saya memiliki hak di bawah lisensi tersebut untuk mengajukan pekerjaan tersebut dengan modifikasi, baik yang dibuat seluruhnya atau sebagian oleh saya, di bawah lisensi open source yang sama (kecuali saya diizinkan untuk mengajukannya di bawah lisensi yang berbeda), seperti yang ditunjukkan dalam file; atau
+- (c) Kontribusi disediakan langsung kepada saya oleh orang lain yang menyatakan (a), (b) atau (c) dan saya tidak mengubahnya.
+- (d) Saya memahami dan setuju bahwa proyek ini dan kontribusi adalah publik dan bahwa catatan kontribusi (termasuk semua informasi pribadi yang saya ajukan dengan kontribusi tersebut, termasuk tanda tangan saya) disimpan tanpa batas waktu dan dapat didistribusikan kembali sesuai dengan proyek ini atau lisensi open source yang terlibat.
 ```
 
 [`squash`]: https://help.github.com/en/articles/about-pull-request-merges#squash-and-merge-your-pull-request-commits
 [Conventional Commits]: https://www.conventionalcommits.org/
-[Commit Signing]: https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits
+[Penandatanganan Commit]: https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits
