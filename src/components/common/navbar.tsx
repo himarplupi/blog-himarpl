@@ -54,6 +54,7 @@ export function Navbar({ session }: { session: Session | null }) {
 
               <Link
                 href="/new"
+                prefetch={false}
                 className={cn(
                   buttonVariants({ variant: "outline", size: "icon" }),
                   "h-10 w-10 md:min-w-20",

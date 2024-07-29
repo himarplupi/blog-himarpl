@@ -23,7 +23,11 @@ export function MeHeader() {
         <h2 className="scroll-m-20 font-serif text-3xl font-semibold tracking-wide">
           Postinganku
         </h2>
-        <Link href="/new" className={cn(buttonVariants({ size: "sm" }))}>
+        <Link
+          href="/new"
+          prefetch={false}
+          className={cn(buttonVariants({ size: "sm" }))}
+        >
           <Pen className="mr-2 h-4 w-4" /> Mulai Menulis Postingan
         </Link>
       </div>
