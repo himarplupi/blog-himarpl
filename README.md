@@ -43,7 +43,7 @@ npm run dev
 Proyek ini mengadopsi [Kode Etik HIMARPL][].
 Dokumentasi untuk desain infrastruktur lengkap dapat ditemukan di [Website Dokumentasi HIMARPL](https://docs.himarpl.com).
 
-> \[!CATATAN]\
+> \[!NOTE]\
 > Kami merekomendasikan membaca semua Tautan Relevan di bawah ini sebelum melakukan perubahan kode; Termasuk perubahan Dependency, perubahan Konten, dan perubahan Kode.
 
 ### Deployment
