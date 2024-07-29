@@ -40,7 +40,7 @@ npm run dev
 
 ## Kontribusi
 
-Proyek ini mengadopsi [Kode Etik HIMARPL][].
+Proyek ini mengadopsi [Kode Etik][] HIMARPL.
 Dokumentasi untuk desain infrastruktur lengkap dapat ditemukan di [Website Dokumentasi HIMARPL](https://docs.himarpl.com).
 
 > \[!NOTE]\
