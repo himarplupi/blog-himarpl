@@ -113,7 +113,7 @@ export function FormSocialMedia() {
                       <span>
                         <SiInstagram color="hsl(var(--foreground))" />
                       </span>
-                      <span>Instagram</span>
+                      <span>Username Instagram</span>
                     </FormLabel>
                     <FormControl>
                       <Input {...field} />
@@ -136,7 +136,7 @@ export function FormSocialMedia() {
                       <span>
                         <SiGithub color="hsl(var(--foreground))" />
                       </span>
-                      <span>Github</span>
+                      <span>Username Github</span>
                     </FormLabel>
                     <FormControl>
                       <Input {...field} />
