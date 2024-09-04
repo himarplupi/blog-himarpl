@@ -13,7 +13,6 @@
     "lint": "next lint",
     "commitlint": "npx commitlint -f",
     "start": "next start",
-    "prepare": "husky",
     "test": "jest",
     "test:watch": "jest --watch"
   },
