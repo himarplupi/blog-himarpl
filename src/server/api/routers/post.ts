@@ -13,6 +13,9 @@ import { ratelimit } from "@/server/ratelimit";
 import { createId } from "@paralleldrive/cuid2";
 import { TRPCError } from "@trpc/server";
 
+const botApiUrl = env.BOT_API_URL;
+const botApiToken = env.BOT_API_TOKEN;
+
 export const postRouter = createTRPCRouter({
   new: protectedProcedure.mutation(async ({ ctx }) => {
     const currentUser = ctx.session.user;
@@ -102,9 +105,8 @@ export const postRouter = createTRPCRouter({
         },
       });
 
-      const response = await fetch(
-        "https://bot.himarpl.com/api/telegram/notify",
-        {
+      if (botApiUrl && botApiToken) {
+        const response = await fetch(botApiUrl, {
           method: "POST",
           body: JSON.stringify({
             title: post.title,
@@ -116,16 +118,16 @@ export const postRouter = createTRPCRouter({
           }),
           headers: {
             "Content-Type": "application/json",
-            "x-api-token": env.BOT_API_TOKEN,
+            "x-api-token": botApiToken,
           },
-        },
-      );
-
-      if (!response.ok) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to notify telegram HIMARPL bot",
         });
+
+        if (!response.ok) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Failed to notify telegram HIMARPL bot",
+          });
+        }
       }
 
       slugger.reset();

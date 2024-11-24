@@ -33,7 +33,8 @@ export const env = createEnv({
       .default("development"),
     BASE_URL: z.string().url(),
     BASE_PATH: z.string().optional(),
-    BOT_API_TOKEN: z.string(),
+    BOT_API_URL: z.string().url().optional(),
+    BOT_API_TOKEN: z.string().optional(),
   },
 
   /**
@@ -63,6 +64,7 @@ export const env = createEnv({
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    BOT_API_URL: process.env.BOT_API_URL,
     BOT_API_TOKEN: process.env.BOT_API_TOKEN,
   },
   /**
