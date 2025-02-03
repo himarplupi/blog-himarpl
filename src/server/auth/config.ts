@@ -1,16 +1,18 @@
-import {
-  type DefaultSession,
-  getServerSession,
-  type NextAuthOptions,
-} from "next-auth";
-import { type Adapter } from "next-auth/adapters";
-import GoogleProvider from "next-auth/providers/google";
+import { type DefaultSession, type NextAuthConfig } from "next-auth";
 
+import GoogleProvider from "next-auth/providers/google";
 import { env } from "@/env";
 import { db } from "@/server/db";
+import {
+  accounts,
+  sessions,
+  users,
+  verificationTokens,
+  type UserSchema,
+} from "@/server/db/schema";
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { api } from "@/trpc/server";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import type { User as PrismaUser } from "@prisma/client";
+import { eq } from "drizzle-orm";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -27,20 +29,33 @@ declare module "next-auth" {
     } & DefaultSession["user"];
   }
 
-  interface User extends PrismaUser {
+  interface User extends UserSchema {
     role: "admin" | "member";
   }
 }
+
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
  *
  * @see https://next-auth.js.org/configuration/options
  */
-export const authOptions: NextAuthOptions = {
+export const authConfig = {
   secret: env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/login",
   },
+  providers: [
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    }),
+  ],
+  adapter: DrizzleAdapter(db, {
+    usersTable: users,
+    accountsTable: accounts,
+    sessionsTable: sessions,
+    verificationTokensTable: verificationTokens,
+  }),
   callbacks: {
     signIn: async ({ profile, account: authAccount }) => {
       const email = profile?.email;
@@ -59,29 +74,23 @@ export const authOptions: NextAuthOptions = {
       if (!account) {
         console.log("Account not found, inserting...");
         // Insert new account user if not found
-        const res = await db.account.create({
-          data: {
-            userId: user.id,
-            provider: authAccount.provider,
-            type: authAccount.type,
-            providerAccountId: authAccount.providerAccountId,
-            access_token: authAccount.access_token,
-            refresh_token: authAccount.refresh_token,
-            expires_at: authAccount.expires_at,
-            scope: authAccount.scope,
-            token_type: authAccount.token_type,
-            id_token: authAccount.id_token,
-            session_state: authAccount.session_state,
-          },
+        const res = await db.insert(accounts).values({
+          userId: user.id,
+          provider: authAccount.provider,
+          type: authAccount.type,
+          providerAccountId: authAccount.providerAccountId,
+          access_token: authAccount.access_token,
+          refresh_token: authAccount.refresh_token,
+          expires_at: authAccount.expires_at,
+          scope: authAccount.scope,
+          token_type: authAccount.token_type,
+          id_token: authAccount.id_token,
+          session_state: authAccount.session_state,
         });
 
-        if (!res) return "/login?errorMsg=Failed to insert account";
+        if (res.rows.length !== 1)
+          return "/login?errorMsg=Failed to insert account";
       }
-
-      await db.user.update({
-        where: { id: user.id },
-        data: { lastLoginAt: new Date() },
-      });
 
       return true;
     },
@@ -97,18 +106,4 @@ export const authOptions: NextAuthOptions = {
       };
     },
   },
-  adapter: PrismaAdapter(db) as Adapter,
-  providers: [
-    GoogleProvider({
-      clientId: env.GOOGLE_CLIENT_ID,
-      clientSecret: env.GOOGLE_CLIENT_SECRET,
-    }),
-  ],
-};
-
-/**
- * Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
- *
- * @see https://next-auth.js.org/configuration/nextjs
- */
-export const getServerAuthSession = () => getServerSession(authOptions);
+} satisfies NextAuthConfig;

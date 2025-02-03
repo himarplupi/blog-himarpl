@@ -1,3 +1,4 @@
+import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import {
@@ -5,37 +6,47 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
+import { socialMedias, users } from "@/server/db/schema";
 import { ratelimit } from "@/server/ratelimit";
 import { TRPCError } from "@trpc/server";
 
 export const userRouter = createTRPCRouter({
   getByEmail: publicProcedure.input(z.string()).query(({ ctx, input }) => {
-    return ctx.db.user.findFirst({ where: { email: input } });
+    return ctx.db.query.users.findFirst({
+      where: (users, { eq }) => eq(users.email, input),
+    });
   }),
   byUsername: publicProcedure.input(z.string()).query(({ ctx, input }) => {
-    return ctx.db.user.findFirst({
-      where: { username: input.toLowerCase() },
-      include: {
-        department: true,
+    return ctx.db.query.users.findFirst({
+      where: (users, { eq }) => eq(users.username, input.toLowerCase()),
+      with: {
+        departments: true,
+        positions: true,
+        periods: true,
         accounts: true,
-        socialMedia: true,
+        socialMedias: true,
       },
     });
   }),
   setSelfUsername: protectedProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.user.update({
-        where: { id: ctx.session.user.id },
-        data: { username: input.toLowerCase() },
-      });
+      return await ctx.db
+        .update(users)
+        .set({
+          username: input.toLowerCase(),
+        })
+        .where(eq(users.id, ctx.session.user.id));
     }),
   me: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.user.findFirst({
-      where: { id: ctx.session.user.id },
-      include: {
-        department: true,
-        socialMedia: true,
+    return ctx.db.query.users.findFirst({
+      where: (users, { eq }) => eq(users.id, ctx.session.user.id),
+      with: {
+        departments: true,
+        positions: true,
+        periods: true,
+        accounts: true,
+        socialMedias: true,
       },
     });
   }),
@@ -61,8 +72,8 @@ export const userRouter = createTRPCRouter({
         });
       }
 
-      const currentSosialMedias = await ctx.db.socialMedia.findMany({
-        where: { userId },
+      const currentSosialMedias = await ctx.db.query.socialMedias.findMany({
+        where: (socialMedias, { eq }) => eq(socialMedias.userId, userId),
       });
 
       // get current social media that exist in input
@@ -76,12 +87,12 @@ export const userRouter = createTRPCRouter({
 
       // Add new social media if not exist
       if (filterredSocialMedias.length === 0) {
-        await ctx.db.socialMedia.createMany({
-          data: inputSocialMedias.map((input) => ({
+        await ctx.db.insert(socialMedias).values(
+          inputSocialMedias.map((input) => ({
             ...input,
             userId,
           })),
-        });
+        );
 
         return inputSocialMedias;
       }
@@ -96,16 +107,16 @@ export const userRouter = createTRPCRouter({
           continue;
         }
 
-        await ctx.db.socialMedia.update({
-          where: {
-            userId_name_username: {
-              userId,
-              name: current.name,
-              username: current.username,
-            },
-          },
-          data: inputSocialMedia,
-        });
+        await ctx.db
+          .update(socialMedias)
+          .set(inputSocialMedia)
+          .where(
+            and(
+              eq(socialMedias.userId, userId),
+              eq(socialMedias.name, current.name),
+              eq(socialMedias.username, current.username),
+            ),
+          );
       }
 
       if (filterredSocialMedias.length < inputSocialMedias.length) {
@@ -117,12 +128,12 @@ export const userRouter = createTRPCRouter({
           return !currentSocialMedia;
         });
 
-        await ctx.db.socialMedia.createMany({
-          data: newSocialMedias.map((input) => ({
+        await ctx.db.insert(socialMedias).values(
+          newSocialMedias.map((input) => ({
             ...input,
             userId,
           })),
-        });
+        );
       }
 
       return inputSocialMedias;
@@ -143,55 +154,40 @@ export const userRouter = createTRPCRouter({
         });
       }
 
-      return await ctx.db.user.update({
-        where: { id: ctx.session.user.id },
-        data: {
+      return await ctx.db
+        .update(users)
+        .set({
           username: input.username,
           bio: input.bio,
-        },
-      });
+        })
+        .where(eq(users.id, ctx.session.user.id));
     }),
-  updateLastLoginAt: protectedProcedure.mutation(({ ctx }) => {
-    return ctx.db.user.update({
-      where: { id: ctx.session.user.id },
-      data: { lastLoginAt: new Date() },
-    });
+  updateLastLoginAt: protectedProcedure.mutation(async ({ ctx }) => {
+    return await ctx.db
+      .update(users)
+      .set({
+        lastLoginAt: new Date(),
+      })
+      .where(eq(users.id, ctx.session.user.id));
   }),
   byNewestArticle: publicProcedure.query(async ({ ctx }) => {
     const thisMonth = new Date();
     thisMonth.setMonth(thisMonth.getMonth() - 1);
-
-    return await ctx.db.user.findMany({
-      orderBy: {
-        posts: {
-          _count: "asc",
-        },
-      },
-      where: {
-        posts: {
-          some: {
-            publishedAt: {
-              gte: thisMonth,
-            },
-          },
-        },
-      },
-      select: {
-        id: true,
-        name: true,
-        image: true,
-        username: true,
-        posts: {
-          where: {
-            publishedAt: {
-              gte: thisMonth,
-            },
-          },
-          select: {
-            _count: true,
+    const newestPosts = await ctx.db.query.posts.findMany({
+      where: (posts, { gte }) => gte(posts.publishedAt, thisMonth),
+      orderBy: (posts, { desc }) => [desc(posts.publishedAt)],
+      with: {
+        author: {
+          columns: {
+            id: true,
+            username: true,
+            image: true,
+            name: true,
           },
         },
       },
     });
+
+    return newestPosts.map((post) => post.author);
   }),
 });

@@ -7,7 +7,7 @@ import { Navbar } from "@/components/common/navbar";
 import { Articles } from "@/components/home/articles";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { getServerAuthSession } from "@/server/auth";
+import { auth } from "@/server/auth";
 import { db } from "@/server/db";
 import { api } from "@/trpc/server";
 import { SiGithub, SiInstagram } from "@icons-pack/react-simple-icons";
@@ -17,13 +17,9 @@ type UserPageProps = {
 };
 
 export async function generateStaticParams() {
-  const users = await db.user.findMany({
-    where: {
-      username: {
-        not: null,
-      },
-    },
-    select: {
+  const users = await db.query.users.findMany({
+    where: (users, { isNotNull }) => isNotNull(users.username),
+    columns: {
       username: true,
     },
   });
@@ -38,22 +34,16 @@ export async function generateMetadata(
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const username = params.username.replace("%40", "");
-  const user = await db.user.findFirst({
-    where: {
-      username: {
-        equals: username,
-      },
+  const user = await db.query.users.findFirst({
+    where: (users, { eq }) => eq(users.username, username),
+    with: {
+      positions: true,
+      departments: true,
     },
-    select: {
+    columns: {
       name: true,
-      position: true,
       username: true,
       bio: true,
-      department: {
-        select: {
-          acronym: true,
-        },
-      },
       image: true,
     },
   });
@@ -65,9 +55,9 @@ export async function generateMetadata(
   const previousImages = (await parent).openGraph?.images ?? [];
   const description =
     (user?.bio ?? "").length > 1
-      ? user.bio ?? ""
+      ? (user.bio ?? "")
       : `Mengenal lebih dekat ${user?.name}, simak selengkapnya di sini!`;
-  const title = `${user?.name ? user.name.toUpperCase() : ""} ${user?.position ? user.position.toUpperCase() : ""} ${user?.department ? user.department.acronym.toUpperCase() : ""}`;
+  const title = `${user?.name ? user.name.toUpperCase() : ""} ${user?.positions.at(-1)?.name ? user?.positions.at(-1)?.name : ""} ${user?.departments.at(-1)?.acronym ? user?.departments.at(-1)?.acronym.toUpperCase() : ""}`;
 
   return {
     title: title,
@@ -90,7 +80,7 @@ export async function generateMetadata(
 }
 
 export default async function UserPage({ params }: UserPageProps) {
-  const session = await getServerAuthSession();
+  const session = await auth();
   const username = params.username.replace("%40", "");
 
   const user = await api.user.byUsername.query(username);

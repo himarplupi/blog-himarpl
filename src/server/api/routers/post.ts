@@ -1,4 +1,5 @@
 import { revalidatePath } from "next/cache";
+import { eq } from "drizzle-orm";
 import GithubSlugger from "github-slugger";
 import { z } from "zod";
 
@@ -9,8 +10,8 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
+import { posts } from "@/server/db/schema";
 import { ratelimit } from "@/server/ratelimit";
-import { createId } from "@paralleldrive/cuid2";
 import { TRPCError } from "@trpc/server";
 
 const botApiUrl = env.BOT_API_URL;
@@ -35,20 +36,37 @@ export const postRouter = createTRPCRouter({
       });
     }
 
-    const id = createId();
-
     // Insert new post
-    return await ctx.db.post.create({
-      data: {
-        id,
+    const res = await ctx.db
+      .insert(posts)
+      .values({
         title: "",
         content: "",
         rawHtml: "",
-        slug: id,
+
         metaTitle: "",
         authorId: ctx.session.user.id,
-      },
-    });
+      })
+      .returning();
+
+    const currentId = res[0]?.id;
+
+    if (!currentId) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Failed to create a new post",
+      });
+    }
+
+    const updatedPost = await ctx.db
+      .update(posts)
+      .set({
+        slug: currentId.toString(),
+      })
+      .where(eq(posts.id, currentId))
+      .returning();
+
+    return updatedPost;
   }),
   publish: protectedProcedure
     .input(
@@ -80,11 +98,9 @@ export const postRouter = createTRPCRouter({
       const metaTitle = parseMetaTitle(title);
 
       (
-        await ctx.db.post.findMany({
-          where: {
-            authorId: ctx.session.user.id,
-          },
-          select: {
+        await ctx.db.query.posts.findMany({
+          where: (posts, { eq }) => eq(posts.authorId, ctx.session.user.id),
+          columns: {
             slug: true,
           },
         })
@@ -92,18 +108,15 @@ export const postRouter = createTRPCRouter({
         slugger.slug(post.slug);
       });
 
-      // Insert new post
-      const post = await ctx.db.post.update({
-        where: {
-          id: input.id,
-        },
-        data: {
+      const post = await ctx.db
+        .update(posts)
+        .set({
           title,
           metaTitle,
           slug: slugger.slug(metaTitle),
           publishedAt: new Date(),
-        },
-      });
+        })
+        .where(eq(posts.id, input.id));
 
       if (botApiUrl && botApiToken) {
         const response = await fetch(botApiUrl, {

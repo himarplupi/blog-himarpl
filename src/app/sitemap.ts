@@ -22,24 +22,18 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
     `${baseUrlAndPath}/login`,
   ];
 
-  const users = await db.user.findMany({
-    where: {
-      username: {
-        not: null,
-      },
-    },
-    select: {
-      username: true,
+  const users = await db.query.users.findMany({
+    where: (users, { isNotNull }) => isNotNull(users.username),
+    with: {
       posts: {
-        where: {
-          publishedAt: {
-            not: null,
-          },
-        },
-        select: {
+        where: (posts, { isNotNull }) => isNotNull(posts.publishedAt),
+        columns: {
           slug: true,
         },
       },
+    },
+    columns: {
+      username: true,
     },
   });
 
@@ -50,8 +44,8 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
     });
   });
 
-  const tags = await db.postTag.findMany({
-    select: {
+  const tags = await db.query.tags.findMany({
+    columns: {
       slug: true,
     },
   });

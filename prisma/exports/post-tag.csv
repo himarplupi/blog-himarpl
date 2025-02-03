@@ -1,0 +1,108 @@
+id,title,slug,createdAt,updatedAt,parentId
+cly42b4o80000e0epuhox87kq,berita,berita,2024-07-02T07:03:08.648,2024-07-02T07:03:08.648,null
+clyhwgdmh0000pcxcsc0ifwqr,penelitian,penelitian,2024-07-11T23:28:02.298,2024-07-11T23:28:02.298,null
+clyhwgdmi0001pcxcs8q3z03i,perangkat lunak,perangkat-lunak,2024-07-11T23:28:02.298,2024-07-11T23:28:02.298,null
+clyhwh0z40002pcxczxafb0nq,perkuliahan,perkuliahan,2024-07-11T23:28:32.56,2024-07-11T23:28:32.56,null
+clyhwh0z50003pcxc0ehh90oe,kompetisi,kompetisi,2024-07-11T23:28:32.56,2024-07-11T23:28:32.56,null
+clyhwh0z50004pcxcwmn2267s,pengembangan diri,pengembangan-diri,2024-07-11T23:28:32.56,2024-07-11T23:28:32.56,null
+clyhwi98w0005pcxc120ql9xf,teknologi,teknologi,2024-07-11T23:29:29.936,2024-07-11T23:29:29.936,null
+clyhwi98w0006pcxc5cp4eywy,sosial,sosial,2024-07-11T23:29:29.936,2024-07-11T23:29:29.936,null
+clyhwi98w0007pcxca0u5xqmv,media,media,2024-07-11T23:29:29.936,2024-07-11T23:30:47.322,null
+clyhwjmi40008pcxcnxftsq8j,berita hima,berita-hima,2024-07-11T23:30:33.773,2024-07-11T23:55:31.954,cly42b4o80000e0epuhox87kq
+clyhwjmi40009pcxce5ospoc8,berita pmb,berita-pmb,2024-07-11T23:30:33.773,2024-07-11T23:55:31.954,cly42b4o80000e0epuhox87kq
+clyhwjmi5000apcxcu7qbwb2q,berita akademik,berita-akademik,2024-07-11T23:30:33.773,2024-07-11T23:55:31.954,cly42b4o80000e0epuhox87kq
+clyhwlcag000bpcxcrbghcsrr,kompetisi bisnis,kompetisi-bisnis,2024-07-11T23:31:53.849,2024-07-11T23:59:24.31,clyhwh0z50003pcxc0ehh90oe
+clyhwlcah000cpcxcycznrbf1,capture the flag,capture-the-flag,2024-07-11T23:31:53.849,2024-07-11T23:59:24.31,clyhwh0z50003pcxc0ehh90oe
+clyhwnat1000dpcxc3xovkd4y,cpp,cpp,2024-07-11T23:33:25.237,2024-07-11T23:58:08.095,clyhwgdmi0001pcxcs8q3z03i
+clyhwnat1000epcxcd87vl2pn,java,java,2024-07-11T23:33:25.237,2024-07-11T23:58:08.095,clyhwgdmi0001pcxcs8q3z03i
+clyhwnat1000fpcxcrph563el,javascript,javascript,2024-07-11T23:33:25.237,2024-07-11T23:58:08.095,clyhwgdmi0001pcxcs8q3z03i
+clyhwnat1000gpcxctdbhlr37,php,php,2024-07-11T23:33:25.237,2024-07-11T23:58:08.095,clyhwgdmi0001pcxcs8q3z03i
+clyhwnat1000hpcxcjbtd35or,laravel,laravel,2024-07-11T23:33:25.237,2024-07-11T23:58:08.095,clyhwgdmi0001pcxcs8q3z03i
+clyhwnat2000ipcxc9oe2fob4,reactjs,reactjs,2024-07-11T23:33:25.237,2024-07-11T23:58:08.095,clyhwgdmi0001pcxcs8q3z03i
+clyhwqehr000jpcxcohtl36it,artificial intelligence,artificial-intelligence,2024-07-11T23:35:49.984,2024-07-12T00:00:34.188,clyhwi98w0005pcxc120ql9xf
+clyhwqehs000kpcxc7v89eiu2,machine learning,machine-learning,2024-07-11T23:35:49.984,2024-07-12T00:00:34.188,clyhwi98w0005pcxc120ql9xf
+clyhwqehs000lpcxcfpk5p1zw,bitcoin,bitcoin,2024-07-11T23:35:49.984,2024-07-12T00:00:34.188,clyhwi98w0005pcxc120ql9xf
+clyhwqehs000mpcxcbpcqbmwg,cryptocurrency,cryptocurrency,2024-07-11T23:35:49.984,2024-07-12T00:00:34.188,clyhwi98w0005pcxc120ql9xf
+clyhwrqyj000npcxcvd0znv2w,data engineering,data-engineering,2024-07-11T23:36:52.795,2024-07-12T00:00:34.188,clyhwi98w0005pcxc120ql9xf
+clyhwrqyj000opcxciucqzirm,database,database,2024-07-11T23:36:52.795,2024-07-12T00:00:34.188,clyhwi98w0005pcxc120ql9xf
+clyhwrqyj000ppcxcn21rl3lg,sql,sql,2024-07-11T23:36:52.795,2024-07-12T00:00:34.188,clyhwi98w0005pcxc120ql9xf
+clyhwsa97000qpcxcr6x890bf,gamejam,gamejam,2024-07-11T23:37:17.804,2024-07-11T23:59:24.31,clyhwh0z50003pcxc0ehh90oe
+clyhwtm1m000rpcxcth19ijsl,competitive programming,competitive-programming,2024-07-11T23:38:19.738,2024-07-21T22:33:38.987,clyhwh0z50003pcxc0ehh90oe
+clyhwu4on000spcxcjqfpeqar,ai innovation,ai-innovation,2024-07-11T23:38:43.896,2024-07-11T23:59:24.31,clyhwh0z50003pcxc0ehh90oe
+clyhwur24000tpcxchiz3f19s,data analytics competition,data-analytics-competition,2024-07-11T23:39:12.892,2024-07-11T23:59:24.31,clyhwh0z50003pcxc0ehh90oe
+clyhwvyzm000upcxc1le0e261,html,html,2024-07-11T23:40:09.827,2024-07-12T00:01:02.238,clyhwgdmi0001pcxcs8q3z03i
+clyhwvyzn000vpcxciih4lfxf,css,css,2024-07-11T23:40:09.827,2024-07-12T00:01:02.238,clyhwgdmi0001pcxcs8q3z03i
+clyhwvyzn000wpcxcip68brmc,typescript,typescript,2024-07-11T23:40:09.827,2024-07-12T00:01:02.238,clyhwgdmi0001pcxcs8q3z03i
+clyhwwk3z000xpcxcz655bfs3,docker,docker,2024-07-11T23:40:37.199,2024-07-12T00:01:02.238,clyhwgdmi0001pcxcs8q3z03i
+clyhwwk3z000ypcxcdxq4kmrk,kubernetes,kubernetes,2024-07-11T23:40:37.199,2024-07-12T00:01:02.238,clyhwgdmi0001pcxcs8q3z03i
+clyhwybma000zpcxcwx5d01tt,deep learning,deep-learning,2024-07-11T23:41:59.507,2024-07-12T00:00:34.188,clyhwi98w0005pcxc120ql9xf
+clyhwybma0010pcxcqzlwu3ag,nft,nft,2024-07-11T23:41:59.507,2024-07-12T00:00:34.188,clyhwi98w0005pcxc120ql9xf
+clyhwybmb0011pcxcfn7ksyh9,coding,coding,2024-07-11T23:41:59.507,2024-07-12T00:00:34.188,clyhwi98w0005pcxc120ql9xf
+clyhwybmb0012pcxc4bbeggxu,flutter,flutter,2024-07-11T23:41:59.507,2024-07-12T00:01:02.238,clyhwgdmi0001pcxcs8q3z03i
+clyhwybmb0013pcxc4slupsyi,frontend development,frontend-development,2024-07-11T23:41:59.507,2024-07-12T00:01:02.238,clyhwgdmi0001pcxcs8q3z03i
+clyhx17or0014pcxctm4zfw8g,ios development,ios-development,2024-07-11T23:44:14.379,2024-07-12T00:01:02.238,clyhwgdmi0001pcxcs8q3z03i
+clyhx17or0015pcxcq6fg0wgk,android development,android-development,2024-07-11T23:44:14.379,2024-07-12T00:01:02.238,clyhwgdmi0001pcxcs8q3z03i
+clyhx17or0016pcxc13nf31s4,anime,anime,2024-07-11T23:44:14.379,2024-07-12T00:01:41.547,clyhwi98w0007pcxca0u5xqmv
+clyhx17os0017pcxc6gj6bh3y,film,film,2024-07-11T23:44:14.379,2024-07-12T00:01:41.547,clyhwi98w0007pcxca0u5xqmv
+clyhx17os0018pcxcntho7l4u,buku,buku,2024-07-11T23:44:14.379,2024-07-12T00:01:41.547,clyhwi98w0007pcxca0u5xqmv
+clyhx17os0019pcxc09v3jt9k,puisi,puisi,2024-07-11T23:44:14.379,2024-07-12T00:01:41.547,clyhwi98w0007pcxca0u5xqmv
+clyhx17os001apcxc98s6sllu,komik,komik,2024-07-11T23:44:14.379,2024-07-12T00:01:41.547,clyhwi98w0007pcxca0u5xqmv
+clyhx17os001bpcxc3aqox2yz,manga,manga,2024-07-11T23:44:14.379,2024-07-12T00:01:41.547,clyhwi98w0007pcxca0u5xqmv
+clyhx17os001cpcxcgd6tfs2o,manwha,manwha,2024-07-11T23:44:14.379,2024-07-12T00:01:41.547,clyhwi98w0007pcxca0u5xqmv
+clyhx17os001dpcxcb1onog4e,musik,musik,2024-07-11T23:44:14.379,2024-07-12T00:01:41.547,clyhwi98w0007pcxca0u5xqmv
+clyhx1yla001epcxc0odecfql,game development,game-development,2024-07-11T23:44:49.246,2024-07-12T00:02:14.886,clyhwgdmi0001pcxcs8q3z03i
+clyhx1yla001fpcxcpm8qrkxx,videogame,videogame,2024-07-11T23:44:49.246,2024-07-12T00:01:41.547,clyhwi98w0007pcxca0u5xqmv
+clyhx2di7001gpcxcvgbd3asu,game,game,2024-07-11T23:45:08.575,2024-07-12T00:01:41.547,clyhwi98w0007pcxca0u5xqmv
+clyhx2di7001hpcxc5s01mqcd,game design,game-design,2024-07-11T23:45:08.575,2024-07-12T00:02:14.886,clyhwgdmi0001pcxcs8q3z03i
+clyhx2iep001ipcxc78ej7bnq,relationship,relationship,2024-07-11T23:45:14.929,2024-07-11T23:57:16.408,null
+clyhx6e1b001jpcxcokvf9z3o,pendidikan,pendidikan,2024-07-11T23:48:15.887,2024-07-11T23:56:12.784,clyhwgdmh0000pcxcsc0ifwqr
+clyhx6e1b001kpcxcykioq55t,ekonomi dan bisnis,ekonomi-dan-bisnis,2024-07-11T23:48:15.887,2024-07-11T23:56:12.784,clyhwgdmh0000pcxcsc0ifwqr
+clyhx6e1b001lpcxc15eqz90d,ilmu sosial,ilmu-sosial,2024-07-11T23:48:15.887,2024-07-11T23:56:12.784,clyhwgdmh0000pcxcsc0ifwqr
+clyhx6e1b001mpcxcea5zivxb,lingkungan dan energi,lingkungan-dan-energi,2024-07-11T23:48:15.887,2024-07-11T23:56:12.784,clyhwgdmh0000pcxcsc0ifwqr
+clyhx6e1b001npcxckf4n65fs,kesehatan,kesehatan,2024-07-11T23:48:15.887,2024-07-11T23:56:12.784,clyhwgdmh0000pcxcsc0ifwqr
+clyhx6e1c001opcxcm02k8n9m,komputer dan teknologi,komputer-dan-teknologi,2024-07-11T23:48:15.887,2024-07-11T23:56:12.784,clyhwgdmh0000pcxcsc0ifwqr
+clyhx9skh001ppcxcbs06950k,hima,hima,2024-07-11T23:50:54.69,2024-07-11T23:58:47.315,clyhwh0z40002pcxczxafb0nq
+clyhx9ski001qpcxcvxpwifg9,ormawa,ormawa,2024-07-11T23:50:54.69,2024-07-11T23:58:47.315,clyhwh0z40002pcxczxafb0nq
+clyhx9ski001rpcxcumd5xris,ukm,ukm,2024-07-11T23:50:54.69,2024-07-11T23:58:47.315,clyhwh0z40002pcxczxafb0nq
+clyhx9ski001spcxc37b6f6un,bem,bem,2024-07-11T23:50:54.69,2024-07-11T23:58:47.315,clyhwh0z40002pcxczxafb0nq
+clyhx9ski001tpcxcpmxi9iqj,dpm,dpm,2024-07-11T23:50:54.69,2024-07-11T23:58:47.315,clyhwh0z40002pcxczxafb0nq
+clyhx9ski001upcxc2rhjq2w9,studi akademik,studi-akademik,2024-07-11T23:50:54.69,2024-07-11T23:58:47.315,clyhwh0z40002pcxczxafb0nq
+clyhx9ski001vpcxc7ok0r2a9,beasiswa,beasiswa,2024-07-11T23:50:54.69,2024-07-11T23:58:47.315,clyhwh0z40002pcxczxafb0nq
+clyhx9ski001wpcxc16nr0ysu,mata kuliah,mata-kuliah,2024-07-11T23:50:54.69,2024-07-11T23:58:47.315,clyhwh0z40002pcxczxafb0nq
+clyhx9ski001xpcxcrgbqyixt,upi,upi,2024-07-11T23:50:54.69,2024-07-11T23:58:47.315,clyhwh0z40002pcxczxafb0nq
+clyhx9ski001ypcxcgwy32lyw,asrama,asrama,2024-07-11T23:50:54.69,2024-07-11T23:50:54.69,null
+clyhxf57q001zpcxcpdd33rqo,produktifitas,produktifitas,2024-07-11T23:55:04.358,2024-07-11T23:59:46.197,clyhwh0z50004pcxcwmn2267s
+clyhxf57q0020pcxcswq3gi8i,pelajaran hidup,pelajaran-hidup,2024-07-11T23:55:04.358,2024-07-11T23:59:46.197,clyhwh0z50004pcxcwmn2267s
+clyhxf57q0021pcxcyj499tyh,kesadaran diri,kesadaran-diri,2024-07-11T23:55:04.358,2024-07-11T23:59:46.197,clyhwh0z50004pcxcwmn2267s
+clyhxf57r0022pcxcebjq6qol,stress,stress,2024-07-11T23:55:04.358,2024-07-11T23:59:46.197,clyhwh0z50004pcxcwmn2267s
+clyhxf57r0023pcxc764xv78q,saran karir,saran-karir,2024-07-11T23:55:04.358,2024-07-11T23:59:46.197,clyhwh0z50004pcxcwmn2267s
+clyhxf57r0024pcxc7e8msxt4,rutinitas pagi,rutinitas-pagi,2024-07-11T23:55:04.358,2024-07-11T23:59:46.197,clyhwh0z50004pcxcwmn2267s
+clyhxf57r0025pcxcmdkrx64o,manajemen waktu,manajemen-waktu,2024-07-11T23:55:04.358,2024-07-11T23:59:46.197,clyhwh0z50004pcxcwmn2267s
+clyhxf57s0026pcxc7q1q66gj,meditasi,meditasi,2024-07-11T23:55:04.358,2024-07-11T23:59:46.197,clyhwh0z50004pcxcwmn2267s
+clyhxf57s0027pcxc2k0o1o8o,olahraga,olahraga,2024-07-11T23:55:04.358,2024-07-11T23:59:46.197,clyhwh0z50004pcxcwmn2267s
+clyhxf57s0028pcxcu05xmay6,tujuan hidup,tujuan-hidup,2024-07-11T23:55:04.358,2024-07-11T23:59:46.197,clyhwh0z50004pcxcwmn2267s
+clyhxvclm0029pcxc0a9zhw81,pendapatan,pendapatan,2024-07-12T00:07:40.426,2024-07-12T00:08:08.718,clyhwi98w0006pcxc5cp4eywy
+clyhxvclm002apcxc01rogvjg,utang,utang,2024-07-12T00:07:40.426,2024-07-12T00:08:08.718,clyhwi98w0006pcxc5cp4eywy
+clyhxvcln002bpcxcs6yas60x,pasar saham,pasar-saham,2024-07-12T00:07:40.426,2024-07-12T00:08:08.718,clyhwi98w0006pcxc5cp4eywy
+clyhxvcln002cpcxctuvv6mcv,reformasi pendidikan,reformasi-pendidikan,2024-07-12T00:07:40.426,2024-07-12T00:08:08.718,clyhwi98w0006pcxc5cp4eywy
+clyhxvcln002dpcxcm3ub5ttv,pendidikan tinggi,pendidikan-tinggi,2024-07-12T00:07:40.426,2024-07-12T00:08:08.718,clyhwi98w0006pcxc5cp4eywy
+clyhxvclo002epcxcz3v5d0ap,phd,phd,2024-07-12T00:07:40.426,2024-07-12T00:08:08.718,clyhwi98w0006pcxc5cp4eywy
+clyhxvclo002fpcxce0sdi0xv,mengajar,mengajar,2024-07-12T00:07:40.426,2024-07-12T00:08:08.718,clyhwi98w0006pcxc5cp4eywy
+clyhxvclp002gpcxcypg6jz16,pengabdian,pengabdian,2024-07-12T00:07:40.426,2024-07-12T00:08:08.718,clyhwi98w0006pcxc5cp4eywy
+clyhxvclp002hpcxc3u7i58cd,pertukaran pelajar,pertukaran-pelajar,2024-07-12T00:07:40.426,2024-07-12T00:08:08.718,clyhwi98w0006pcxc5cp4eywy
+clyhxvclp002ipcxcf5et2ubi,disabilitas,disabilitas,2024-07-12T00:07:40.426,2024-07-12T00:08:08.718,clyhwi98w0006pcxc5cp4eywy
+clyhxvclq002jpcxcknvgx8zl,diskriminasi,diskriminasi,2024-07-12T00:07:40.426,2024-07-12T00:08:08.718,clyhwi98w0006pcxc5cp4eywy
+clyhxvclq002kpcxc76vfbh6o,keberagaman,keberagaman,2024-07-12T00:07:40.426,2024-07-12T00:08:08.718,clyhwi98w0006pcxc5cp4eywy
+clyilw9w10002k5890d10og3h,kalender akademik,kalender-akademik,2024-07-12T11:20:14.353,2024-07-12T11:20:14.353,null
+clyir65bv00002p1439fiw9kf,ekraf,ekraf,2024-07-12T13:47:53.083,2024-07-12T13:47:53.083,null
+clyir68q800012p14i6r4lk1w,merch,merch,2024-07-12T13:47:57.488,2024-07-13T02:08:46.215,cly42b4o80000e0epuhox87kq
+clyjesfxs0000r75m3iq3jqf8,pemrograman,pemrograman,2024-07-13T00:49:04.433,2024-07-13T02:09:04.897,clyhwgdmi0001pcxcs8q3z03i
+clyjfq6bo000013zwi9lge84n,english test,english-test,2024-07-13T01:15:18.276,2024-07-13T01:15:18.276,null
+clyjfqc4m000113zwwihjuq7m,ptesol,ptesol,2024-07-13T01:15:25.799,2024-07-13T01:15:25.799,null
+clyjhkycg0000ne5t1syfzzzc,berita himarpl,berita-himarpl,2024-07-13T02:07:13.888,2024-07-13T02:08:46.215,cly42b4o80000e0epuhox87kq
+clyjkk1j90000o47xwiiqvmqx,developer announcement,developer-announcement,2024-07-13T03:30:30.213,2024-07-13T03:30:30.213,null
+clyjm9e3o0000gh6v2ku3o6a0,rekapstore,rekapstore,2024-07-13T04:18:12.517,2024-07-13T04:18:12.517,null
+clyjm9jm30001gh6vj0da7ni0,artikel,artikel,2024-07-13T04:18:19.659,2024-07-13T04:18:19.659,null
+clyu5vbse0000a26aaqezdx5l,c++,c-plus-plus,2024-07-20T13:24:50.413,2024-07-20T13:26:58.831,clyhwgdmi0001pcxcs8q3z03i
+clyu5xbfb0002a26arw749wqg,c,c,2024-07-20T13:26:23.255,2024-07-20T13:26:58.831,clyhwgdmi0001pcxcs8q3z03i
+clyu5zcu600016sm9uokheojg,c#,c-sharp,2024-07-20T13:27:58.398,2024-07-20T13:28:24.594,clyhwgdmi0001pcxcs8q3z03i
