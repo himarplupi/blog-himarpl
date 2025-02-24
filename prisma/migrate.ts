@@ -12,6 +12,7 @@ async function main() {
   await accountMigration();
   await departmentMigration();
   await postTagMigration();
+  await postMigration();
 }
 
 async function generatePositions() {
@@ -115,7 +116,7 @@ async function departmentMigration() {
     })
     .flat();
 
-  await db.programs.createMany({
+  await db.program.createMany({
     data: programs.map((program) => ({
       content: program.content,
       departmentId: program.departmentId,
@@ -168,7 +169,6 @@ async function userMigration() {
       image: user.image,
       username: user.username,
       bio: user.bio,
-      position: user.position,
       role: user.role,
       createdAt: new Date(user.createdAt),
       positions: {
@@ -311,7 +311,7 @@ async function postMigration() {
 async function clearDatabase() {
   await db.postTag.deleteMany({});
   await db.post.deleteMany({});
-  await db.programs.deleteMany({});
+  await db.program.deleteMany({});
   await db.department.deleteMany({});
   await db.period.deleteMany({});
   await db.position.deleteMany({});

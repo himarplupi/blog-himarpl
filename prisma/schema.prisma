@@ -44,11 +44,13 @@ model Post {
   @@map("posts")
 }
 
-model Programs {
+model Program {
   id           String     @id @default(cuid())
   content      String
   departmentId String     @map("department_id")
   department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  @@map("programs")
 }
 
 model Position {
@@ -62,18 +64,18 @@ model Position {
 }
 
 model Department {
-  id          String     @id @default(cuid())
+  id          String    @id @default(cuid())
   name        String
   acronym     String
   image       String?
   description String?
-  type        String     @default("BE") // "BE" | "DP"
-  createdAt   DateTime   @default(now()) @map("created_at")
-  updatedAt   DateTime   @default(now()) @updatedAt @map("updated_at")
+  type        String    @default("BE") // "BE" | "DP"
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at")
   users       User[]
-  programs    Programs[]
-  periodYear  Int        @map("period_year")
-  periods     Period     @relation(fields: [periodYear], references: [year], onDelete: Cascade)
+  programs    Program[]
+  periodYear  Int       @map("period_year")
+  period      Period    @relation(fields: [periodYear], references: [year], onDelete: Cascade)
 
   @@unique([type, acronym])
   @@map("departments")
@@ -88,7 +90,7 @@ model Period {
   createdAt   DateTime     @default(now()) @map("created_at")
   updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at")
   users       User[]
-  department  Department[]
+  departments Department[]
 
   @@map("periods")
 }
@@ -112,15 +114,14 @@ model User {
   image         String?
   username      String?       @unique
   bio           String?
-  position      String?
   role          String        @default("member") // "member" | "admin"
   lastLoginAt   DateTime?     @map("last_login_at")
   createdAt     DateTime      @default(now()) @map("created_at")
   updatedAt     DateTime      @default(now()) @updatedAt @map("updated_at")
-  department    Department[]
+  departments   Department[]
   posts         Post[]
   periods       Period[]
-  socialMedia   SocialMedia[]
+  socialMedias  SocialMedia[]
   accounts      Account[]
   sessions      Session[]
   positions     Position[]

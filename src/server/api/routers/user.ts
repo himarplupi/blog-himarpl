@@ -16,9 +16,11 @@ export const userRouter = createTRPCRouter({
     return ctx.db.user.findFirst({
       where: { username: input.toLowerCase() },
       include: {
-        department: true,
+        departments: true,
         accounts: true,
-        socialMedia: true,
+        socialMedias: true,
+        periods: true,
+        positions: true,
       },
     });
   }),
@@ -30,12 +32,14 @@ export const userRouter = createTRPCRouter({
         data: { username: input.toLowerCase() },
       });
     }),
-  me: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.user.findFirst({
+  me: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.user.findFirst({
       where: { id: ctx.session.user.id },
       include: {
-        department: true,
-        socialMedia: true,
+        departments: true,
+        socialMedias: true,
+        periods: true,
+        positions: true,
       },
     });
   }),

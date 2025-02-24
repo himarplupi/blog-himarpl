@@ -84,8 +84,7 @@ export const postTagRouter = createTRPCRouter({
       return await ctx.db.postTag.findFirst({
         where: {
           title: {
-            contains: input,
-            mode: "insensitive",
+            contains: input.toLowerCase(),
           },
         },
         include: {

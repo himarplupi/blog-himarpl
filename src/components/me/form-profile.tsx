@@ -114,7 +114,7 @@ export function FormProfile() {
                   type="text"
                   className="w-full"
                   name="position"
-                  defaultValue={`${me?.position} ${me?.department?.name ?? ""}`}
+                  defaultValue={`${me?.positions?.at(-1)?.name} ${me?.departments?.at(-1)?.name ?? ""}`}
                   readOnly
                 />
                 <p className="text-sm text-muted-foreground">

@@ -43,10 +43,10 @@ export function FormSocialMedia() {
     resolver: zodResolver(socialMediaSchema),
     defaultValues: {
       instagram:
-        me?.socialMedia?.find((value) => value.name === "instagram")
+        me?.socialMedias?.find((value) => value?.name === "instagram")
           ?.username ?? "",
       github:
-        me?.socialMedia?.find((value) => value.name === "github")?.username ??
+        me?.socialMedias?.find((value) => value?.name === "github")?.username ??
         "",
     },
   });
