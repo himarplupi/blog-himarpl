@@ -10,6 +10,7 @@ async function main() {
   await generatePeriods();
   // await accountMigration();
   await departmentMigration();
+  await postTagMigration();
 }
 
 async function generatePeriods() {
@@ -132,6 +133,43 @@ async function accountMigration() {
       access_token: account.access_token,
       expires_at: Number(account.expires_at),
       token_type: account.token_type,
+    })),
+  });
+}
+
+async function postTagMigration() {
+  console.log("\n\nPOST-TAG MIGRATION STARTED\n\n");
+  // DEFINE POST TAG CSV TYPE
+  type PostTagCSV = {
+    id: string;
+    title: string;
+    slug: string;
+    createdAt: string;
+    updatedAt: string;
+    parentId: string | null;
+  };
+
+  // READ POST TAG CSV
+  const postTagContent = await fs.readFile(`./prisma/exports/post-tag.csv`, {
+    encoding: "utf8",
+  });
+
+  const postTags = await neatCsv<PostTagCSV>(postTagContent);
+
+  for (const element of postTags) {
+    if (element.parentId === "null") {
+      element.parentId = null;
+    }
+  }
+
+  await db.postTag.createMany({
+    data: postTags.map((postTag) => ({
+      id: postTag.id,
+      title: postTag.title,
+      slug: postTag.slug,
+      createdAt: new Date(postTag.createdAt),
+      updatedAt: new Date(postTag.updatedAt),
+      parentId: postTag.parentId,
     })),
   });
 }
