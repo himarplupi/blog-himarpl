@@ -18,7 +18,7 @@ model PostTag {
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @default(now()) @updatedAt @map("updated_at")
   parentId  String?   @map("parent_id")
-  parent    PostTag?  @relation("ParentChildren", fields: [parentId], references: [id])
+  parent    PostTag?  @relation("ParentChildren", fields: [parentId], references: [id], onDelete: Cascade)
   children  PostTag[] @relation("ParentChildren")
   posts     Post[]
 
@@ -37,7 +37,7 @@ model Post {
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at")
   publishedAt DateTime? @map("published_at")
-  author      User      @relation(fields: [authorId], references: [id])
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   tags        PostTag[]
 
   @@unique([authorId, slug])
@@ -48,7 +48,7 @@ model Programs {
   id           String     @id @default(cuid())
   content      String
   departmentId String     @map("department_id")
-  department   Department @relation(fields: [departmentId], references: [id])
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
 }
 
 model Position {
@@ -73,7 +73,7 @@ model Department {
   users       User[]
   programs    Programs[]
   periodYear  Int        @map("period_year")
-  periods     Period     @relation(fields: [periodYear], references: [year])
+  periods     Period     @relation(fields: [periodYear], references: [year], onDelete: Cascade)
 
   @@unique([type, acronym])
   @@map("departments")
@@ -98,7 +98,7 @@ model SocialMedia {
   name     String
   username String
   url      String
-  user     User   @relation(fields: [userId], references: [id])
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, name, username])
   @@map("social_medias")
@@ -117,8 +117,7 @@ model User {
   lastLoginAt   DateTime?     @map("last_login_at")
   createdAt     DateTime      @default(now()) @map("created_at")
   updatedAt     DateTime      @default(now()) @updatedAt @map("updated_at")
-  departmentId  String?       @map("department_id")
-  department    Department?   @relation(fields: [departmentId], references: [id])
+  department    Department[]
   posts         Post[]
   periods       Period[]
   socialMedia   SocialMedia[]
