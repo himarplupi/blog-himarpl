@@ -11,23 +11,13 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-enum DepartmentType {
-  BE
-  DP
-}
-
-enum Role {
-  admin
-  member
-}
-
 model PostTag {
   id        String    @id @default(cuid())
   title     String    @unique
   slug      String    @unique
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt
-  parentId  String?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at")
+  parentId  String?   @map("parent_id")
   parent    PostTag?  @relation("ParentChildren", fields: [parentId], references: [id])
   children  PostTag[] @relation("ParentChildren")
   posts     Post[]
@@ -37,16 +27,16 @@ model PostTag {
 
 model Post {
   id          String    @id @default(cuid())
-  authorId    String
+  authorId    String    @map("author_id")
   title       String
-  metaTitle   String
+  metaTitle   String    @map("meta_title")
   slug        String
   content     String
   rawHtml     String
   image       String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt
-  publishedAt DateTime?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at")
+  publishedAt DateTime? @map("published_at")
   author      User      @relation(fields: [authorId], references: [id])
   tags        PostTag[]
 
@@ -54,36 +44,57 @@ model Post {
   @@map("posts")
 }
 
-// Define the department model
+model Programs {
+  id           String     @id @default(cuid())
+  content      String
+  departmentId String     @map("department_id")
+  department   Department @relation(fields: [departmentId], references: [id])
+}
+
+model Position {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  users     User[]
+
+  @@map("positions")
+}
+
 model Department {
-  id          String         @id @default(cuid())
+  id          String     @id @default(cuid())
   name        String
   acronym     String
   image       String?
   description String?
-  programs    String[]
-  type        DepartmentType
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @default(now()) @updatedAt
+  type        String     @default("BE") // "BE" | "DP"
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @default(now()) @updatedAt @map("updated_at")
   users       User[]
+  programs    Programs[]
+  periodYear  Int        @map("period_year")
+  periods     Period     @relation(fields: [periodYear], references: [year])
 
   @@unique([type, acronym])
   @@map("departments")
 }
 
 model Period {
-  id   String @id @default(cuid())
-  name String @unique
-  year Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  id          String       @id @default(cuid())
+  logo        String
+  name        String       @unique
+  description String?
+  year        Int          @unique
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at")
+  users       User[]
+  department  Department[]
 
   @@map("periods")
 }
 
 model SocialMedia {
-  userId   String
+  userId   String @map("user_id")
   name     String
   username String
   url      String
@@ -97,22 +108,23 @@ model User {
   id            String        @id @default(cuid())
   name          String?
   email         String?       @unique
-  emailVerified DateTime?
+  emailVerified DateTime?     @map("email_verified")
   image         String?
   username      String?       @unique
   bio           String?
   position      String?
-  periods       String[]
-  role          Role          @default(member)
-  lastLoginAt   DateTime?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @default(now()) @updatedAt
-  departmentId  String?
+  role          String        @default("member") // "member" | "admin"
+  lastLoginAt   DateTime?     @map("last_login_at")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @default(now()) @updatedAt @map("updated_at")
+  departmentId  String?       @map("department_id")
   department    Department?   @relation(fields: [departmentId], references: [id])
   posts         Post[]
+  periods       Period[]
   socialMedia   SocialMedia[]
   accounts      Account[]
   sessions      Session[]
+  positions     Position[]
 
   @@map("users")
 }
@@ -120,10 +132,10 @@ model User {
 // Necessary for Next auth
 model Account {
   id                String  @id @default(cuid())
-  userId            String
+  userId            String  @map("user_id")
   type              String
   provider          String
-  providerAccountId String
+  providerAccountId String  @map("provider_account_id")
   refresh_token     String? // @db.Text
   access_token      String? // @db.Text
   expires_at        Int?
@@ -140,7 +152,7 @@ model Account {
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
-  userId       String
+  userId       String   @map("user_id")
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
