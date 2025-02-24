@@ -2,17 +2,13 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider = "cockroachdb"
-  // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-  // Further reading:
-  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 enum DepartmentType {
@@ -35,6 +31,8 @@ model PostTag {
   parent    PostTag?  @relation("ParentChildren", fields: [parentId], references: [id])
   children  PostTag[] @relation("ParentChildren")
   posts     Post[]
+
+  @@map("post_tags")
 }
 
 model Post {
@@ -53,6 +51,7 @@ model Post {
   tags        PostTag[]
 
   @@unique([authorId, slug])
+  @@map("posts")
 }
 
 // Define the department model
@@ -69,6 +68,18 @@ model Department {
   users       User[]
 
   @@unique([type, acronym])
+  @@map("departments")
+}
+
+model Period {
+  id   String @id @default(cuid())
+  name String @unique
+  year Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map("periods")
 }
 
 model SocialMedia {
@@ -79,6 +90,7 @@ model SocialMedia {
   user     User   @relation(fields: [userId], references: [id])
 
   @@unique([userId, name, username])
+  @@map("social_medias")
 }
 
 model User {
@@ -101,6 +113,8 @@ model User {
   socialMedia   SocialMedia[]
   accounts      Account[]
   sessions      Session[]
+
+  @@map("users")
 }
 
 // Necessary for Next auth
@@ -120,6 +134,7 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@map("accounts")
 }
 
 model Session {
@@ -128,6 +143,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
 }
 
 model VerificationToken {
@@ -136,4 +153,5 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+  @@map("verification_tokens")
 }

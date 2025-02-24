@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "next build",
+    "db:migrate": "prisma migrate dev --name init",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "db:seed": "node prisma/seed.js",
@@ -23,8 +24,10 @@
     "@formkit/auto-animate": "^0.8.2",
     "@hookform/resolvers": "^3.6.0",
     "@icons-pack/react-simple-icons": "^9.4.0",
+    "@libsql/client": "^0.8.1",
     "@next/third-parties": "^14.1.4",
     "@paralleldrive/cuid2": "^2.2.2",
+    "@prisma/adapter-libsql": "^6.4.1",
     "@prisma/client": "^5.16.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-aspect-ratio": "^1.1.0",
