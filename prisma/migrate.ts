@@ -6,11 +6,38 @@ import { db } from "@/server/db";
 async function main() {
   await clearDatabase();
 
-  // Generating Periods for department Migration
   await generatePeriods();
-  // await accountMigration();
+  await generatePositions();
+  await userMigration();
+  await accountMigration();
   await departmentMigration();
   await postTagMigration();
+}
+
+async function generatePositions() {
+  console.log("\n\nPOSITION GENERATION STARTED\n\n");
+  await db.position.createMany({
+    data: [
+      {
+        name: "ketua",
+      },
+      {
+        name: "wakil ketua",
+      },
+      {
+        name: "sekretaris",
+      },
+      {
+        name: "bendahara",
+      },
+      {
+        name: "staff",
+      },
+      {
+        name: "administrator",
+      },
+    ],
+  });
 }
 
 async function generatePeriods() {
@@ -70,7 +97,6 @@ async function departmentMigration() {
 
   // Mapping String programs
   const departmentsWithProgramsArray = departments.map((department) => {
-    // console.log(JSON.parse(department.programs));
     return {
       ...department,
       programs: JSON.parse(department.programs) as string[],
@@ -81,7 +107,6 @@ async function departmentMigration() {
   const programs = departmentsWithProgramsArray
     .map((department) => {
       return department.programs.map((program) => {
-        // console.log(program);
         return {
           content: program,
           departmentId: department.id,
@@ -94,6 +119,73 @@ async function departmentMigration() {
     data: programs.map((program) => ({
       content: program.content,
       departmentId: program.departmentId,
+    })),
+  });
+}
+
+async function userMigration() {
+  console.log("\n\nUSER MIGRATION STARTED\n\n");
+
+  // DEFINE USER CSV TYPE
+  type UserCSV = {
+    id: string;
+    name: string;
+    email: string;
+    emailVerified: string;
+    image: string;
+    username: string;
+    bio: string;
+    position: string;
+    role: string;
+    lastLoginAt: string;
+    createdAt: string;
+    updatedAt: string;
+    departmentId: string;
+    periods: string;
+  };
+
+  // READ USER CSV
+  const userContent = await fs.readFile(`./prisma/exports/users.csv`, {
+    encoding: "utf8",
+  });
+
+  const users = await neatCsv<UserCSV>(userContent);
+
+  const positions = await db.position.findMany({
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+
+  await db.user.createMany({
+    data: users.map((user) => ({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      emailVerified:
+        user.emailVerified === "null" ? null : new Date(user.emailVerified),
+      image: user.image,
+      username: user.username,
+      bio: user.bio,
+      position: user.position,
+      role: user.role,
+      createdAt: new Date(user.createdAt),
+      positions: {
+        connect: {
+          id: positions.find((position) => position.name === user.position)?.id,
+        },
+      },
+      departments: {
+        connect: {
+          id: user.departmentId,
+        },
+      },
+      periods: {
+        connect: {
+          year: 2024,
+        },
+      },
     })),
   });
 }
@@ -170,6 +262,48 @@ async function postTagMigration() {
       createdAt: new Date(postTag.createdAt),
       updatedAt: new Date(postTag.updatedAt),
       parentId: postTag.parentId,
+    })),
+  });
+}
+
+async function postMigration() {
+  console.log("\n\nPOST MIGRATION STARTED\n\n");
+
+  // DEFINE POST CSV TYPE
+  type PostCSV = {
+    id: string;
+    title: string;
+    metaTitle: string;
+    slug: string;
+    content: string;
+    rawHtml: string;
+    image: string;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+    authorId: string;
+  };
+
+  // READ POST CSV
+  const postContent = await fs.readFile(`./prisma/exports/posts.csv`, {
+    encoding: "utf8",
+  });
+
+  const posts = await neatCsv<PostCSV>(postContent);
+
+  await db.post.createMany({
+    data: posts.map((post) => ({
+      id: post.id,
+      title: post.title,
+      metaTitle: post.metaTitle,
+      slug: post.slug,
+      content: post.content,
+      rawHtml: post.rawHtml,
+      image: post.image,
+      createdAt: new Date(post.createdAt),
+      updatedAt: new Date(post.updatedAt),
+      publishedAt: new Date(post.publishedAt),
+      authorId: post.authorId,
     })),
   });
 }
