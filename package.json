@@ -14,6 +14,7 @@
     "lint": "next lint",
     "commitlint": "npx commitlint -f",
     "start": "next start",
+    "typecheck": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch"
   },
