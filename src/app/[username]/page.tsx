@@ -46,10 +46,10 @@ export async function generateMetadata(
     },
     select: {
       name: true,
-      position: true,
+      positions: true,
       username: true,
       bio: true,
-      department: {
+      departments: {
         select: {
           acronym: true,
         },
@@ -65,9 +65,9 @@ export async function generateMetadata(
   const previousImages = (await parent).openGraph?.images ?? [];
   const description =
     (user?.bio ?? "").length > 1
-      ? user.bio ?? ""
+      ? (user.bio ?? "")
       : `Mengenal lebih dekat ${user?.name}, simak selengkapnya di sini!`;
-  const title = `${user?.name ? user.name.toUpperCase() : ""} ${user?.position ? user.position.toUpperCase() : ""} ${user?.department ? user.department.acronym.toUpperCase() : ""}`;
+  const title = `${user?.name ? user.name.toUpperCase() : ""} ${user?.positions?.at(-1) ? user.positions?.at(-1)?.name.toUpperCase() : ""} ${user?.departments?.at(-1) ? user.departments?.at(-1)?.acronym.toUpperCase() : ""}`;
 
   return {
     title: title,
@@ -138,21 +138,21 @@ export default async function UserPage({ params }: UserPageProps) {
               {user?.name}
             </h1>
 
-            {user?.department && (
+            {user?.departments?.at(-1) && (
               <>
-                {user?.department?.name === "pimpinan" ? (
+                {user?.departments?.at(-1)?.name === "pimpinan" ? (
                   <p
                     itemProp="jobTitle"
                     className="mb-1 text-lg capitalize"
-                  >{`${user?.position}`}</p>
+                  >{`${user?.positions?.at(-1)?.name}`}</p>
                 ) : (
                   <p itemProp="jobTitle" className="mb-1 text-lg capitalize">
-                    {`${user?.position} ${user?.department?.acronym}`}
+                    {`${user?.positions?.at(-1)?.name} ${user?.departments?.at(-1)?.acronym}`}
                   </p>
                 )}
 
                 <p itemProp="jobTitle" className="mb-6 text-lg capitalize">
-                  {`${user?.department?.type === "BE" ? "Badan Eksekutif" : "Dewan Perwakilan"}`}
+                  {`${user?.departments?.at(-1)?.type === "BE" ? "Badan Eksekutif" : "Dewan Perwakilan"}`}
                 </p>
               </>
             )}
@@ -163,7 +163,7 @@ export default async function UserPage({ params }: UserPageProps) {
 
             <h4 className="mb-2 text-lg font-semibold">Media Sosial</h4>
             <div className="flex flex-col gap-1">
-              {user?.socialMedia.map((social, i) => (
+              {user?.socialMedias.map((social, i) => (
                 <Link
                   itemProp="url"
                   key={i}

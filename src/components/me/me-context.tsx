@@ -2,13 +2,11 @@
 
 import { createContext } from "react";
 
-import type { Department, SocialMedia, User } from "@prisma/client";
+import { type api } from "@/trpc/server";
 
 type MeContextValue =
-  | (User & {
-      socialMedia: SocialMedia[];
-      department: Department | null;
-    })
+  | Awaited<ReturnType<typeof api.user.me.query>>
+  | undefined
   | null;
 
 export const MeContext = createContext<MeContextValue>(null);
