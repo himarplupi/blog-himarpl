@@ -6,7 +6,7 @@ CREATE TABLE "post_tags" (
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "parent_id" TEXT,
-    CONSTRAINT "post_tags_parent_id_fkey" FOREIGN KEY ("parent_id") REFERENCES "post_tags" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+    CONSTRAINT "post_tags_parent_id_fkey" FOREIGN KEY ("parent_id") REFERENCES "post_tags" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -22,15 +22,15 @@ CREATE TABLE "posts" (
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "published_at" DATETIME,
-    CONSTRAINT "posts_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "posts_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
-CREATE TABLE "Programs" (
+CREATE TABLE "programs" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "content" TEXT NOT NULL,
     "department_id" TEXT NOT NULL,
-    CONSTRAINT "Programs_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "departments" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "programs_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "departments" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -52,7 +52,7 @@ CREATE TABLE "departments" (
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "period_year" INTEGER NOT NULL,
-    CONSTRAINT "departments_period_year_fkey" FOREIGN KEY ("period_year") REFERENCES "periods" ("year") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "departments_period_year_fkey" FOREIGN KEY ("period_year") REFERENCES "periods" ("year") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -72,7 +72,7 @@ CREATE TABLE "social_medias" (
     "name" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "url" TEXT NOT NULL,
-    CONSTRAINT "social_medias_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "social_medias_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -84,13 +84,10 @@ CREATE TABLE "users" (
     "image" TEXT,
     "username" TEXT,
     "bio" TEXT,
-    "position" TEXT,
     "role" TEXT NOT NULL DEFAULT 'member',
     "last_login_at" DATETIME,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "department_id" TEXT,
-    CONSTRAINT "users_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "departments" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+    "updated_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- CreateTable
@@ -140,6 +137,14 @@ CREATE TABLE "_PositionToUser" (
     "B" TEXT NOT NULL,
     CONSTRAINT "_PositionToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "positions" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "_PositionToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "_DepartmentToUser" (
+    "A" TEXT NOT NULL,
+    "B" TEXT NOT NULL,
+    CONSTRAINT "_DepartmentToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "departments" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "_DepartmentToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -200,6 +205,12 @@ CREATE UNIQUE INDEX "_PositionToUser_AB_unique" ON "_PositionToUser"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_PositionToUser_B_index" ON "_PositionToUser"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_DepartmentToUser_AB_unique" ON "_DepartmentToUser"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_DepartmentToUser_B_index" ON "_DepartmentToUser"("B");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_PeriodToUser_AB_unique" ON "_PeriodToUser"("A", "B");

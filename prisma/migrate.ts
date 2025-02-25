@@ -8,11 +8,10 @@ async function main() {
 
   await generatePeriods();
   await generatePositions();
-  await userMigration();
-  await accountMigration();
   await departmentMigration();
   await postTagMigration();
-  await postMigration();
+  await userMigration();
+  await accountMigration();
 }
 
 async function generatePositions() {
@@ -162,32 +161,54 @@ async function userMigration() {
   await db.user.createMany({
     data: users.map((user) => ({
       id: user.id,
-      name: user.name,
-      email: user.email,
+      name: validateNull(user.name),
+      email: validateNull(user.email),
       emailVerified:
         user.emailVerified === "null" ? null : new Date(user.emailVerified),
-      image: user.image,
-      username: user.username,
-      bio: user.bio,
+      image: validateNull(user.image),
+      username: validateNull(user.username),
+      bio: validateNull(user.bio),
       role: user.role,
       createdAt: new Date(user.createdAt),
-      positions: {
-        connect: {
-          id: positions.find((position) => position.name === user.position)?.id,
-        },
-      },
-      departments: {
-        connect: {
-          id: user.departmentId,
-        },
-      },
-      periods: {
-        connect: {
-          year: 2024,
-        },
-      },
     })),
   });
+
+  console.log("\n\nSETTING USER RELATIONS\n\n");
+
+  for (const user of users) {
+    console.log(user);
+    await db.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        positions: {
+          set: [
+            {
+              id: positions.find((position) => position.name === user.position)
+                ?.id,
+            },
+          ],
+        },
+        departments: validateNull(user.departmentId)
+          ? {
+              set: [
+                {
+                  id: user.departmentId,
+                },
+              ],
+            }
+          : undefined,
+        periods: {
+          set: [
+            {
+              year: 2024,
+            },
+          ],
+        },
+      },
+    });
+  }
 }
 
 async function accountMigration() {
@@ -221,10 +242,10 @@ async function accountMigration() {
       userId: account.userId,
       provider: account.provider,
       providerAccountId: account.providerAccountId,
-      refresh_token: account.refresh_token,
-      access_token: account.access_token,
+      refresh_token: validateNull(account.refresh_token),
+      access_token: validateNull(account.access_token),
       expires_at: Number(account.expires_at),
-      token_type: account.token_type,
+      token_type: validateNull(account.token_type),
     })),
   });
 }
@@ -238,7 +259,7 @@ async function postTagMigration() {
     slug: string;
     createdAt: string;
     updatedAt: string;
-    parentId: string | null;
+    parentId: string;
   };
 
   // READ POST TAG CSV
@@ -248,12 +269,6 @@ async function postTagMigration() {
 
   const postTags = await neatCsv<PostTagCSV>(postTagContent);
 
-  for (const element of postTags) {
-    if (element.parentId === "null") {
-      element.parentId = null;
-    }
-  }
-
   await db.postTag.createMany({
     data: postTags.map((postTag) => ({
       id: postTag.id,
@@ -261,49 +276,7 @@ async function postTagMigration() {
       slug: postTag.slug,
       createdAt: new Date(postTag.createdAt),
       updatedAt: new Date(postTag.updatedAt),
-      parentId: postTag.parentId,
-    })),
-  });
-}
-
-async function postMigration() {
-  console.log("\n\nPOST MIGRATION STARTED\n\n");
-
-  // DEFINE POST CSV TYPE
-  type PostCSV = {
-    id: string;
-    title: string;
-    metaTitle: string;
-    slug: string;
-    content: string;
-    rawHtml: string;
-    image: string;
-    createdAt: string;
-    updatedAt: string;
-    publishedAt: string;
-    authorId: string;
-  };
-
-  // READ POST CSV
-  const postContent = await fs.readFile(`./prisma/exports/posts.csv`, {
-    encoding: "utf8",
-  });
-
-  const posts = await neatCsv<PostCSV>(postContent);
-
-  await db.post.createMany({
-    data: posts.map((post) => ({
-      id: post.id,
-      title: post.title,
-      metaTitle: post.metaTitle,
-      slug: post.slug,
-      content: post.content,
-      rawHtml: post.rawHtml,
-      image: post.image,
-      createdAt: new Date(post.createdAt),
-      updatedAt: new Date(post.updatedAt),
-      publishedAt: new Date(post.publishedAt),
-      authorId: post.authorId,
+      parentId: validateNull(postTag.parentId),
     })),
   });
 }
@@ -331,3 +304,10 @@ main()
     console.log(e);
     void db.$disconnect();
   });
+
+function validateNull(value: string) {
+  if (value === "null") {
+    return null;
+  }
+  return value;
+}
