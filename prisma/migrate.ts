@@ -12,6 +12,7 @@ async function main() {
   await postTagMigration();
   await userMigration();
   await accountMigration();
+  await socialMediaMigration();
 }
 
 async function generatePositions() {
@@ -55,6 +56,37 @@ async function generatePeriods() {
         logo: "",
       },
     ],
+  });
+}
+
+async function socialMediaMigration() {
+  console.log("\n\nSOCIAL MEDIA MIGRATION STARTED\n\n");
+
+  // DEFINE SOCIAL MEDIA CSV TYPE
+  type SocialMediaCSV = {
+    name: string;
+    username: string;
+    url: string;
+    userId: string;
+  };
+
+  // READ SOCIAL MEDIA CSV
+  const socialMediaContent = await fs.readFile(
+    `./prisma/exports/social_media.csv`,
+    {
+      encoding: "utf8",
+    },
+  );
+
+  const socialMedias = await neatCsv<SocialMediaCSV>(socialMediaContent);
+
+  await db.socialMedia.createMany({
+    data: socialMedias.map((socialMedia) => ({
+      name: socialMedia.name,
+      username: socialMedia.username,
+      url: socialMedia.url,
+      userId: socialMedia.userId,
+    })),
   });
 }
 

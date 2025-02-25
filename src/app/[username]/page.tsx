@@ -144,7 +144,7 @@ export default async function UserPage({ params }: UserPageProps) {
                   <p
                     itemProp="jobTitle"
                     className="mb-1 text-lg capitalize"
-                  >{`${user?.positions?.at(-1)}`}</p>
+                  >{`${user?.positions?.at(-1)?.name}`}</p>
                 ) : (
                   <p itemProp="jobTitle" className="mb-1 text-lg capitalize">
                     {`${user?.positions?.at(-1)?.name} ${user?.departments?.at(-1)?.acronym}`}
