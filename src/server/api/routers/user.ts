@@ -12,6 +12,25 @@ export const userRouter = createTRPCRouter({
   getByEmail: publicProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.user.findFirst({ where: { email: input } });
   }),
+  getAll: publicProcedure.query(({ ctx }) => {
+    return ctx.db.user.findMany({
+      where: {
+        username: {
+          not: null,
+        },
+      },
+      include: {
+        departments: true,
+        periods: true,
+        positions: true,
+        _count: {
+          select: {
+            posts: true,
+          },
+        },
+      },
+    });
+  }),
   byUsername: publicProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.user.findFirst({
       where: { username: input.toLowerCase() },
