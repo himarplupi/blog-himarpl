@@ -34,60 +34,79 @@ export function Sidebar({
     >
       <div className="mt-6 p-0 px-6 md:mt-14 lg:mt-0 lg:px-6 lg:pb-20">
         {/* Label */}
-        <h3 className="mb-4 text-xl font-semibold">Telusur Label</h3>
-        <div className="mb-2 flex flex-wrap gap-2">
-          {relatedTagQuery.data?.map((tag) => (
-            <Link href={`/tag/${tag.slug}`} key={tag.id}>
-              <Button
-                className="rounded-full"
-                variant={
-                  tag.slug === tagSlug || tag.slug === tagQuery
-                    ? "default"
-                    : "secondary"
-                }
-                size={"sm"}
-              >
-                {tag.title}
-              </Button>
-            </Link>
-          ))}
+        <div className="mb-6">
+          <h3 className="mb-4 text-xl font-semibold">Telusur Label</h3>
+          <div className="mb-2 flex flex-wrap gap-2">
+            {relatedTagQuery.data?.map((tag) => (
+              <Link href={`/tag/${tag.slug}`} key={tag.id}>
+                <Button
+                  className="rounded-full"
+                  variant={
+                    tag.slug === tagSlug || tag.slug === tagQuery
+                      ? "default"
+                      : "secondary"
+                  }
+                  size={"sm"}
+                >
+                  {tag.title}
+                </Button>
+              </Link>
+            ))}
+          </div>
+
+          <Link href={"/explore-tags"}>
+            <Button variant="link" size={"sm"} className="px-0">
+              Lihat Semua
+            </Button>
+          </Link>
         </div>
 
-        <Link href={"/explore-tags"}>
-          <Button variant="link" size={"sm"}>
-            Lihat Semua
-          </Button>
-        </Link>
-
         {/* Pengurus */}
-        <h3 className="mb-4 mt-2 text-xl font-semibold">Pengurus</h3>
-        <div className="mb-8 flex flex-col gap-2">
-          {usersQuery.data?.map((user) => (
-            <div key={user.id} className="flex items-start justify-start gap-4">
-              <Link
-                href={`/@${user.username}`}
-                className="aspect-square overflow-hidden rounded-full"
+        <div className="mb-6">
+          <h3 className="mb-4 mt-2 text-xl font-semibold">Pengurus Teraktif</h3>
+          <div className="mb-2 flex flex-col gap-2">
+            {usersQuery.data && usersQuery.data.length === 0 && (
+              <div className="text-sm text-muted-foreground">
+                Belum ada pengurus yang aktif menulis
+              </div>
+            )}
+
+            {usersQuery.data?.map((user) => (
+              <div
+                key={user.id}
+                className="flex items-start justify-start gap-4"
               >
-                <Image
-                  className=""
-                  src={user.image ?? ""}
-                  width={40}
-                  height={40}
-                  alt={user.name + " profile picture"}
-                />
-              </Link>
-              <div>
                 <Link
                   href={`/@${user.username}`}
-                  className="font-semibold underline-offset-4 hover:underline"
+                  className="aspect-square overflow-hidden rounded-full"
                 >
-                  {user.name}
+                  <Image
+                    className=""
+                    src={user.image ?? ""}
+                    width={40}
+                    height={40}
+                    alt={user.name + " profile picture"}
+                  />
                 </Link>
+                <div>
+                  <Link
+                    href={`/@${user.username}`}
+                    className="font-semibold underline-offset-4 hover:underline"
+                  >
+                    {user.name}
+                  </Link>
 
-                <p className="text-sm">{`${user.posts.length} Artikel bulan ini`}</p>
+                  <p className="text-sm">{`${user.posts.length} Artikel bulan ini`}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+
+          <Link href={"/users"}>
+            <Button variant="link" size={"sm"} className="px-0">
+              Lihat Semua
+            </Button>
+          </Link>
         </div>
 
         <BotCard />

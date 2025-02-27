@@ -94,6 +94,10 @@ export default async function UserPage({ params }: UserPageProps) {
   const username = params.username.replace("%40", "");
 
   const user = await api.user.byUsername.query(username);
+  const currentDepartment = user?.departments?.at(-1);
+  const currentPosition = user?.positions?.find(
+    (position) => position?.departmentId === currentDepartment?.id,
+  );
 
   if (!user) {
     return notFound();
@@ -138,21 +142,20 @@ export default async function UserPage({ params }: UserPageProps) {
               {user?.name}
             </h1>
 
-            {user?.departments?.at(-1) && (
+            {currentDepartment && (
               <>
-                {user?.departments?.at(-1)?.name === "pimpinan" ? (
-                  <p
-                    itemProp="jobTitle"
-                    className="mb-1 text-lg capitalize"
-                  >{`${user?.positions?.at(-1)?.name}`}</p>
+                {currentDepartment?.name === "pimpinan" ? (
+                  <p itemProp="jobTitle" className="mb-1 text-lg capitalize">
+                    {`${currentPosition?.name}`}
+                  </p>
                 ) : (
                   <p itemProp="jobTitle" className="mb-1 text-lg capitalize">
-                    {`${user?.positions?.at(-1)?.name} ${user?.departments?.at(-1)?.acronym}`}
+                    {`${currentPosition?.name} ${currentDepartment?.acronym}`}
                   </p>
                 )}
 
                 <p itemProp="jobTitle" className="mb-6 text-lg capitalize">
-                  {`${user?.departments?.at(-1)?.type === "BE" ? "Badan Eksekutif" : "Dewan Perwakilan"}`}
+                  {`${currentDepartment.type === "BE" ? "Badan Eksekutif" : "Dewan Perwakilan"}`}
                 </p>
               </>
             )}

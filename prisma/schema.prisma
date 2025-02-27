@@ -54,28 +54,31 @@ model Program {
 }
 
 model Position {
-  id        String   @id @default(cuid())
-  name      String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
-  users     User[]
+  id           String      @id @default(cuid())
+  name         String
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @default(now()) @updatedAt @map("updated_at")
+  departmentId String?     @map("department_id")
+  department   Department? @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  users        User[]
 
   @@map("positions")
 }
 
 model Department {
-  id          String    @id @default(cuid())
+  id          String     @id @default(cuid())
   name        String
   acronym     String
   image       String?
   description String?
-  type        String    @default("BE") // "BE" | "DP"
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at")
+  type        String     @default("BE") // "BE" | "DP"
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @default(now()) @updatedAt @map("updated_at")
   users       User[]
   programs    Program[]
-  periodYear  Int       @map("period_year")
-  period      Period    @relation(fields: [periodYear], references: [year], onDelete: Cascade)
+  periodYear  Int        @map("period_year")
+  period      Period     @relation(fields: [periodYear], references: [year], onDelete: Cascade)
+  Position    Position[]
 
   @@unique([type, acronym])
   @@map("departments")

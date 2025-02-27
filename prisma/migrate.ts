@@ -7,8 +7,8 @@ async function main() {
   await clearDatabase();
 
   await generatePeriods();
-  await generatePositions();
   await departmentMigration();
+  await generatePositions();
   await postTagMigration();
   await userMigration();
   await accountMigration();
@@ -17,27 +17,84 @@ async function main() {
 
 async function generatePositions() {
   console.log("\n\nPOSITION GENERATION STARTED\n\n");
+
+  const departments = await db.department.findMany({
+    select: {
+      id: true,
+      acronym: true,
+    },
+  });
+
+  const pimpinan = [
+    {
+      name: "ketua",
+    },
+    {
+      name: "wakil ketua",
+    },
+  ];
+
+  const sekretaris = [
+    {
+      name: "sekretaris",
+    },
+  ];
+  const bendahara = [
+    {
+      name: "bendahara",
+    },
+  ];
+
+  const staff = [
+    {
+      name: "staff",
+    },
+  ];
+
+  const data = departments
+    .map((department) => {
+      if (department.acronym === "pimpinan") {
+        return pimpinan.map((position) => ({
+          name: `${position.name}`,
+          departmentId: department.id,
+        }));
+      }
+
+      if (department.acronym === "sekretaris") {
+        return sekretaris.map((position) => ({
+          name: `${position.name}`,
+          departmentId: department.id,
+        }));
+      }
+
+      if (department.acronym === "bendahara") {
+        return bendahara.map((position) => ({
+          name: `${position.name}`,
+          departmentId: department.id,
+        }));
+      }
+
+      return [
+        ...pimpinan.map((position) => ({
+          name: `${position.name}`,
+          departmentId: department.id,
+        })),
+        ...staff.map((position) => ({
+          name: `${position.name}`,
+          departmentId: department.id,
+        })),
+      ];
+    })
+    .flat();
+
   await db.position.createMany({
-    data: [
-      {
-        name: "ketua",
-      },
-      {
-        name: "wakil ketua",
-      },
-      {
-        name: "sekretaris",
-      },
-      {
-        name: "bendahara",
-      },
-      {
-        name: "staff",
-      },
-      {
-        name: "administrator",
-      },
-    ],
+    data,
+  });
+
+  await db.position.create({
+    data: {
+      name: "administrator",
+    },
   });
 }
 
@@ -187,6 +244,7 @@ async function userMigration() {
     select: {
       id: true,
       name: true,
+      departmentId: true,
     },
   });
 
@@ -215,12 +273,21 @@ async function userMigration() {
       },
       data: {
         positions: {
-          set: [
-            {
-              id: positions.find((position) => position.name === user.position)
-                ?.id,
-            },
-          ],
+          set: positions.find(
+            (position) =>
+              position.name === user.position &&
+              position.departmentId === user.departmentId,
+          )?.id
+            ? [
+                {
+                  id: positions.find(
+                    (position) =>
+                      position.name === user.position &&
+                      position.departmentId === user.departmentId,
+                  )?.id,
+                },
+              ]
+            : undefined,
         },
         departments: validateNull(user.departmentId)
           ? {
