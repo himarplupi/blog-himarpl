@@ -44,9 +44,9 @@ export function UserList() {
                 </Avatar>
                 <div className="space-y-1">
                   <h3 className="font-medium">{user.name}</h3>
-                  <div className="text-sm text-muted-foreground">
-                    {user.departments[0]?.name ?? "No Department"} ·{" "}
-                    {user._count.posts} posts
+                  <div className="text-sm capitalize text-muted-foreground">
+                    {user.departments.at(-1)?.name ?? "No Department"} Kabinet{" "}
+                    {user.periods.at(-1)?.name} · {user._count.posts} posts
                   </div>
                 </div>
               </div>
