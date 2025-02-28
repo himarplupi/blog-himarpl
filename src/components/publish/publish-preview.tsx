@@ -103,6 +103,9 @@ export function PublishPreview({ session }: { session: Session | null }) {
                       maxMenuHeight={128}
                       inputId="label-select"
                       placeholder="Beri label..."
+                      classNames={{
+                        container: () => "no-lenis",
+                      }}
                       className="duration-300 animate-in fade-in"
                       isLoading={isLoading}
                       onInputChange={(value) => {

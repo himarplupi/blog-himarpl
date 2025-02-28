@@ -14,6 +14,9 @@ export const userRouter = createTRPCRouter({
   }),
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.db.user.findMany({
+      orderBy: {
+        name: "asc",
+      },
       where: {
         username: {
           not: null,

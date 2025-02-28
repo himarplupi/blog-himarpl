@@ -61,7 +61,9 @@ export const postTagRouter = createTRPCRouter({
   search: protectedProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
-      const inputs = input.split(" ");
+      const inputs = input.toLowerCase().split(" ");
+
+      console.log("inputs tags : ", inputs);
       return await ctx.db.postTag.findMany({
         include: {
           _count: {
@@ -72,7 +74,6 @@ export const postTagRouter = createTRPCRouter({
           OR: inputs.map((input) => ({
             title: {
               contains: input,
-              mode: "insensitive",
             },
           })),
         },

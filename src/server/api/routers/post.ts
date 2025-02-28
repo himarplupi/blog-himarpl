@@ -433,13 +433,11 @@ export const postRouter = createTRPCRouter({
                   {
                     title: {
                       contains: search,
-                      mode: "insensitive",
                     },
                   },
                   {
                     content: {
                       contains: search,
-                      mode: "insensitive",
                     },
                   },
                 ],
