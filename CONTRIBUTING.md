@@ -40,9 +40,10 @@ Langkah-langkah di bawah ini akan memberi Anda gambaran umum tentang cara memper
 
    1. **Prasyarat untuk file .env**: Buat file `.env` di root proyek.
 
-   2. Ikuti panduan memulai di [CoackroachDB](https://www.cockroachlabs.com/docs/cockroachcloud/quickstart) untuk nilai `DATABASE_URL`.
+   2. Ikuti panduan memulai di [Turso](https://docs.turso.tech/quickstart) untuk nilai `DATABASE_URL` dan `TURSO_AUTH_TOKEN`.
 
       ```bash
+      TURSO_AUTH_TOKEN=
       DATABASE_URL=
       ```
 
@@ -77,7 +78,9 @@ Langkah-langkah di bawah ini akan memberi Anda gambaran umum tentang cara memper
 6. Jalankan perintah berikut untuk menginstal dependensi dan memulai pratinjau lokal dari pekerjaan Anda.
 
    ```bash
-   npm run db:push # mendorong skema database ke CockroachDB
+   # LAKUKAN DI WSL!
+   npm run db:migrate # migrasi skema database ke .sql file
+   npm run db:push {PATH_KE_MIGRASI_FILE} # mendorong skema database ke Turso libSQL
    npm ci # menginstal dependensi proyek ini
    npm run dev # memulai lingkungan pengembangan
    ```
@@ -131,7 +134,8 @@ Repositori ini berisi beberapa skrip dan perintah untuk melakukan berbagai tugas
 <details>
   <summary>Perintah untuk Tugas Pemeliharaan dan Tes</summary>
 
-- `npm run db:push` mendorong skema database ke CockroachDB.
+- `npm run db:migrate` migrasi skema database ke .sql file.
+- `npm run db:push` mendorong skema database ke Turso libSQL.
 - `npm run db:studio` menjalankan prisma studio untuk manajemen database.
 - `npm run lint` menjalankan linter untuk semua file.
 - `npm run test` menjalankan semua tes secara lokal
