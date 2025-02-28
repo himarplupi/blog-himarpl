@@ -21,6 +21,8 @@ import {
 import logo from "@/images/logo.png";
 import { abbreviation, cn } from "@/lib/utils";
 
+import { ModeToggle } from "./mode-toggle";
+
 const hideNavbarOnRoutes = ["/login"];
 
 export function Navbar({ session }: { session: Session | null }) {
@@ -51,6 +53,8 @@ export function Navbar({ session }: { session: Session | null }) {
               >
                 <SearchIcon className="h-5 w-5" />
               </Link>
+
+              <ModeToggle isCollapsed />
 
               <Link
                 href="/new"
@@ -111,6 +115,9 @@ export function Navbar({ session }: { session: Session | null }) {
               >
                 <SearchIcon className="h-5 w-5" />
               </Link>
+
+              <ModeToggle isCollapsed />
+
               <Link
                 href="/login"
                 className={cn(

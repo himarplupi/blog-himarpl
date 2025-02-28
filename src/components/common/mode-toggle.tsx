@@ -25,7 +25,7 @@ export function ModeToggle({ isCollapsed }: { isCollapsed: boolean }) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            className="w-full gap-x-2"
+            className={isCollapsed ? "" : "w-full gap-x-2"}
             variant="outline"
             size={isCollapsed ? "icon" : "default"}
           >

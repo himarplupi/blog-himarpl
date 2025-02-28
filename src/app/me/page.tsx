@@ -1,7 +1,6 @@
 import { FormProfile } from "@/components/me/form-profile";
 import { FormSocialMedia } from "@/components/me/form-social-media";
 import { MeProvider } from "@/components/me/me-context";
-import { Settings } from "@/components/me/settings";
 import { api } from "@/trpc/server";
 
 export default async function MePage() {
@@ -18,7 +17,6 @@ export default async function MePage() {
           <FormProfile />
           <div className="md:basis-4/12">
             <FormSocialMedia />
-            <Settings />
           </div>
         </div>
       </main>
